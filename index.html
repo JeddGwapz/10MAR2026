@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div class="app-container" id="appContainer">
+<div class="app-container intro-empty-state" id="appContainer">
 
   <!-- SETTINGS MODAL -->
   <div class="modal-overlay" id="settingsModal">
@@ -25,7 +25,7 @@
         <option value="JA">🇯🇵 Japanese</option>
       </select>
       <label>Theme Color</label>
-      <input type="color" id="settingColor" value="#9b82e8" style="height:36px;padding:4px;" />
+      <input type="color" id="settingColor" value="#393b45" style="height:36px;padding:4px;" />
       <br/><br/>
       <button onclick="applySettings()" style="width:100%;padding:10px;background:#fff;color:#6a5ab0;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;">Apply</button>
     </div>
@@ -33,10 +33,7 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="app-title">
-      <img src="https://static.wixstatic.com/media/d0630a_9680d5ad465147a4bd244f7b9d0acc44~mv2.png/v1/crop/x_63,y_399,w_937,h_221/fill/w_232,h_60,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/CP_edited.png" alt="App title" />
-    </div>
-    <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
+    <div class="app-title">CRYSTAL PROMPTER</div>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -111,8 +108,8 @@
     <!-- RIGHT: CARDS -->
     <div class="cards-panel">
       <div class="info-card main-card" id="infoCard">
-        <h3>Did You Know</h3>
-        <p>Crystal Prompter is a leading company in innovative prompter technology. We provide high-quality prompter products and services through continuous research and development, always prioritizing customer satisfaction.</p>
+        <h3></h3>
+        <p></p>
       </div>
       <div class="bottom-cards">
         <div class="info-card image-card" id="card2">
@@ -125,6 +122,8 @@
     </div>
 
   </div>
+
+  <div class="subtitle-strip" id="subtitleStrip"></div>
 
   <!-- BOTTOM AREA -->
   <div class="bottom-area">
@@ -145,11 +144,6 @@
 
     <!-- INPUT AREA -->
     <div class="input-area">
-      <div class="input-top">
-        <button class="lang-btn" id="langBtn" onclick="cycleLang()">🇺🇸 EN</button>
-        <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙</button>
-        <button class="attach-btn" onclick="attachFile()">↗</button>
-      </div>
       <div class="input-bottom">
         <div class="input-field-wrap">
           <input
@@ -159,6 +153,11 @@
             placeholder="Ask Anything..."
             onkeydown="handleKey(event)"
           />
+        </div>
+        <div class="input-controls">
+          <button class="lang-btn" id="langBtn" onclick="cycleLang()">🇺🇸 EN</button>
+          <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙</button>
+          <button class="attach-btn" onclick="attachFile()">↗</button>
         </div>
         <button class="send-btn" onclick="sendMessage()">➤</button>
       </div>

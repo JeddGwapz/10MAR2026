@@ -69,7 +69,6 @@
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
   const PANEL_DEFAULT_VIDEO = 'assets/clone16-q1-answer.mp4';
-  const PANEL_ABOUT_US_VIDEO = 'assets/crystal-prompter-introduction.mp4';
   const CLONE16_INTRO_SLIDES = [
     {
       title: 'Equipped with a 16-inch Monitor',
@@ -366,8 +365,7 @@
   const quickActions = document.getElementById('quickActions');
   const quickActionButtons = Array.from(document.querySelectorAll('.action-chip'));
   const cardsPanel = document.querySelector('.cards-panel');
-  const infoCardTitle = infoCard ? infoCard.querySelector('h3') : null;
-  const infoCardBody = infoCard ? infoCard.querySelector('p') : null;
+  const appContainer = document.getElementById('appContainer');
   const bottomCards = document.querySelector('.bottom-cards');
   const card2 = document.getElementById('card2');
   const card3 = document.getElementById('card3');
@@ -553,13 +551,154 @@
   let currentProductKey = 'clone16';
   let infoCardAutoScrollTimer = null;
   let infoCardAutoScrollDelayTimer = null;
+  let introInfoCardSlideIndex = 0;
+  let introInfoCardSliderTimer = null;
+
+  const INTRO_INFO_CARD_SLIDES = [
+    'https://static.wixstatic.com/media/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_68b9c39bdc094c6a930e4f196cd9bd01~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_68b9c39bdc094c6a930e4f196cd9bd01~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_6a06acf81a724deeb88e2e94060eeb6b~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_6a06acf81a724deeb88e2e94060eeb6b~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_1e5da76aa11c4a1196d4e119311c7c4b~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_1e5da76aa11c4a1196d4e119311c7c4b~mv2.png'
+  ];
+
+  const INTRO_INFO_CARD_DETAILS = [
+    {
+      number: '01',
+      title: 'High Brightness and Clear Display',
+      body: 'Optimal 700-1000 cd/m2 brightness and large 24-32" screens ensure crisp, legible text and reduced eye strain.'
+    },
+    {
+      number: '02',
+      title: 'Built-in Screen Flip Function',
+      body: 'Internal flip board with external buttons allows flexible orientation for any recording setup.'
+    },
+    {
+      number: '03',
+      title: 'Lightweight, Stable, and Safe',
+      body: 'Durable, portable frame with secure construction for vibration-free, safe operation.'
+    },
+    {
+      number: '04',
+      title: 'Best Value in Its Class',
+      body: 'Premium professional performance at an affordable price - no unnecessary parts, just essential features.'
+    },
+    {
+      number: '05',
+      title: 'Modular, Tool-Free Assembly',
+      body: 'Simplified three-section design lets anyone set up or disassemble the teleprompter in minutes.'
+    },
+    {
+      number: '06',
+      title: 'Beginner-Friendly Design',
+      body: 'Intuitive operation for everyone - from students to YouTubers - no technical expertise required.'
+    }
+  ];
 
   const INFO_TEXT = {
     aboutUs: {
-      title: 'About Us',
-      bodyHtml: `Crystal Prompter Co., Ltd.<br><br>established in 2017, is a leading broadcast equipment company specializing in prompters and electric pedestals. With continuous innovation and technical expertise, we deliver high-quality solutions focused on customer satisfaction`
+      title: '',
+      bodyHtml: `
+        <section class="about-card-embed" aria-label="About Us">
+          <div class="about-images">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png"
+              alt="Crystal Prompter teleprompter big"
+              class="img-big"
+            />
+            <img
+              src="https://static.wixstatic.com/media/6e449d_64393b62a0dc48588a1be12f6e6c56ba~mv2.png/v1/fill/w_193,h_399,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Mime%2032_3.png"
+              alt="Crystal Prompter teleprompter small"
+              class="img-small"
+            />
+          </div>
+          <div class="about-content">
+            <h1>About Us</h1>
+            <h2>Crystal Prompter Co., Ltd.</h2>
+            <p>
+              established in 2017, is a leading broadcast equipment company specializing
+              in prompters and electric pedestals. With continuous innovation and
+              technical expertise, we deliver high-quality solutions focused on customer
+              satisfaction.
+            </p>
+            <button type="button" class="next-btn" onclick="quickAction('Buy Now')">Next</button>
+          </div>
+        </section>
+      `
     }
   };
+
+  function getBuyNowInfoHtml(product) {
+    return `
+      <strong>How to buy ${product.name}</strong><br><br>
+      1. Choose the product model and intended setup.<br>
+      2. Prepare your quantity, delivery country, and preferred production use.<br>
+      3. Contact Crystal Prompter through the official social channels shown in About Us to request pricing and availability.<br>
+      4. Confirm the final configuration, accessories, and shipping arrangement before payment.<br><br>
+      <strong>Recommended details to send</strong><br>
+      Product name, camera or monitor setup, required accessories, target delivery location, and schedule.<br><br>
+      <strong>Note</strong><br>
+      Pricing and final order terms depend on the selected model and configuration.
+    `;
+  }
+
+  function getBuyNowFormHtml(product) {
+    return `
+      <form class="buy-now-form" onsubmit="event.preventDefault()">
+        <label class="buy-now-field">
+          <span>First Name :</span>
+          <input type="text" name="firstName" />
+        </label>
+        <label class="buy-now-field">
+          <span>Last Name :</span>
+          <input type="text" name="lastName" />
+        </label>
+        <label class="buy-now-field">
+          <span>Phone Number :</span>
+          <input type="tel" name="phoneNumber" />
+        </label>
+        <label class="buy-now-field">
+          <span>Email :</span>
+          <input type="email" name="email" />
+        </label>
+        <label class="buy-now-field">
+          <span>Address :</span>
+          <input type="text" name="address" />
+        </label>
+        <label class="buy-now-field">
+          <span>Select Item :</span>
+          <select name="selectItem">
+            ${PRODUCT_DEFINITIONS.map((definition) => `
+              <option value="${definition.name}"${definition.key === currentProductKey ? ' selected' : ''}>${definition.name}</option>
+            `).join('')}
+          </select>
+        </label>
+        <label class="buy-now-field">
+          <span>Quantity :</span>
+          <input type="number" name="quantity" min="1" value="1" />
+        </label>
+        <label class="buy-now-field buy-now-field-textarea">
+          <span>Details :</span>
+          <textarea name="details" rows="4"></textarea>
+        </label>
+      </form>
+    `;
+  }
+
+  function getProductUnifiedInfoHtml(product) {
+    const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
+    return `
+      <section class="product-unified-card" aria-label="${escapeHtml(product.name)} overview">
+        <div class="product-unified-images">
+          <img src="${product.images[0]}" alt="${escapeHtml(product.name)} image 1" class="product-unified-image product-unified-image-main" />
+          <img src="${product.images[1]}" alt="${escapeHtml(product.name)} image 2" class="product-unified-image product-unified-image-secondary" />
+        </div>
+        <div class="product-unified-copy">
+          <p class="product-unified-kicker">${escapeHtml(product.name)} Overview</p>
+          <div class="product-unified-summary">${summaryHtml}</div>
+        </div>
+      </section>
+    `;
+  }
 
   const scriptedFaq = [
     ...PRODUCT_DEFINITIONS.map((definition) => ({
@@ -648,18 +787,94 @@
     }
   ];
 
-  function setInfoCardText(title, body, useHtml = false) {
-    if (!infoCardTitle || !infoCardBody) return;
-    infoCardTitle.textContent = title;
-    if (useHtml) {
-      infoCardBody.innerHTML = body;
-      resetInfoCardAutoScroll();
-      if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
-      return;
-    }
-    infoCardBody.textContent = body;
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function getSocialLinksHtml() {
+    return `
+      <div class="social-strip" aria-label="Crystal Prompter social media">
+        <a class="social-icon-button" href="https://www.facebook.com/crystalprompter/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#1877F2"/>
+            <path fill="#fff" d="M13.5 20v-6.3h2.1l.3-2.5h-2.4V9.7c0-.7.2-1.2 1.2-1.2h1.3V6.3c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.1-3.2 3.3v1.7H8.8v2.5H11V20h2.5z"/>
+          </svg>
+        </a>
+        <a class="social-icon-button" href="https://www.instagram.com/crystalprompter_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <defs>
+              <linearGradient id="instagramGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#feda75"/>
+                <stop offset="35%" stop-color="#fa7e1e"/>
+                <stop offset="60%" stop-color="#d62976"/>
+                <stop offset="82%" stop-color="#962fbf"/>
+                <stop offset="100%" stop-color="#4f5bd5"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#instagramGradient)"/>
+            <rect x="6.2" y="6.2" width="11.6" height="11.6" rx="4" fill="none" stroke="#fff" stroke-width="1.7"/>
+            <circle cx="12" cy="12" r="3.1" fill="none" stroke="#fff" stroke-width="1.7"/>
+            <circle cx="17" cy="7.4" r="1.2" fill="#fff"/>
+          </svg>
+        </a>
+        <a class="social-icon-button" href="https://www.youtube.com/@i_crystal_river" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="4.5" fill="#FF0000"/>
+            <path d="M10 9.2v5.6l5-2.8-5-2.8z" fill="#fff"/>
+          </svg>
+        </a>
+        <a class="social-icon-button" href="https://www.tiktok.com/@crystal_prompter" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#25F4EE" d="M14.4 3.5v2.1c.8.8 1.8 1.3 2.9 1.5V10c-1.1-.1-2-.5-2.9-1.1v5.2a4.9 4.9 0 1 1-4.9-4.9c.2 0 .5 0 .7.1v2.7a2.3 2.3 0 1 0 1.6 2.2V3.5h2.6z"/>
+            <path fill="#FE2C55" d="M15 3.5c.2 1.1.8 2.1 1.7 2.8.4.3.9.6 1.5.8v2.6c-.9-.1-1.7-.3-2.4-.7v5.1a4.9 4.9 0 1 1-6-4.8v2.8a2.3 2.3 0 1 0 2.5 2.2V3.5H15z" opacity="0.9"/>
+            <path fill="#111" d="M14.8 2.6c.2 1.2.9 2.3 1.8 3 .8.6 1.7 1 2.7 1.1v2.6c-1.2 0-2.3-.3-3.3-.9v5.5a5.4 5.4 0 1 1-6.2-5.3v2.8a2.6 2.6 0 1 0 3.3 2.5V2.6h1.7z"/>
+          </svg>
+        </a>
+      </div>
+    `;
+  }
+
+  function playInfoCardAnimation(animationName) {
+    if (!infoCard) return;
+    infoCard.classList.remove('info-card-slide-enter');
+    if (animationName !== 'slide') return;
+    void infoCard.offsetWidth;
+    infoCard.classList.add('info-card-slide-enter');
+  }
+
+  function setInfoCardText(title, body, useHtml = false, options = {}) {
+    if (!infoCard) return;
+    const includeSocial = Boolean(options.includeSocial);
+    const animation = options.animation || '';
+    const contentClass = animation === 'slide' ? ' info-card-content-slide-enter' : '';
+    infoCard.classList.toggle('info-card-show-scrollbar', Boolean(options.showScrollbar));
+    const formattedBody = useHtml ? body : escapeHtml(body);
+    const titleHtml = title ? `<h3>${escapeHtml(title)}</h3>` : '';
+    const bodyHtml = useHtml
+      ? `<div class="info-card-body">${formattedBody}</div>`
+      : `<p class="info-card-body">${formattedBody}</p>`;
+    infoCard.innerHTML = `
+      <div class="info-card-content${contentClass}">
+        ${titleHtml}
+        ${bodyHtml}
+        ${includeSocial ? `<div class="info-card-social-wrap">${getSocialLinksHtml()}</div>` : ''}
+      </div>
+    `;
     resetInfoCardAutoScroll();
+    playInfoCardAnimation(animation);
     if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
+  }
+
+  function clearInfoCard() {
+    if (!infoCard) return;
+    infoCard.classList.remove('info-card-show-scrollbar', 'info-card-slide-enter');
+    infoCard.innerHTML = '<h3></h3><p></p>';
+    resetInfoCardAutoScroll();
   }
 
   function stopInfoCardAutoScroll() {
@@ -673,55 +888,72 @@
     }
   }
 
+  function stopIntroInfoCardSlider() {
+    if (introInfoCardSliderTimer) {
+      window.clearInterval(introInfoCardSliderTimer);
+      introInfoCardSliderTimer = null;
+    }
+  }
+
+  function updateIntroInfoCardSlider() {
+    const slides = Array.from(document.querySelectorAll('.intro-info-slide'));
+    if (!slides.length) return;
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('active', index === introInfoCardSlideIndex);
+    });
+  }
+
+  function startIntroInfoCardSlider() {
+    stopIntroInfoCardSlider();
+    if (INTRO_INFO_CARD_SLIDES.length <= 1) return;
+    introInfoCardSliderTimer = window.setInterval(() => {
+      introInfoCardSlideIndex = (introInfoCardSlideIndex + 1) % INTRO_INFO_CARD_SLIDES.length;
+      updateIntroInfoCardSlider();
+    }, 5000);
+  }
+
+  function renderIntroInfoCardSlider() {
+    if (!infoCard) return;
+    stopInfoCardAutoScroll();
+    introInfoCardSlideIndex = 0;
+    infoCard.innerHTML = `
+      <div class="intro-info-slider" aria-label="Crystal Prompter intro slider">
+        <div class="intro-info-slider-title">Our Top Picks For You</div>
+        ${INTRO_INFO_CARD_SLIDES.map((src, index) => `
+          <div class="intro-info-slide${index === 0 ? ' active' : ''}">
+            <img src="${src}" alt="Crystal Prompter intro slide ${index + 1}" />
+          </div>
+        `).join('')}
+        <div class="intro-info-detail-shell" aria-hidden="true">
+          <div class="intro-info-detail-trigger"></div>
+          <aside class="intro-info-detail-card">
+            ${INTRO_INFO_CARD_DETAILS.map((item) => `
+              <article class="intro-info-detail-item">
+                <span class="intro-info-detail-number">${item.number}</span>
+                <h4>${item.title}</h4>
+                <p>${item.body}</p>
+              </article>
+            `).join('')}
+          </aside>
+        </div>
+      </div>
+    `;
+    updateIntroInfoCardSlider();
+    startIntroInfoCardSlider();
+  }
+
   function resetInfoCardAutoScroll() {
     stopInfoCardAutoScroll();
     if (infoCard) infoCard.scrollTop = 0;
   }
 
   function restartInfoCardAutoScroll() {
-    if (!infoCard) return;
-    resetInfoCardAutoScroll();
-
-    window.requestAnimationFrame(() => {
-      infoCard.scrollTop = 0;
-      const maxScroll = infoCard.scrollHeight - infoCard.clientHeight;
-      if (maxScroll <= 6) return;
-
-      let direction = 1;
-      let currentTop = 0;
-      const step = 1;
-      const delayMs = 1200;
-
-      const startScroll = () => {
-        infoCardAutoScrollTimer = window.setInterval(() => {
-          currentTop += direction * step;
-          if (currentTop >= maxScroll) {
-            currentTop = maxScroll;
-            infoCard.scrollTop = maxScroll;
-            stopInfoCardAutoScroll();
-            direction = -1;
-            infoCardAutoScrollDelayTimer = window.setTimeout(startScroll, delayMs);
-            return;
-          }
-          if (currentTop <= 0 && direction < 0) {
-            currentTop = 0;
-            infoCard.scrollTop = 0;
-            stopInfoCardAutoScroll();
-            direction = 1;
-            infoCardAutoScrollDelayTimer = window.setTimeout(startScroll, delayMs);
-            return;
-          }
-          infoCard.scrollTop = currentTop;
-        }, 28);
-      };
-
-      infoCardAutoScrollDelayTimer = window.setTimeout(startScroll, delayMs);
-    });
+    stopInfoCardAutoScroll();
   }
 
   if (infoCard) {
-    infoCard.addEventListener('mouseenter', restartInfoCardAutoScroll);
-    infoCard.addEventListener('mouseleave', resetInfoCardAutoScroll);
+    infoCard.addEventListener('mouseenter', stopInfoCardAutoScroll);
+    infoCard.addEventListener('mouseleave', stopInfoCardAutoScroll);
   }
 
   function getCurrentProduct() {
@@ -747,33 +979,7 @@
     }
     if (card2) {
       card2.className = 'info-card social-card';
-      card2.innerHTML = `
-        <div class="social-strip" aria-label="Crystal Prompter social media">
-          <a class="social-icon-button" href="https://www.facebook.com/crystalprompter/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M13.5 21v-7h2.3l.4-2.7h-2.7V9.6c0-.8.2-1.3 1.4-1.3h1.5V5.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7v1.8H8.5V14h2.2v7h2.8z"/>
-            </svg>
-          </a>
-          <a class="social-icon-button" href="https://www.instagram.com/crystalprompter_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="5" y="5" width="14" height="14" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <circle cx="16.8" cy="7.6" r="1" />
-            </svg>
-          </a>
-          <a class="social-icon-button" href="https://www.youtube.com/@i_crystal_river" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20 8.2c-.2-1-.9-1.8-1.9-2-1.6-.4-6.1-.4-6.1-.4s-4.5 0-6.1.4c-1 .2-1.7 1-1.9 2C3.6 9.8 3.6 12 3.6 12s0 2.2.4 3.8c.2 1 .9 1.8 1.9 2 1.6.4 6.1.4 6.1.4s4.5 0 6.1-.4c1-.2 1.7-1 1.9-2 .4-1.6.4-3.8.4-3.8s0-2.2-.4-3.8z"/>
-              <path d="M10.3 14.8l4.7-2.8-4.7-2.8v5.6" fill="#2b1830"/>
-            </svg>
-          </a>
-          <a class="social-icon-button" href="https://www.tiktok.com/@crystal_prompter" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M14.6 4c.3 1.8 1.4 3.2 3.1 3.9v2.3c-1.1 0-2.2-.3-3.1-.9v5.2a4.6 4.6 0 1 1-4.6-4.6c.3 0 .6 0 .9.1v2.4a2.3 2.3 0 1 0 1.4 2.1V4h2.3z"/>
-            </svg>
-          </a>
-        </div>
-      `;
+      card2.innerHTML = getSocialLinksHtml();
     }
   }
 
@@ -817,24 +1023,44 @@
     cardsPanel.classList.toggle('response-hidden', hidden);
   }
 
+  function setIntroEmptyState(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('intro-empty-state', enabled);
+    if (enabled) {
+      renderIntroInfoCardSlider();
+      return;
+    }
+    stopIntroInfoCardSlider();
+  }
+
+  function setDetailFocusMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('detail-focus-mode', enabled);
+  }
+
+  function setProductSummaryMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('product-summary-mode', enabled);
+  }
+
   function selectProduct(productKey, options = {}) {
     const product = PRODUCTS[productKey];
     if (!product) return;
 
     currentProductKey = productKey;
+    setIntroEmptyState(false);
+    setDetailFocusMode(false);
+    setProductSummaryMode(true);
     if (options.setPlaceholderMode !== false) {
       setPlaceholderMode('intro');
     }
     setCardsPanelHidden(false);
     updatePlaceholderProductSelection();
-    showDefaultBottomCards(product.images, product.name);
-    if (productKey === 'clone16') {
-      renderClone16IntroSlider();
-    } else {
-      clearCustomCenterPanel();
-      setInitialVideoPanelHidden(true);
-    }
-    setInfoCardText(product.summary.title, product.summary.bodyHtml || product.summary.body, Boolean(product.summary.bodyHtml));
+    clearCustomCenterPanel();
+    setInitialVideoPanelHidden(true);
+    stopPanelVideo();
+    showMergedEmptyBottomCard();
+    setInfoCardText(product.summary.title, getProductUnifiedInfoHtml(product), true);
 
     if (options.showQuickActions && quickActions) {
       setQuickActionsMode('all');
@@ -844,6 +1070,9 @@
 
   function showCurrentProductImages() {
     const product = getCurrentProduct();
+    setIntroEmptyState(false);
+    setDetailFocusMode(false);
+    setProductSummaryMode(false);
     setCardsPanelHidden(false);
     if (currentProductKey === 'clone16') {
       showMergedEmptyBottomCard();
@@ -860,6 +1089,9 @@
 
   function showCurrentProductVideo() {
     const product = getCurrentProduct();
+    setIntroEmptyState(false);
+    setDetailFocusMode(false);
+    setProductSummaryMode(false);
     setCardsPanelHidden(false);
     clearCustomCenterPanel();
     if (currentProductKey === 'clone16') {
@@ -880,6 +1112,9 @@
 
   function showCurrentProductText(section) {
     const product = getCurrentProduct();
+    setIntroEmptyState(false);
+    if (section !== 'buy_now') setDetailFocusMode(false);
+    setProductSummaryMode(false);
     setCardsPanelHidden(false);
     if (section === 'specification') {
       clearCustomCenterPanel();
@@ -947,9 +1182,13 @@
       return;
     }
     if (section === 'buy_now') {
+      stopAvatarVideo();
+      setDetailFocusMode(true);
       clearCustomCenterPanel();
-      showDefaultBottomCards(product.images, product.name);
-      setInfoCardText(product.buyNow.title, product.buyNow.body);
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      showMergedEmptyBottomCard();
+      setInfoCardText('Buy Now Form', getBuyNowFormHtml(product), true, { showScrollbar: true });
     }
   }
 
@@ -965,6 +1204,9 @@
   function applyMatchedResponse(match) {
     if (!match) return;
 
+    setIntroEmptyState(false);
+    setDetailFocusMode(false);
+    setProductSummaryMode(false);
     setPlaceholderMode('intro');
     restoreAvatarIdleVideo();
     setQuickActionsMode('all');
@@ -979,9 +1221,12 @@
     if (match.id === 'about_us') {
       stopAvatarVideo();
       setQuickActionsMode('limited');
-      showAboutUsSocialCard();
-      setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true);
-      playPanelVideo(PANEL_ABOUT_US_VIDEO, false);
+      setDetailFocusMode(true);
+      clearCustomCenterPanel();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      showMergedEmptyBottomCard();
+      setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true, { includeSocial: true });
     }
     if (match.id === 'images') showCurrentProductImages();
     if (match.id === 'videos') showCurrentProductVideo();
@@ -1095,6 +1340,7 @@
     const msg = text || input.value.trim();
     if (!msg) return;
     input.value = '';
+    setIntroEmptyState(false);
     const detectedProductKey = detectProductKeyFromText(msg);
     if (detectedProductKey && PRODUCTS[detectedProductKey]) {
       currentProductKey = detectedProductKey;
@@ -1107,6 +1353,8 @@
 
     const match = matchScriptedQuestion(msg);
     if (!match) {
+      setDetailFocusMode(false);
+      setProductSummaryMode(false);
       setPlaceholderMode('nomatch');
       setInitialVideoPanelHidden(true);
       setQuickActionsMode('nomatch');
@@ -1161,3 +1409,6 @@
   }
 
   resetInfoCardAutoScroll();
+  if (appContainer && appContainer.classList.contains('intro-empty-state')) {
+    renderIntroInfoCardSlider();
+  }
