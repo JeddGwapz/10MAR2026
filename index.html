@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div class="app-container intro-empty-state" id="appContainer">
+<div class="app-container" id="appContainer">
 
   <!-- SETTINGS MODAL -->
   <div class="modal-overlay" id="settingsModal">
@@ -16,7 +16,7 @@
       <button class="modal-close" onclick="closeSettings()">&#x2715;</button>
       <h2>Settings</h2>
       <label>Assistant Name</label>
-      <input type="text" id="settingName" value="Assistant" />
+      <input type="text" id="settingName" value="AI Assistant Online" />
       <label>Language</label>
       <select id="settingLang">
         <option value="EN">🇺🇸 English</option>
@@ -33,7 +33,16 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="app-title">CRYSTAL PROMPTER</div>
+    <div class="app-title">
+      <img class="app-title-logo" src="favicon_cp.ico" alt="Crystal Prompter logo" width="22" height="22" />
+      <span class="app-title-text">CRYSTAL PROMPTER</span>
+    </div>
+    <div class="assistant-status" aria-label="Assistant status">
+      <span class="assistant-status-dot" aria-hidden="true"></span>
+      <div class="assistant-status-copy">
+        <span class="assistant-status-label" id="assistantName">AI Assistant Online</span>
+      </div>
+    </div>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -42,6 +51,7 @@
     <!-- LEFT: ASSISTANT -->
     <div class="assistant-panel">
       <div class="avatar-box">
+        <img id="avatarImage" src="assets/Daniel Mobile.png" alt="Daniel Mobile avatar" />
         <video id="avatarVideo" muted loop playsinline preload="metadata">
           <source id="avatarVideoSource" src="assets/steady.mp4" type="video/mp4" />
         </video>
@@ -112,12 +122,8 @@
         <p></p>
       </div>
       <div class="bottom-cards">
-        <div class="info-card image-card" id="card2">
-          <img src="https://static.wixstatic.com/media/6e449d_e47651efc6c94d8ea6969d9892419f57~mv2.png/v1/fill/w_311,h_438,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Pink%20Poppy%20Flowers.png" alt="Clone 16 image 1" />
-        </div>
-        <div class="info-card image-card" id="card3">
-          <img src="https://static.wixstatic.com/media/6e449d_64393b62a0dc48588a1be12f6e6c56ba~mv2.png/v1/fill/w_193,h_399,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Mime%2032_3.png" alt="Clone 16 image 2" />
-        </div>
+        <div class="info-card image-card" id="card2"></div>
+        <div class="info-card image-card" id="card3"></div>
       </div>
     </div>
 
@@ -129,15 +135,15 @@
   <div class="bottom-area">
 
     <!-- QUICK ACTIONS -->
-    <div class="quick-actions hidden" id="quickActions">
+    <div class="quick-actions" id="quickActions">
       <div class="action-row">
         <button class="action-chip" data-action="about_us" onclick="quickAction('About Us')">❓ About Us</button>
-        <button class="action-chip" data-action="images" onclick="quickAction('Images')">🖼 Images</button>
-        <button class="action-chip" data-action="videos" onclick="quickAction('Videos')">🎬 Videos</button>
+        <button class="action-chip" data-action="images" onclick="quickAction('Images')" style="display: none;">🖼 Images</button>
+        <button class="action-chip" data-action="videos" onclick="quickAction('Videos')" style="display: none;">🎬 Videos</button>
       </div>
       <div class="action-row">
-        <button class="action-chip" data-action="specification" onclick="quickAction('Specification')">📋 Specification</button>
-        <button class="action-chip" data-action="installation" onclick="quickAction('Installation')">🛠 Installation</button>
+        <button class="action-chip" data-action="specification" onclick="quickAction('Specification')" style="display: none;">📋 Specification</button>
+        <button class="action-chip" data-action="installation" onclick="quickAction('Installation')" style="display: none;">🛠 Installation</button>
         <button class="action-chip" data-action="buy_now" onclick="quickAction('Buy Now')">🛒 Buy Now</button>
       </div>
     </div>
@@ -153,11 +159,6 @@
             placeholder="Ask Anything..."
             onkeydown="handleKey(event)"
           />
-        </div>
-        <div class="input-controls">
-          <button class="lang-btn" id="langBtn" onclick="cycleLang()">🇺🇸 EN</button>
-          <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙</button>
-          <button class="attach-btn" onclick="attachFile()">↗</button>
         </div>
         <button class="send-btn" onclick="sendMessage()">➤</button>
       </div>

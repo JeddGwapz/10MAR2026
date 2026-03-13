@@ -214,49 +214,46 @@
     });
   }
 
-  function renderClone16ApplicationImagesPlaceholder() {
-    renderCustomCenterPanel(`
-      <div class="placeholder-application-card">
-        <h3>Application Images</h3>
-        <div class="application-gallery-grid">
-          <div class="application-gallery-item large">
-            <img src="https://static.wixstatic.com/media/d0630a_35a6cb4b811c4ddb960e45b970c20e41~mv2.jpg/v1/fill/w_284,h_392,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 1" />
-            <div class="application-gallery-caption">
-              <strong>Darakwon Publisher</strong>
-              <span>Application image</span>
-            </div>
+  function getClone16ApplicationGalleryHtml() {
+    return `
+      <div class="application-gallery-grid clone16-inline-gallery">
+        <div class="application-gallery-item large">
+          <img src="https://static.wixstatic.com/media/d0630a_35a6cb4b811c4ddb960e45b970c20e41~mv2.jpg/v1/fill/w_284,h_392,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 1" />
+          <div class="application-gallery-caption">
+            <strong>Darakwon Publisher</strong>
+            <span>Application image</span>
           </div>
-          <div class="application-gallery-item">
-            <img src="https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png" alt="Clone 16 application image 2" />
-            <div class="application-gallery-caption">
-              <strong>Darakwon Publisher</strong>
-              <span>Application image</span>
-            </div>
+        </div>
+        <div class="application-gallery-item">
+          <img src="https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png" alt="Clone 16 application image 2" />
+          <div class="application-gallery-caption">
+            <strong>Darakwon Publisher</strong>
+            <span>Application image</span>
           </div>
-          <div class="application-gallery-item">
-            <img src="https://static.wixstatic.com/media/d0630a_221e63cfeb6743ab9373699001470a76~mv2.jpg/v1/crop/x_89,y_0,w_4446,h_3468/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 3" />
-            <div class="application-gallery-caption">
-              <strong>Darakwon Publisher</strong>
-              <span>Application image</span>
-            </div>
+        </div>
+        <div class="application-gallery-item">
+          <img src="https://static.wixstatic.com/media/d0630a_221e63cfeb6743ab9373699001470a76~mv2.jpg/v1/crop/x_89,y_0,w_4446,h_3468/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 3" />
+          <div class="application-gallery-caption">
+            <strong>Darakwon Publisher</strong>
+            <span>Application image</span>
           </div>
-          <div class="application-gallery-item">
-            <img src="https://static.wixstatic.com/media/d0630a_4e3390b8436d4386ab5e848389e3088f~mv2.jpg/v1/crop/x_77,y_0,w_3846,h_3000/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.jpg" alt="Clone 16 application image 4" />
-            <div class="application-gallery-caption">
-              <strong>Byeokje Global Culinary Research Institute</strong>
-              <span>Application image</span>
-            </div>
+        </div>
+        <div class="application-gallery-item">
+          <img src="https://static.wixstatic.com/media/d0630a_4e3390b8436d4386ab5e848389e3088f~mv2.jpg/v1/crop/x_77,y_0,w_3846,h_3000/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.jpg" alt="Clone 16 application image 4" />
+          <div class="application-gallery-caption">
+            <strong>Byeokje Global Culinary Research Institute</strong>
+            <span>Application image</span>
           </div>
-          <div class="application-gallery-item">
-            <img src="https://static.wixstatic.com/media/d0630a_de6c72aa4a714bb9bfd19c34f4fdc679~mv2.png/v1/crop/x_0,y_63,w_600,h_468/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.png" alt="Clone 16 application image 5" />
-            <div class="application-gallery-caption">
-              <strong>Byeokje Global Culinary Research Institute</strong>
-              <span>Application image</span>
-            </div>
+        </div>
+        <div class="application-gallery-item">
+          <img src="https://static.wixstatic.com/media/d0630a_de6c72aa4a714bb9bfd19c34f4fdc679~mv2.png/v1/crop/x_0,y_63,w_600,h_468/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.png" alt="Clone 16 application image 5" />
+          <div class="application-gallery-caption">
+            <strong>Byeokje Global Culinary Research Institute</strong>
+            <span>Application image</span>
           </div>
         </div>
       </div>
-    `);
+    `;
   }
 
   function playPanelVideo(src, autoplay = false) {
@@ -362,14 +359,79 @@
   /* ── CHAT ── */
   const infoCard = document.getElementById('infoCard');
   const bottomArea = document.querySelector('.bottom-area');
+  const inputArea = document.querySelector('.input-area');
   const quickActions = document.getElementById('quickActions');
   const quickActionButtons = Array.from(document.querySelectorAll('.action-chip'));
   const cardsPanel = document.querySelector('.cards-panel');
   const appContainer = document.getElementById('appContainer');
+  const assistantPanel = document.querySelector('.assistant-panel');
+  const avatarBox = document.querySelector('.avatar-box');
   const bottomCards = document.querySelector('.bottom-cards');
   const card2 = document.getElementById('card2');
   const card3 = document.getElementById('card3');
   const placeholderProductButtons = Array.from(document.querySelectorAll('.placeholder-product-item.available'));
+  const subtitleStrip = document.getElementById('subtitleStrip');
+
+  function setSubtitleStripText(text = '') {
+    if (!subtitleStrip) return;
+    subtitleStrip.textContent = text;
+  }
+
+  function syncCueSeriesAvatarHeight() {
+    if (!appContainer || !assistantPanel || !avatarBox || !infoCard || !cardsPanel) return;
+    if (!appContainer.classList.contains('cue-series-mode')) {
+      assistantPanel.style.height = '';
+      avatarBox.style.height = '';
+      cardsPanel.style.height = '';
+      infoCard.style.height = '';
+      return;
+    }
+    if (appContainer.classList.contains('clone16-action-layout')) {
+      assistantPanel.style.height = '';
+      avatarBox.style.height = '';
+      cardsPanel.style.height = '';
+      infoCard.style.height = '';
+      return;
+    }
+
+    const infoCardHeight = Math.round(infoCard.getBoundingClientRect().height);
+    if (!infoCardHeight) return;
+
+    assistantPanel.style.height = `${infoCardHeight}px`;
+    avatarBox.style.height = '100%';
+    cardsPanel.style.height = `${infoCardHeight}px`;
+    infoCard.style.height = '100%';
+  }
+
+  function scheduleCueSeriesAvatarHeightSync() {
+    window.requestAnimationFrame(syncCueSeriesAvatarHeight);
+  }
+
+  function setCueSeriesMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('cue-series-mode', enabled);
+    if (!subtitleStrip || !bottomArea || !inputArea) {
+      scheduleCueSeriesAvatarHeightSync();
+      return;
+    }
+    if (enabled) {
+      if (subtitleStrip.parentElement !== bottomArea) {
+        bottomArea.insertBefore(subtitleStrip, inputArea);
+      }
+      scheduleCueSeriesAvatarHeightSync();
+      return;
+    }
+    if (subtitleStrip.parentElement !== appContainer) {
+      appContainer.insertBefore(subtitleStrip, bottomArea);
+    }
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function setClone16ActionLayout(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('clone16-action-layout', enabled);
+    scheduleCueSeriesAvatarHeightSync();
+  }
 
   function createPlaceholderImage(label) {
     const svg = `
@@ -398,6 +460,7 @@
       : `No dedicated ${definition.name} video is configured yet. Use Images or Specification for now.`;
 
     return {
+      key: definition.key,
       name: definition.name,
       aliases: definition.aliases,
       summary: {
@@ -435,9 +498,9 @@
       summaryHtml: `Portable interview teleprompter equipped with<br><br>a 16-inch, 500 cd/m², 16:9 monitor<br><br><strong>Portable and Precise Performance</strong><br><br>Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.<br><br><strong>Effortless Script Control and Wider View</strong><br><br>Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.`,
       images: [
         'https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png',
-        'https://static.wixstatic.com/media/6e449d_64393b62a0dc48588a1be12f6e6c56ba~mv2.png/v1/fill/w_193,h_399,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Mime%2032_3.png'
+        'https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png'
       ],
-      videoSrc: 'assets/clone16-video.mp4',
+      videoSrc: 'assets/clone16-q1-answer.mp4',
       specification: 'Clone 16 uses a 16:9 widescreen display, laptop HDMI workflow, and smooth script control for studio and field production.',
       installation: 'Mount the prompter, align the camera and lens, connect the laptop via HDMI, then load the script and begin prompting.'
     },
@@ -446,6 +509,7 @@
       name: 'Cue Series',
       aliases: ['cue series', 'cue24', 'cue 24'],
       summary: 'Cue Series is built for larger-format prompting workflows, giving creators and studios a more stable and readable teleprompter setup.',
+      summaryHtml: `Built for the next generation of professionals, these ultra-lightweight, high-brightness teleprompters set up effortlessly anywhere, delivering exceptional clarity and precision for creators and broadcasters alike.`,
       images: [
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png',
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png'
@@ -549,6 +613,7 @@
   }));
 
   let currentProductKey = 'clone16';
+  let hasExplicitProductSelection = false;
   let infoCardAutoScrollTimer = null;
   let infoCardAutoScrollDelayTimer = null;
   let introInfoCardSlideIndex = 0;
@@ -599,18 +664,6 @@
       title: '',
       bodyHtml: `
         <section class="about-card-embed" aria-label="About Us">
-          <div class="about-images">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png"
-              alt="Crystal Prompter teleprompter big"
-              class="img-big"
-            />
-            <img
-              src="https://static.wixstatic.com/media/6e449d_64393b62a0dc48588a1be12f6e6c56ba~mv2.png/v1/fill/w_193,h_399,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Mime%2032_3.png"
-              alt="Crystal Prompter teleprompter small"
-              class="img-small"
-            />
-          </div>
           <div class="about-content">
             <h1>About Us</h1>
             <h2>Crystal Prompter Co., Ltd.</h2>
@@ -638,6 +691,43 @@
       Product name, camera or monitor setup, required accessories, target delivery location, and schedule.<br><br>
       <strong>Note</strong><br>
       Pricing and final order terms depend on the selected model and configuration.
+    `;
+  }
+
+  function getBuyNowCardHtml(product) {
+    return `
+      <section class="buy-now-card-embed" aria-label="Buy ${escapeHtml(product.name)}">
+        <div class="buy-now-card-copy">
+          <h3 class="what-we-do-title">What We Do?</h3>
+          <p class="what-we-do-intro">We provide high-quality teleprompters designed to support clear and confident delivery for broadcasting, education, live events, and more.</p>
+          <div class="what-we-do-grid">
+            <article class="what-we-do-card">
+              <h4>Design and Manufacture Teleprompters</h4>
+              <p>We create mid-size and large studio teleprompters for creators of all levels.</p>
+            </article>
+            <article class="what-we-do-card">
+              <h4>Simplified Professional Equipment</h4>
+              <p>Modular, intuitive designs make professional-quality broadcasting, online teaching, and video production easy.</p>
+            </article>
+            <article class="what-we-do-card">
+              <h4>Versatile Applications</h4>
+              <p>Ideal for students, YouTubers, online instructors, and professional studios.</p>
+            </article>
+            <article class="what-we-do-card">
+              <h4>Domestic Production and Quality Control</h4>
+              <p>All components are produced and standardized in Korea for consistency, durability, and reliability.</p>
+            </article>
+          </div>
+          <div class="buy-now-card-guide">${getBuyNowInfoHtml(product)}</div>
+        </div>
+        <div class="buy-now-card-form-shell">
+          <div class="buy-now-card-form-header">
+            <h4>Buy Now Form</h4>
+            <p>Complete the details below to request ${escapeHtml(product.name)} pricing and availability.</p>
+          </div>
+          ${getBuyNowFormHtml(product)}
+        </div>
+      </section>
     `;
   }
 
@@ -684,17 +774,321 @@
     `;
   }
 
-  function getProductUnifiedInfoHtml(product) {
+  function getProductUnifiedInfoHtml(product, extraHtml = '') {
     const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
+    const extraSection = extraHtml
+      ? `<div class="product-unified-summary product-unified-summary-extra">${extraHtml}</div>`
+      : '';
     return `
       <section class="product-unified-card" aria-label="${escapeHtml(product.name)} overview">
-        <div class="product-unified-images">
-          <img src="${product.images[0]}" alt="${escapeHtml(product.name)} image 1" class="product-unified-image product-unified-image-main" />
-          <img src="${product.images[1]}" alt="${escapeHtml(product.name)} image 2" class="product-unified-image product-unified-image-secondary" />
+        <div class="product-unified-visual">
+          <div class="product-unified-stage">
+            <span class="product-unified-badge">Featured Product</span>
+            <img src="${product.images[0]}" alt="${escapeHtml(product.name)} image 1" class="product-unified-image product-unified-image-main" />
+            <img src="${product.images[1]}" alt="${escapeHtml(product.name)} image 2" class="product-unified-image product-unified-image-secondary" />
+          </div>
         </div>
         <div class="product-unified-copy">
-          <p class="product-unified-kicker">${escapeHtml(product.name)} Overview</p>
+          <div class="product-unified-copy-intro">
+            <p class="product-unified-kicker">${escapeHtml(product.name)} Overview</p>
+            <p class="product-unified-lead">Professional teleprompter presentation with organized product visuals and readable content blocks.</p>
+          </div>
           <div class="product-unified-summary">${summaryHtml}</div>
+          ${extraSection}
+        </div>
+      </section>
+    `;
+  }
+
+  function getClone16ProductVisualHtml(product, options = {}) {
+    const showSecondaryImage = options.showSecondaryImage !== false;
+    return `
+      <div class="clone16-card-visual">
+        <span class="clone16-card-badge">Clone 16</span>
+        <img src="${product.images[0]}" alt="${escapeHtml(product.name)} primary product image" class="clone16-card-image clone16-card-image-primary" />
+        ${showSecondaryImage ? `<img src="${product.images[1]}" alt="${escapeHtml(product.name)} secondary product image" class="clone16-card-image clone16-card-image-secondary" />` : ''}
+      </div>
+    `;
+  }
+
+  function getClone16MetricPillsHtml(items) {
+    return `
+      <div class="clone16-card-metrics">
+        ${items.map((item) => `<span class="clone16-card-metric">${escapeHtml(item)}</span>`).join('')}
+      </div>
+    `;
+  }
+
+  function getClone16InfoCardHtml({ product, kicker, title, lead, sectionHtml, metrics = [], showSecondaryImage = true }) {
+    const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
+    const metricsHtml = metrics.length ? getClone16MetricPillsHtml(metrics) : '';
+    return `
+      <section class="clone16-card" aria-label="${escapeHtml(title)}">
+        <div class="clone16-card-hero">
+          <div class="clone16-card-copy">
+            <p class="clone16-card-kicker">${escapeHtml(kicker)}</p>
+            <h4 class="clone16-card-heading">${escapeHtml(title)}</h4>
+            <p class="clone16-card-lead">${escapeHtml(lead)}</p>
+            ${metricsHtml}
+            <div class="clone16-card-summary">${summaryHtml}</div>
+          </div>
+          ${getClone16ProductVisualHtml(product, { showSecondaryImage })}
+        </div>
+        ${sectionHtml}
+      </section>
+    `;
+  }
+
+  function getClone16ImagesInfoHtml(product) {
+    return getClone16InfoCardHtml({
+      product,
+      kicker: 'Images Info Card',
+      title: 'Application Images',
+      lead: 'Product photos and real installation shots are arranged inside one responsive card for fast review.',
+      metrics: ['16-inch monitor', '16:9 / 4:3', 'Portable setup'],
+      sectionHtml: `
+        <section class="clone16-card-panel clone16-card-panel-gallery" aria-label="Clone 16 image gallery">
+          <div class="clone16-card-section-header">
+            <h5>Image Gallery</h5>
+            <p>Configured product shots and live-use examples without moving outside the main info card.</p>
+          </div>
+          ${getClone16ApplicationGalleryHtml()}
+        </section>
+      `
+    });
+  }
+
+  function getClone16VideoInfoHtml(product) {
+    const videoTitle = escapeHtml(product.video.title);
+    const videoBody = escapeHtml(product.video.body);
+    const videoSrc = escapeHtml(product.video.src || PANEL_DEFAULT_VIDEO);
+    return getClone16InfoCardHtml({
+      product,
+      kicker: 'Videos Info Card',
+      title: 'Video Preview',
+      lead: 'The demo video stays embedded in the main info card with supporting notes aligned beside it on larger screens.',
+      metrics: ['Embedded playback', 'Laptop HDMI workflow', 'Field and studio use'],
+      sectionHtml: `
+        <section class="clone16-video-layout" aria-label="Clone 16 video content">
+          <div class="clone16-card-panel clone16-card-panel-video">
+            <div class="clone16-card-section-header">
+              <h5>${videoTitle}</h5>
+              <p>${videoBody}</p>
+            </div>
+            <div class="clone16-video-card">
+              <video class="clone16-inline-video" controls playsinline preload="metadata">
+                <source src="${videoSrc}" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+          <aside class="clone16-card-panel clone16-card-panel-notes">
+            <div class="clone16-card-section-header">
+              <h5>Video Notes</h5>
+              <p>Use this block for quick talking points while previewing the product demo.</p>
+            </div>
+            <ul class="clone16-card-list">
+              <li>Portable one-body build for interviews and on-location production.</li>
+              <li>Widescreen prompting supports clearer long-form script reading.</li>
+              <li>Direct laptop connection makes script changes faster during shooting.</li>
+            </ul>
+          </aside>
+        </section>
+      `
+    });
+  }
+
+  function getClone16SpecificationTableHtml() {
+    return `
+      <div class="placeholder-spec-table-wrap">
+        <table class="placeholder-spec-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Overall Structure</td><td>Folding Type (adjustable angle)</td></tr>
+            <tr><td>Panel Size</td><td>156</td></tr>
+            <tr><td>Monitor Active Area</td><td>W 560mm x H 490mm</td></tr>
+            <tr><td>Resolution</td><td>1280 x 720</td></tr>
+            <tr><td>Aspect Ratio</td><td>16:9, 4:3</td></tr>
+            <tr><td>Monitor Brightness</td><td>400 cds</td></tr>
+            <tr><td>Input Signal</td><td>HDMI/DVI/DP</td></tr>
+            <tr><td>Screen Flip</td><td>Panel Built-in Board / Flip Button</td></tr>
+            <tr><td>Input Power</td><td>12V SA Power Adapter</td></tr>
+            <tr><td>Prompter Glass</td><td>Ultra-low iron/Tempered glass / Special coating/2mm</td></tr>
+            <tr><td>Camera Plate</td><td>3-level Height Adjustment</td></tr>
+            <tr><td>Body Plate</td><td>1/4, 3/8 tap hole (can be connected to various tripods)</td></tr>
+            <tr><td>Body &amp; Hood</td><td>Aluminum 2.5mm (standard)</td></tr>
+            <tr><td>Body &amp; Hood Surface Treatment</td><td>Black, Matte, Sanding. Anodizing, Insulation Treatment</td></tr>
+            <tr><td>Lens Cover Cloth</td><td>Special anti-reflective fiber material</td></tr>
+            <tr><td>Body Lens Hole Size</td><td>Width 270mm x Height 235mm</td></tr>
+            <tr><td>Wireless Speed Control Remote</td><td>SW Play &amp; Stop, speed control within 10m range</td></tr>
+            <tr><td>Product Folding Size</td><td>W 410mm x D 380mm x H 210mm</td></tr>
+            <tr><td>Product Body Size</td><td>W 410mm x D 260mm x H 310mm (excluding plate)</td></tr>
+            <tr><td>Product Overall Size</td><td>W 410mm x D 520mm x H 310mm</td></tr>
+            <tr><td>Product Overall Weight</td><td>6.98 kg</td></tr>
+            <tr><td>Hard Case</td><td>Wood &amp; Plastic combination (optional purchase)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function getClone16SpecificationInfoHtml(product) {
+    return getClone16InfoCardHtml({
+      product,
+      kicker: 'Specification Info Card',
+      title: 'Technical Specification',
+      lead: 'The full specification table is grouped with the product summary so the content reads as one clean technical card.',
+      metrics: ['1280 x 720', 'HDMI / DVI / DP', '6.98 kg'],
+      showSecondaryImage: false,
+      sectionHtml: `
+        <section class="clone16-spec-layout" aria-label="Clone 16 specification details">
+          <aside class="clone16-card-panel clone16-card-panel-notes">
+            <div class="clone16-card-section-header">
+              <h5>Key Points</h5>
+              <p>${escapeHtml(product.specification.body)}</p>
+            </div>
+            <ul class="clone16-card-list">
+              <li>16-inch widescreen display with switchable 16:9 and 4:3 aspect ratios.</li>
+              <li>Built-in screen flip support for flexible prompting orientation.</li>
+              <li>Aluminum body and foldable structure for transport and repeat setup.</li>
+            </ul>
+          </aside>
+          <div class="clone16-card-panel clone16-card-panel-spec">
+            <div class="clone16-card-section-header">
+              <h5>Specification Table</h5>
+              <p>Scrollable on small screens without breaking the card layout.</p>
+            </div>
+            ${getClone16SpecificationTableHtml()}
+          </div>
+        </section>
+      `
+    });
+  }
+
+  function getClone16InstallationInfoHtml(product) {
+    return getClone16InfoCardHtml({
+      product,
+      kicker: 'Installation Info Card',
+      title: 'Installation Guide',
+      lead: 'Setup instructions are arranged into compact steps and checks so the card stays dense without leaving dead space.',
+      metrics: ['Tripod-ready', 'Fast alignment', 'Remote control ready'],
+      sectionHtml: `
+        <section class="clone16-install-layout" aria-label="Clone 16 installation guide">
+          <div class="clone16-card-panel clone16-card-panel-steps">
+            <div class="clone16-card-section-header">
+              <h5>Step-by-Step Setup</h5>
+              <p>${escapeHtml(product.installation.body)}</p>
+            </div>
+            <div class="detail-steps">
+              <article class="detail-step">
+                <span class="detail-step-number">1</span>
+                <div>
+                  <h4>Mount the teleprompter</h4>
+                  <p>Place Clone 16 on a stable tripod or compatible support and confirm the foldable body is locked in position.</p>
+                </div>
+              </article>
+              <article class="detail-step">
+                <span class="detail-step-number">2</span>
+                <div>
+                  <h4>Align camera and glass</h4>
+                  <p>Center the camera behind the prompter glass and adjust the lens position for a clean eyeline and balanced framing.</p>
+                </div>
+              </article>
+              <article class="detail-step">
+                <span class="detail-step-number">3</span>
+                <div>
+                  <h4>Connect the script source</h4>
+                  <p>Use HDMI from the laptop, then verify the mirrored script output, monitor brightness, and flip settings before recording.</p>
+                </div>
+              </article>
+              <article class="detail-step">
+                <span class="detail-step-number">4</span>
+                <div>
+                  <h4>Finalize prompt control</h4>
+                  <p>Load the script, test scroll speed, and confirm remote or operator control so the presenter can start smoothly.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+          <aside class="clone16-card-panel clone16-card-panel-notes">
+            <div class="clone16-card-section-header">
+              <h5>Before Recording</h5>
+              <p>Quick checks to keep the setup stable and ready for talent.</p>
+            </div>
+            <ul class="clone16-card-list">
+              <li>Confirm tripod balance and camera centering before talent arrives.</li>
+              <li>Check monitor brightness and screen flip orientation.</li>
+              <li>Test remote scroll speed with the final script loaded.</li>
+            </ul>
+          </div>
+        </section>
+      `
+    });
+  }
+
+  const PRODUCT_SHOWCASE_META = {
+    clone16: 'Clone 16 | Portable HDMI Teleprompter',
+    cueSeries: 'Cue 24 | Cue 27 | Cue 32',
+    framerSeries: 'Professional Framing Prompt Line',
+    folder22n: 'Foldable Prompt System',
+    lessonQ: 'Education and Lecture Prompt Line',
+    mimeSeries: 'Monitor Prompt Series',
+    ultraSeries: 'Large-format Professional Prompt Line',
+    tab12: 'Compact Tablet Prompt System',
+    flex15: 'Flexible Mid-size Prompt System',
+    rotunda15: 'Compact Creator Prompt System',
+    olleson18: '18-inch Presentation Prompt System',
+    plate: 'Mounting and Support Component'
+  };
+
+  const PRODUCT_INTRO_IMAGE_MAP = {
+    cueSeries: {
+      src: 'assets/Cue Series - Intro.png',
+      alt: 'Cue Series - Intro'
+    },
+    tab12: {
+      src: 'assets/Tab 12 - Intro.png',
+      alt: 'Tab 12 - Intro'
+    }
+  };
+
+  function getProductSummaryStripText(product) {
+    if (!product || !product.summary || !product.summary.body) return '';
+    if (product.key === 'cueSeries') {
+      return 'The Cue Series teleprompters are designed for professionals who need clear and reliable script display.';
+    }
+    if (product.key === 'clone16') {
+      return 'The Clone 16 teleprompter is designed for portable, reliable prompting in studio and on-location workflows.';
+    }
+    const text = product.summary.body.trim();
+    return text.length > 120 ? `${text.slice(0, 117).trimEnd()}...` : text;
+  }
+
+  function shouldUseShowcaseLayout(productKey, section = 'summary') {
+    return Boolean(PRODUCTS[productKey]);
+  }
+
+  function getProductShowcaseHtml(product) {
+    const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
+    const showcaseMeta = PRODUCT_SHOWCASE_META[product.key] || '';
+    return `
+      <section class="cue-series-showcase" aria-label="Cue Series showcase">
+        <div class="cue-series-showcase-copy">
+          <p class="cue-series-kicker">Our Top Picks For You</p>
+          <p class="cue-series-subtitle">Explore Our Latest Recommended Products</p>
+          <span class="cue-series-accent" aria-hidden="true"></span>
+          <h4 class="cue-series-title">${escapeHtml(product.name)}</h4>
+          ${showcaseMeta ? `<p class="cue-series-models">${escapeHtml(showcaseMeta)}</p>` : ''}
+          <div class="cue-series-summary">${summaryHtml}</div>
+        </div>
+        <div class="cue-series-showcase-visual">
+          <div class="cue-series-image-shell cue-series-image-shell-hero">
+            <img src="${product.images[0]}" alt="${escapeHtml(product.name)} product image" class="cue-series-image cue-series-image-hero" />
+          </div>
         </div>
       </section>
     `;
@@ -849,6 +1243,7 @@
 
   function setInfoCardText(title, body, useHtml = false, options = {}) {
     if (!infoCard) return;
+    infoCard.classList.remove('image-card', 'info-card-empty-state');
     const includeSocial = Boolean(options.includeSocial);
     const animation = options.animation || '';
     const contentClass = animation === 'slide' ? ' info-card-content-slide-enter' : '';
@@ -867,14 +1262,44 @@
     `;
     resetInfoCardAutoScroll();
     playInfoCardAnimation(animation);
+    scheduleCueSeriesAvatarHeightSync();
     if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
   }
 
   function clearInfoCard() {
     if (!infoCard) return;
-    infoCard.classList.remove('info-card-show-scrollbar', 'info-card-slide-enter');
-    infoCard.innerHTML = '<h3></h3><p></p>';
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state');
+    infoCard.innerHTML = '';
     resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function showEmptyInfoCard() {
+    if (!infoCard) return;
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card');
+    infoCard.classList.add('info-card-empty-state');
+    infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function getInitialInfoCardHtml() {
+    return `
+      <section class="initial-info-card" aria-label="Multimedia Content">
+        <p class="initial-info-card-label">Multimedia Content</p>
+        <div class="initial-info-card-hint" aria-label="Multimedia hint">
+          <span class="initial-info-card-gallery" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="presentation">
+              <rect x="7" y="11" width="34" height="24" rx="6" />
+              <path d="M15 28l6-7 5 5 4-4 6 6" />
+              <circle cx="18" cy="18" r="2.5" />
+            </svg>
+          </span>
+          <p class="initial-info-card-copy">if you select a question</p>
+          <p class="initial-info-card-copy">Related multimedia materials are displayed.</p>
+        </div>
+      </section>
+    `;
   }
 
   function stopInfoCardAutoScroll() {
@@ -966,6 +1391,16 @@
     card.innerHTML = `<img src="${src}" alt="${alt}" />`;
   }
 
+  function renderMainInfoImageCard(src, alt, className = '') {
+    if (!infoCard) return;
+    infoCard.classList.remove('info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card');
+    infoCard.classList.add('image-card');
+    if (className) infoCard.classList.add(className);
+    infoCard.innerHTML = `<img src="${src}" alt="${escapeHtml(alt)}" />`;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
   function showDefaultBottomCards(images, productName) {
     if (bottomCards) bottomCards.classList.remove('about-us-social-mode', 'merged-empty-mode');
     if (card2 && images[0]) renderImageCard(card2, images[0], `${productName} image 1`);
@@ -993,6 +1428,15 @@
     card3.innerHTML = '';
   }
 
+  function clearBottomInfoCards() {
+    if (!bottomCards || !card2 || !card3) return;
+    bottomCards.classList.remove('about-us-social-mode', 'merged-empty-mode');
+    card2.className = 'info-card image-card';
+    card2.innerHTML = '';
+    card3.className = 'info-card image-card';
+    card3.innerHTML = '';
+  }
+
   function updatePlaceholderProductSelection() {
     if (!placeholderProductButtons.length) return;
     placeholderProductButtons.forEach((button) => {
@@ -1002,7 +1446,8 @@
 
   function setQuickActionsMode(mode = 'all') {
     if (!quickActionButtons.length) return;
-    const isLimitedMode = mode === 'nomatch' || mode === 'limited';
+    const isPreselectMode = mode === 'preselect' || (mode === 'all' && !hasExplicitProductSelection);
+    const isLimitedMode = mode === 'nomatch' || mode === 'limited' || isPreselectMode;
     const allowedActions = isLimitedMode
       ? new Set(['about_us', 'buy_now'])
       : null;
@@ -1018,6 +1463,14 @@
     });
   }
 
+  function setQuickActionsHidden(hidden) {
+    if (!quickActions) return;
+    quickActions.classList.toggle('hidden', hidden);
+    if (hidden && bottomArea) {
+      bottomArea.classList.remove('nomatch-actions-layout');
+    }
+  }
+
   function setCardsPanelHidden(hidden) {
     if (!cardsPanel) return;
     cardsPanel.classList.toggle('response-hidden', hidden);
@@ -1027,7 +1480,7 @@
     if (!appContainer) return;
     appContainer.classList.toggle('intro-empty-state', enabled);
     if (enabled) {
-      renderIntroInfoCardSlider();
+      clearInfoCard();
       return;
     }
     stopIntroInfoCardSlider();
@@ -1038,9 +1491,43 @@
     appContainer.classList.toggle('detail-focus-mode', enabled);
   }
 
+  function setInfoCardOnlyMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('info-card-only-mode', enabled);
+  }
+
+  function setBuyNowMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('buy-now-mode', enabled);
+  }
+
   function setProductSummaryMode(enabled) {
     if (!appContainer) return;
     appContainer.classList.toggle('product-summary-mode', enabled);
+  }
+
+  function applyAboutStyleLayout(subtitleText = '', options = {}) {
+    const showEmptyCard = options.showEmptyCard !== false;
+    stopAvatarVideo();
+    setIntroEmptyState(false);
+    setDetailFocusMode(true);
+    setInfoCardOnlyMode(false);
+    setBuyNowMode(false);
+    setProductSummaryMode(false);
+    setCueSeriesMode(true);
+    setClone16ActionLayout(false);
+    setCardsPanelHidden(false);
+    setQuickActionsMode('all');
+    setQuickActionsHidden(true);
+    clearCustomCenterPanel();
+    setInitialVideoPanelHidden(true);
+    setPlaceholderMode('intro');
+    stopPanelVideo();
+    showMergedEmptyBottomCard();
+    setSubtitleStripText(subtitleText);
+    if (showEmptyCard) {
+      showEmptyInfoCard();
+    }
   }
 
   function selectProduct(productKey, options = {}) {
@@ -1048,9 +1535,14 @@
     if (!product) return;
 
     currentProductKey = productKey;
+    hasExplicitProductSelection = true;
     setIntroEmptyState(false);
     setDetailFocusMode(false);
+    setInfoCardOnlyMode(false);
+    setBuyNowMode(false);
     setProductSummaryMode(true);
+    setCueSeriesMode(shouldUseShowcaseLayout(productKey, 'summary'));
+    setClone16ActionLayout(false);
     if (options.setPlaceholderMode !== false) {
       setPlaceholderMode('intro');
     }
@@ -1060,135 +1552,37 @@
     setInitialVideoPanelHidden(true);
     stopPanelVideo();
     showMergedEmptyBottomCard();
-    setInfoCardText(product.summary.title, getProductUnifiedInfoHtml(product), true);
+    setSubtitleStripText(getProductSummaryStripText(product));
+    clearInfoCard();
 
     if (options.showQuickActions && quickActions) {
       setQuickActionsMode('all');
-      quickActions.classList.remove('hidden');
+      setQuickActionsHidden(false);
     }
   }
 
   function showCurrentProductImages() {
     const product = getCurrentProduct();
-    setIntroEmptyState(false);
-    setDetailFocusMode(false);
-    setProductSummaryMode(false);
-    setCardsPanelHidden(false);
-    if (currentProductKey === 'clone16') {
-      showMergedEmptyBottomCard();
-      renderClone16ApplicationImagesPlaceholder();
-    } else {
-      clearCustomCenterPanel();
-      showDefaultBottomCards(product.images, product.name);
-      setInitialVideoPanelHidden(true);
-      setPlaceholderMode('intro');
-      stopPanelVideo();
-    }
-    setInfoCardText(`${product.name} Images`, `You are viewing configured ${product.name} product images in Card 2 and Card 3.`);
+    applyAboutStyleLayout(getProductSummaryStripText(product));
   }
 
   function showCurrentProductVideo() {
     const product = getCurrentProduct();
-    setIntroEmptyState(false);
-    setDetailFocusMode(false);
-    setProductSummaryMode(false);
-    setCardsPanelHidden(false);
-    clearCustomCenterPanel();
-    if (currentProductKey === 'clone16') {
-      showMergedEmptyBottomCard();
-    } else {
-      showDefaultBottomCards(product.images, product.name);
-    }
-    setInfoCardText(product.video.title, product.video.body);
-    if (!product.video.src) {
-      setInitialVideoPanelHidden(true);
-      setPlaceholderMode('intro');
-      stopPanelVideo();
-      return;
-    }
-    setInitialVideoPanelHidden(false);
-    playPanelVideo(product.video.src, false);
+    applyAboutStyleLayout(getProductSummaryStripText(product));
   }
 
   function showCurrentProductText(section) {
     const product = getCurrentProduct();
-    setIntroEmptyState(false);
-    if (section !== 'buy_now') setDetailFocusMode(false);
-    setProductSummaryMode(false);
-    setCardsPanelHidden(false);
     if (section === 'specification') {
-      clearCustomCenterPanel();
-      if (currentProductKey === 'clone16') {
-        showMergedEmptyBottomCard();
-      } else {
-        showDefaultBottomCards(product.images, product.name);
-      }
-      if (currentProductKey === 'clone16') {
-        renderCustomPlaceholder(`
-          <div class="placeholder-spec-card">
-            <h3>Specifications</h3>
-            <div class="placeholder-spec-table-wrap">
-              <table class="placeholder-spec-table">
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Data</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Overall Structure</td><td>Folding Type (adjustable angle)</td></tr>
-                  <tr><td>Panel Size</td><td>156</td></tr>
-                  <tr><td>Monitor Active Area</td><td>W 560mm x H 490mm</td></tr>
-                  <tr><td>Resolution</td><td>1280 x 720</td></tr>
-                  <tr><td>Aspect Ratio</td><td>16:9, 4:3</td></tr>
-                  <tr><td>Monitor Brightness</td><td>400 cds</td></tr>
-                  <tr><td>Input Signal</td><td>HDMI/DVI/DP</td></tr>
-                  <tr><td>Screen Flip</td><td>Panel Built-in Board / Flip Button</td></tr>
-                  <tr><td>Input Power</td><td>12V SA Power Adapter</td></tr>
-                  <tr><td>Prompter Glass</td><td>Ultra-low iron/Tempered glass / Special coating/2mm</td></tr>
-                  <tr><td>Camera Plate</td><td>3-level Height Adjustment</td></tr>
-                  <tr><td>Body Plate</td><td>1/4, 3/8 tap hole (can be connected to various tripods)</td></tr>
-                  <tr><td>Body &amp; Hood</td><td>Aluminum 2.5mm (standard)</td></tr>
-                  <tr><td>Body &amp; Hood Surface Treatment</td><td>Black, Matte, Sanding. Anodizing, Insulation Treatment</td></tr>
-                  <tr><td>Lens Cover Cloth</td><td>Special anti-reflective fiber material</td></tr>
-                  <tr><td>Body Lens Hole Size</td><td>Width 270mm x Height 235mm</td></tr>
-                  <tr><td>Wireless Speed Control Remote</td><td>SW Play &amp; Stop, speed control within 10m range</td></tr>
-                  <tr><td>Product Folding Size</td><td>W 410mm x D 380mm x H 210mm</td></tr>
-                  <tr><td>Product Body Size</td><td>W 410mm x D 260mm x H 310mm (excluding plate)</td></tr>
-                  <tr><td>Product Overall Size</td><td>W 410mm x D 520mm x H 310mm</td></tr>
-                  <tr><td>Product Overall Weight</td><td>6.98 kg</td></tr>
-                  <tr><td>Hard Case</td><td>Wood &amp; Plastic combination (optional purchase)</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `);
-      } else {
-        setInitialVideoPanelHidden(true);
-        setPlaceholderMode('intro');
-        stopPanelVideo();
-      }
-      setInfoCardText(product.specification.title, product.specification.body);
+      applyAboutStyleLayout(getProductSummaryStripText(product));
       return;
     }
     if (section === 'installation') {
-      clearCustomCenterPanel();
-      if (currentProductKey === 'clone16') {
-        showMergedEmptyBottomCard();
-      } else {
-        showDefaultBottomCards(product.images, product.name);
-      }
-      setInfoCardText(product.installation.title, product.installation.body);
+      applyAboutStyleLayout(getProductSummaryStripText(product));
       return;
     }
     if (section === 'buy_now') {
-      stopAvatarVideo();
-      setDetailFocusMode(true);
-      clearCustomCenterPanel();
-      setInitialVideoPanelHidden(true);
-      stopPanelVideo();
-      showMergedEmptyBottomCard();
-      setInfoCardText('Buy Now Form', getBuyNowFormHtml(product), true, { showScrollbar: true });
+      applyAboutStyleLayout(`Complete the form below to request ${product.name} pricing and availability.`);
     }
   }
 
@@ -1206,6 +1600,8 @@
 
     setIntroEmptyState(false);
     setDetailFocusMode(false);
+    setInfoCardOnlyMode(false);
+    setBuyNowMode(false);
     setProductSummaryMode(false);
     setPlaceholderMode('intro');
     restoreAvatarIdleVideo();
@@ -1219,13 +1615,7 @@
       return;
     }
     if (match.id === 'about_us') {
-      stopAvatarVideo();
-      setQuickActionsMode('limited');
-      setDetailFocusMode(true);
-      clearCustomCenterPanel();
-      setInitialVideoPanelHidden(true);
-      stopPanelVideo();
-      showMergedEmptyBottomCard();
+      applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false });
       setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true, { includeSocial: true });
     }
     if (match.id === 'images') showCurrentProductImages();
@@ -1233,7 +1623,8 @@
     if (match.id === 'specification') showCurrentProductText('specification');
     if (match.id === 'installation') showCurrentProductText('installation');
     if (match.id === 'buy_now') {
-      setQuickActionsMode('limited');
+      setQuickActionsMode('all');
+      setQuickActionsHidden(true);
       showCurrentProductText('buy_now');
     }
   }
@@ -1344,24 +1735,18 @@
     const detectedProductKey = detectProductKeyFromText(msg);
     if (detectedProductKey && PRODUCTS[detectedProductKey]) {
       currentProductKey = detectedProductKey;
+      hasExplicitProductSelection = true;
       updatePlaceholderProductSelection();
       showDefaultBottomCards(PRODUCTS[detectedProductKey].images, PRODUCTS[detectedProductKey].name);
     }
     setInitialVideoPanelHidden(false);
     setQuickActionsMode('all');
-    if (quickActions) quickActions.classList.remove('hidden');
+    setQuickActionsHidden(false);
 
     const match = matchScriptedQuestion(msg);
     if (!match) {
-      setDetailFocusMode(false);
-      setProductSummaryMode(false);
+      applyAboutStyleLayout('Please select a product to continue.');
       setPlaceholderMode('nomatch');
-      setInitialVideoPanelHidden(true);
-      setQuickActionsMode('nomatch');
-      if (quickActions) quickActions.classList.remove('hidden');
-      setCardsPanelHidden(true);
-      stopPanelVideo();
-      stopAvatarVideo();
       return;
     }
     applyMatchedResponse(match);
@@ -1409,6 +1794,11 @@
   }
 
   resetInfoCardAutoScroll();
-  if (appContainer && appContainer.classList.contains('intro-empty-state')) {
-    renderIntroInfoCardSlider();
+  if (appContainer) {
+    applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.');
+    setInfoCardText('', getInitialInfoCardHtml(), true);
+    hasExplicitProductSelection = true;
+    setQuickActionsMode('all');
+    setQuickActionsHidden(false);
   }
+  window.addEventListener('resize', syncCueSeriesAvatarHeight);
