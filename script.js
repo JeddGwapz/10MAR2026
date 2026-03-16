@@ -107,9 +107,70 @@
       body: 'Includes a custom wireless remote that connects to laptops, tablets, or smartphones. The performer can control scroll speed within approximately 10 meters, adjusting it freely to match their reading pace. Existing computer mice can also be used to control script scrolling speed.'
     }
   ];
+  const CLONE16_READMORE_SLIDES = [
+    {
+      title: 'Portable and Precise Performance',
+      body: 'Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.'
+    },
+    {
+      title: 'Effortless Script Control and Wider View',
+      body: 'Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.'
+    }
+  ];
+  const CLONE16_READMORE_IMAGES = [
+    'https://static.wixstatic.com/media/6e449d_382118eb051d49808586203b6c0e3c58~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_382118eb051d49808586203b6c0e3c58~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_a3b1d22a8e384b9ab1095d637658166b~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_a3b1d22a8e384b9ab1095d637658166b~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_5df4bf7712f746ee97f842e6b53c5aa0~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_5df4bf7712f746ee97f842e6b53c5aa0~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_f0e034a237a24143927fdf894d22cba5~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_f0e034a237a24143927fdf894d22cba5~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_7814393820b44771a88f1b162d52218c~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_7814393820b44771a88f1b162d52218c~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_210e2c1df9984c49aa76b381859f49d9~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_210e2c1df9984c49aa76b381859f49d9~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_7473831c2e24440eb2d254eb36283d06~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_7473831c2e24440eb2d254eb36283d06~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_aa4b967d615f497b92bcd107aa13e622~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_aa4b967d615f497b92bcd107aa13e622~mv2.png',
+    'https://static.wixstatic.com/media/6e449d_24aee05e59e54fe28464d4bb6df153ce~mv2.png/v1/fit/w_2003,h_1034,q_90,enc_avif,quality_auto/6e449d_24aee05e59e54fe28464d4bb6df153ce~mv2.png'
+  ];
+  const CLONE16_COMPONENTS_IMAGES = [
+    'https://static.wixstatic.com/media/d0630a_45d26962bbaa46ffb03bcdf6f9815d50~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_45d26962bbaa46ffb03bcdf6f9815d50~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_6a688dab52c24c7fbeafe7d62be720ff~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_6a688dab52c24c7fbeafe7d62be720ff~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_e76f9a93316b4d59b32813116f389fc8~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_e76f9a93316b4d59b32813116f389fc8~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_844515b0057a48bf9329f1c817010193~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_844515b0057a48bf9329f1c817010193~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_1305fdff77aa432b86a2d38d88cd2f69~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_1305fdff77aa432b86a2d38d88cd2f69~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_f472ef8fe8e6441993a84ca85707cc7e~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_f472ef8fe8e6441993a84ca85707cc7e~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_f0b3227187a44aedad2e2a975148de91~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_f0b3227187a44aedad2e2a975148de91~mv2.png',
+    'https://static.wixstatic.com/media/d0630a_9c8b2a78d25c47bb8f58e452581e85e6~mv2.png/v1/fit/w_1164,h_844,q_90,enc_avif,quality_auto/d0630a_9c8b2a78d25c47bb8f58e452581e85e6~mv2.png'
+  ];
+  const CLONE16_IMAGES_FEATURE_SLIDES = [
+    {
+      kicker: 'Key Attractions',
+      question: 'Looking for a portable teleprompter that\'s easy to set up on any shoot, yet simple and efficient to operate?',
+      subtitle: 'The most convenient on-site portable teleprompter',
+      body: [],
+      image: 'https://static.wixstatic.com/media/d0630a_4f659d0837ff4a1799f19888e30af5ff~mv2.jpg/v1/crop/x_374,y_83,w_2320,h_1605/fill/w_892,h_618,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_30_edited.jpg'
+    },
+    {
+      kicker: 'Key Attractions',
+      question: '',
+      subtitle: 'The most cost-effective mid-sized teleprompter',
+      body: [],
+      image: 'https://static.wixstatic.com/media/d0630a_b0445488a60a4e9892d7a75541f08d13~mv2.jpg/v1/crop/x_353,y_0,w_2440,h_1688/fill/w_892,h_618,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_29_edited.jpg'
+    },
+    {
+      kicker: 'Key Attractions',
+      question: 'Dreaming of becoming a high-earning YouTuber and need a compact yet powerful teleprompter?',
+      subtitle: 'The most preferred teleprompter among top-earning YouTubers',
+      body: [],
+      image: 'https://static.wixstatic.com/media/d0630a_78dd6153efc746b8896ea3397f5f7272~mv2.jpg/v1/crop/x_374,y_83,w_2320,h_1605/fill/w_892,h_618,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_1_edited.jpg'
+    }
+  ];
   let videoPanelLocked = false;
   let clone16IntroSlideIndex = 0;
   let clone16IntroAutoplayTimer = null;
+  let clone16ReadMoreSlideIndex = 0;
+  let clone16ReadMoreImageIndex = 0;
+  let clone16ReadMoreAutoplayTimer = null;
+  let clone16ImagesFeatureSlideIndex = 0;
+  let clone16ImagesFeatureAutoplayTimer = null;
+  let clone16ComponentsImageIndex = 0;
+  let clone16ComponentsAutoplayTimer = null;
 
   function setVideoPanelExpanded(expanded) {
     if (!mainContentPanel) return;
@@ -144,6 +205,27 @@
     if (clone16IntroAutoplayTimer) {
       window.clearInterval(clone16IntroAutoplayTimer);
       clone16IntroAutoplayTimer = null;
+    }
+  }
+
+  function stopClone16ReadMoreAutoplay() {
+    if (clone16ReadMoreAutoplayTimer) {
+      window.clearInterval(clone16ReadMoreAutoplayTimer);
+      clone16ReadMoreAutoplayTimer = null;
+    }
+  }
+
+  function stopClone16ImagesFeatureAutoplay() {
+    if (clone16ImagesFeatureAutoplayTimer) {
+      window.clearInterval(clone16ImagesFeatureAutoplayTimer);
+      clone16ImagesFeatureAutoplayTimer = null;
+    }
+  }
+
+  function stopClone16ComponentsAutoplay() {
+    if (clone16ComponentsAutoplayTimer) {
+      window.clearInterval(clone16ComponentsAutoplayTimer);
+      clone16ComponentsAutoplayTimer = null;
     }
   }
 
@@ -217,35 +299,35 @@
   function getClone16ApplicationGalleryHtml() {
     return `
       <div class="application-gallery-grid clone16-inline-gallery">
-        <div class="application-gallery-item large">
+        <div class="application-gallery-item large" tabindex="0" role="button" aria-label="Open Clone 16 application image 1">
           <img src="https://static.wixstatic.com/media/d0630a_35a6cb4b811c4ddb960e45b970c20e41~mv2.jpg/v1/fill/w_284,h_392,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 1" />
           <div class="application-gallery-caption">
             <strong>Darakwon Publisher</strong>
             <span>Application image</span>
           </div>
         </div>
-        <div class="application-gallery-item">
+        <div class="application-gallery-item" tabindex="0" role="button" aria-label="Open Clone 16 application image 2">
           <img src="https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png" alt="Clone 16 application image 2" />
           <div class="application-gallery-caption">
             <strong>Darakwon Publisher</strong>
             <span>Application image</span>
           </div>
         </div>
-        <div class="application-gallery-item">
+        <div class="application-gallery-item" tabindex="0" role="button" aria-label="Open Clone 16 application image 3">
           <img src="https://static.wixstatic.com/media/d0630a_221e63cfeb6743ab9373699001470a76~mv2.jpg/v1/crop/x_89,y_0,w_4446,h_3468/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 3" />
           <div class="application-gallery-caption">
             <strong>Darakwon Publisher</strong>
             <span>Application image</span>
           </div>
         </div>
-        <div class="application-gallery-item">
+        <div class="application-gallery-item" tabindex="0" role="button" aria-label="Open Clone 16 application image 4">
           <img src="https://static.wixstatic.com/media/d0630a_4e3390b8436d4386ab5e848389e3088f~mv2.jpg/v1/crop/x_77,y_0,w_3846,h_3000/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.jpg" alt="Clone 16 application image 4" />
           <div class="application-gallery-caption">
             <strong>Byeokje Global Culinary Research Institute</strong>
             <span>Application image</span>
           </div>
         </div>
-        <div class="application-gallery-item">
+        <div class="application-gallery-item" tabindex="0" role="button" aria-label="Open Clone 16 application image 5">
           <img src="https://static.wixstatic.com/media/d0630a_de6c72aa4a714bb9bfd19c34f4fdc679~mv2.png/v1/crop/x_0,y_63,w_600,h_468/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Byeokje%20Global%20Culinary%20Research%20Institute_121522.png" alt="Clone 16 application image 5" />
           <div class="application-gallery-caption">
             <strong>Byeokje Global Culinary Research Institute</strong>
@@ -369,8 +451,11 @@
   const bottomCards = document.querySelector('.bottom-cards');
   const card2 = document.getElementById('card2');
   const card3 = document.getElementById('card3');
-  const placeholderProductButtons = Array.from(document.querySelectorAll('.placeholder-product-item.available'));
   const subtitleStrip = document.getElementById('subtitleStrip');
+
+  function isLayoutLocked() {
+    return Boolean(appContainer && appContainer.classList.contains('layout-locked'));
+  }
 
   function setSubtitleStripText(text = '') {
     if (!subtitleStrip) return;
@@ -379,6 +464,13 @@
 
   function syncCueSeriesAvatarHeight() {
     if (!appContainer || !assistantPanel || !avatarBox || !infoCard || !cardsPanel) return;
+    if (isLayoutLocked()) {
+      assistantPanel.style.height = '';
+      avatarBox.style.height = '';
+      cardsPanel.style.height = '';
+      infoCard.style.height = '';
+      return;
+    }
     if (!appContainer.classList.contains('cue-series-mode')) {
       assistantPanel.style.height = '';
       avatarBox.style.height = '';
@@ -411,6 +503,13 @@
     if (!appContainer) return;
     appContainer.classList.toggle('cue-series-mode', enabled);
     if (!subtitleStrip || !bottomArea || !inputArea) {
+      scheduleCueSeriesAvatarHeightSync();
+      return;
+    }
+    if (isLayoutLocked()) {
+      if (subtitleStrip.parentElement !== bottomArea) {
+        bottomArea.insertBefore(subtitleStrip, inputArea);
+      }
       scheduleCueSeriesAvatarHeightSync();
       return;
     }
@@ -969,6 +1068,37 @@
     });
   }
 
+  function getClone16SpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="Clone 16 specifications">
+        <div class="clone16-spec-image-card-header">
+          <h3 class="clone16-spec-image-kicker">Specifications</h3>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar" aria-hidden="true">Specifications</div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png"
+            alt="Clone 16 specifications"
+            class="clone16-spec-image-asset"
+          />
+        </div>
+      </section>
+    `;
+  }
+
+  function renderClone16SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getClone16SpecificationImageInfoHtml();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
   function getClone16InstallationInfoHtml(product) {
     return getClone16InfoCardHtml({
       product,
@@ -1243,7 +1373,10 @@
 
   function setInfoCardText(title, body, useHtml = false, options = {}) {
     if (!infoCard) return;
-    infoCard.classList.remove('image-card', 'info-card-empty-state');
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     const includeSocial = Boolean(options.includeSocial);
     const animation = options.animation || '';
     const contentClass = animation === 'slide' ? ' info-card-content-slide-enter' : '';
@@ -1268,7 +1401,10 @@
 
   function clearInfoCard() {
     if (!infoCard) return;
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state');
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     infoCard.innerHTML = '';
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -1276,7 +1412,10 @@
 
   function showEmptyInfoCard() {
     if (!infoCard) return;
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card');
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
     resetInfoCardAutoScroll();
@@ -1286,7 +1425,10 @@
   function getInitialInfoCardHtml() {
     return `
       <section class="initial-info-card" aria-label="Multimedia Content">
-        <p class="initial-info-card-label">Multimedia Content</p>
+        <div class="initial-info-card-copy-block">
+          <p class="initial-info-card-label">Multimedia Content</p>
+          <p class="initial-info-card-description">Ask a question or choose a quick action to display the related multimedia materials here.</p>
+        </div>
         <div class="initial-info-card-hint" aria-label="Multimedia hint">
           <span class="initial-info-card-gallery" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="presentation">
@@ -1295,11 +1437,816 @@
               <circle cx="18" cy="18" r="2.5" />
             </svg>
           </span>
-          <p class="initial-info-card-copy">if you select a question</p>
-          <p class="initial-info-card-copy">Related multimedia materials are displayed.</p>
+          <p class="initial-info-card-copy">If you select a question,</p>
+          <p class="initial-info-card-copy">related multimedia materials are displayed.</p>
         </div>
       </section>
     `;
+  }
+
+  function getClone16IntroInfoCardHtml(product) {
+    return `
+      <section class="product-intro-info-card" aria-label="${escapeHtml(product.name)} intro">
+        <div class="product-intro-info-card-copy">
+          <p class="product-intro-info-card-kicker">Featured Product</p>
+          <div class="product-intro-info-card-copy-main">
+            <h3 class="product-intro-info-card-title">Portable HDMI teleprompter with a wide 16:9 display for interviews and production.</h3>
+          </div>
+          <div class="product-intro-info-card-meta" aria-label="Clone 16 highlights">
+            <span class="product-intro-info-card-tag">Portable Setup</span>
+            <span class="product-intro-info-card-tag">HDMI Workflow</span>
+            <span class="product-intro-info-card-tag">16:9 Display</span>
+          </div>
+          <button type="button" class="product-intro-read-more" onclick="showClone16IntroReadMore()">Read More</button>
+        </div>
+        <div class="product-intro-info-card-visual" aria-hidden="true">
+          <div class="product-intro-info-card-image-shell">
+            <span class="product-intro-info-card-visual-label">Clone 16</span>
+            <div class="product-intro-info-card-image-wrap">
+              <img src="https://static.wixstatic.com/media/d0630a_7105d15163c240729eaa6cb65ac8b043~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/cl%2016.png" alt="${escapeHtml(product.name)} featured image" class="product-intro-info-card-image" />
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderClone16IntroInfoCard() {
+    const product = PRODUCTS.clone16;
+    if (!product || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-intro-info-state');
+    infoCard.innerHTML = getClone16IntroInfoCardHtml(product);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function getClone16ImagesFeatureInfoCardHtml() {
+    return `
+      <section class="clone16-images-feature-card" aria-label="Clone 16 key attractions">
+        <div class="clone16-images-feature-slides">
+          ${CLONE16_IMAGES_FEATURE_SLIDES.map((slide, index) => `
+            <article class="clone16-images-feature-slide${index === 0 ? ' active' : ''}" aria-label="Clone 16 key attraction ${index + 1}">
+              <div class="clone16-images-feature-copy">
+                <p class="clone16-images-feature-kicker">${escapeHtml(slide.kicker)}</p>
+                ${slide.question ? `<h3 class="clone16-images-feature-question">${escapeHtml(slide.question)}</h3>` : ''}
+                ${slide.subtitle ? `<p class="clone16-images-feature-subtitle">${escapeHtml(slide.subtitle)}</p>` : ''}
+                ${slide.body.map((paragraph) => `<p class="clone16-images-feature-body">${escapeHtml(paragraph)}</p>`).join('')}
+              </div>
+              <div class="clone16-images-feature-visual" aria-hidden="true">
+                <img src="${slide.image}" alt="Clone 16 key attraction image ${index + 1}" class="clone16-images-feature-image" />
+              </div>
+            </article>
+          `).join('')}
+        </div>
+        <div class="clone16-images-feature-footer" aria-label="Clone 16 image shortcuts">
+          <button type="button" class="clone16-images-feature-link" onclick="showClone16ApplicationsInfoCard()">Applications</button>
+          <button type="button" class="clone16-images-feature-link" onclick="showClone16ComponentsInfoCard()">Components and Parts</button>
+        </div>
+      </section>
+    `;
+  }
+
+  function updateClone16ImagesFeatureSlides() {
+    if (!infoCard) return;
+    const slides = Array.from(infoCard.querySelectorAll('.clone16-images-feature-slide'));
+    if (!slides.length) return;
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('active', index === clone16ImagesFeatureSlideIndex);
+    });
+  }
+
+  function renderClone16ImagesFeatureInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    clone16ImagesFeatureSlideIndex = 0;
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.add('clone16-images-info-state');
+    infoCard.innerHTML = getClone16ImagesFeatureInfoCardHtml();
+    updateClone16ImagesFeatureSlides();
+    if (CLONE16_IMAGES_FEATURE_SLIDES.length > 1) {
+      clone16ImagesFeatureAutoplayTimer = window.setInterval(() => {
+        clone16ImagesFeatureSlideIndex = (clone16ImagesFeatureSlideIndex + 1) % CLONE16_IMAGES_FEATURE_SLIDES.length;
+        updateClone16ImagesFeatureSlides();
+      }, 5000);
+    }
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function getClone16ApplicationsInfoCardHtml() {
+    return `
+      <section class="clone16-subview-card clone16-subview-applications" aria-label="Clone 16 applications">
+        <div class="clone16-subview-gallery-shell">
+          ${getClone16ApplicationGalleryHtml()}
+        </div>
+        <div class="clone16-subview-applications-footer">
+          <button type="button" class="clone16-subview-back-button clone16-subview-back-button-below" onclick="showClone16ImagesFeatureInfoCard()">
+            <span aria-hidden="true">←</span>
+            <span>Back to Images</span>
+          </button>
+          <div class="clone16-subview-header clone16-subview-applications-copy">
+          <p class="clone16-subview-kicker">Applications</p>
+          <h3 class="clone16-subview-title">Clone 16 real-world usage</h3>
+          <p class="clone16-subview-copy">Examples of Clone 16 in education, publishing, culinary training, and practical on-site production environments.</p>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderClone16ApplicationsInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.add('clone16-images-info-state');
+    infoCard.innerHTML = getClone16ApplicationsInfoCardHtml();
+    bindClone16ApplicationsGallery();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function getClone16ApplicationsPreviewInfoCardHtml(imageSrc, imageAlt) {
+    return `
+      <section class="clone16-subview-card clone16-subview-application-preview" aria-label="Clone 16 application image preview">
+        <div class="clone16-subview-header-top">
+          <button type="button" class="clone16-subview-back-button" onclick="showClone16ApplicationsInfoCard()">
+            <span aria-hidden="true">←</span>
+            <span>Back to Applications</span>
+          </button>
+        </div>
+        <div class="clone16-application-preview-stage">
+          <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(imageAlt)}" class="clone16-application-preview-image" />
+        </div>
+      </section>
+    `;
+  }
+
+  function renderClone16ApplicationImagePreview(imageSrc, imageAlt) {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.add('clone16-images-info-state');
+    infoCard.innerHTML = getClone16ApplicationsPreviewInfoCardHtml(imageSrc, imageAlt);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function bindClone16ApplicationsGallery() {
+    if (!infoCard) return;
+    const tiles = Array.from(infoCard.querySelectorAll('.clone16-subview-applications .application-gallery-item'));
+    if (!tiles.length) return;
+
+    const openPreview = (tile) => {
+      const image = tile.querySelector('img');
+      if (!image) return;
+      renderClone16ApplicationImagePreview(image.currentSrc || image.src, image.alt || 'Clone 16 application image');
+    };
+
+    tiles.forEach((tile) => {
+      tile.addEventListener('click', () => {
+        openPreview(tile);
+      });
+      tile.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openPreview(tile);
+      });
+    });
+  }
+
+  function updateClone16ComponentsImages() {
+    if (!infoCard) return;
+    const frames = Array.from(infoCard.querySelectorAll('.clone16-components-gallery-frame'));
+    if (!frames.length) return;
+    frames.forEach((frame, index) => {
+      frame.classList.toggle('active', index === clone16ComponentsImageIndex);
+    });
+  }
+
+  function getClone16ComponentsInfoCardHtml() {
+    return `
+      <section class="clone16-subview-card clone16-subview-components" aria-label="Clone 16 components and parts">
+        <div class="clone16-components-topbar">
+          <div class="clone16-components-heading">
+            <p class="clone16-subview-kicker">Components and Parts</p>
+            <h3 class="clone16-subview-title">Sturdy, Stable, and Optimized Structure for Maximum Efficiency</h3>
+          </div>
+          <button type="button" class="clone16-subview-back-button clone16-components-back-button" onclick="showClone16ImagesFeatureInfoCard()">
+            <span aria-hidden="true">←</span>
+            <span>Back to Images</span>
+          </button>
+        </div>
+        <div class="clone16-components-wall" aria-label="Clone 16 components gallery">
+          ${CLONE16_COMPONENTS_IMAGES.map((imageSrc, index) => `
+            <figure class="clone16-components-tile" tabindex="0" role="button" aria-label="Open Clone 16 component image ${index + 1}">
+              <img src="${imageSrc}" alt="Clone 16 component image ${index + 1}" class="clone16-components-tile-image" />
+            </figure>
+          `).join('')}
+        </div>
+        <div class="clone16-components-lightbox" hidden aria-hidden="true">
+          <button type="button" class="clone16-components-lightbox-close" aria-label="Close image preview">×</button>
+          <div class="clone16-components-lightbox-stage">
+            <img src="" alt="" class="clone16-components-lightbox-image" />
+            <div class="clone16-components-lightbox-magnifier" aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function bindClone16ComponentsMagnifier() {
+    if (!infoCard) return;
+    const section = infoCard.querySelector('.clone16-subview-components');
+    const tiles = Array.from(infoCard.querySelectorAll('.clone16-components-tile'));
+    const lightbox = infoCard.querySelector('.clone16-components-lightbox');
+    const lightboxStage = infoCard.querySelector('.clone16-components-lightbox-stage');
+    const lightboxImage = infoCard.querySelector('.clone16-components-lightbox-image');
+    const lightboxLens = infoCard.querySelector('.clone16-components-lightbox-magnifier');
+    const closeButton = infoCard.querySelector('.clone16-components-lightbox-close');
+    if (!section || !tiles.length || !lightbox || !lightboxStage || !lightboxImage || !lightboxLens || !closeButton) return;
+
+    const openLightbox = (image) => {
+      const popupWidth = Math.max(640, Math.round(window.screen.availWidth * 0.5));
+      const popupHeight = Math.max(420, Math.round(window.screen.availHeight * 0.5));
+      const popupLeft = Math.max(0, Math.round((window.screen.availWidth - popupWidth) / 2));
+      const popupTop = Math.max(0, Math.round((window.screen.availHeight - popupHeight) / 2));
+      const popup = window.open(
+        '',
+        'clone16-components-preview',
+        `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=no`
+      );
+
+      if (popup && !popup.closed) {
+        const imageSrc = image.currentSrc || image.src;
+        const imageAlt = image.alt || 'Clone 16 component image preview';
+        popup.document.open();
+        popup.document.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(imageAlt)}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 16px;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.12), transparent 22%), #11161b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .preview-shell {
+      width: 100%;
+      height: calc(100vh - 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(242,245,246,0.94));
+      box-shadow: 0 20px 36px rgba(0,0,0,0.28);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .preview-back {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: #1b3e44;
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 10px 18px rgba(27,62,68,0.2);
+    }
+    .preview-helper {
+      margin: 0;
+      color: #5e676d;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: right;
+    }
+    .preview-stage {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(249,250,251,0.98), rgba(235,239,241,0.94));
+      overflow: hidden;
+      touch-action: none;
+    }
+    img {
+      position: relative;
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 24px rgba(24,33,41,0.14));
+    }
+    .preview-lens {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      pointer-events: none;
+      border: 2px solid rgba(255,255,255,0.92);
+      box-shadow: 0 14px 24px rgba(16,24,40,0.28), inset 0 0 0 1px rgba(17,17,17,0.08);
+      background-repeat: no-repeat;
+      background-color: rgba(255,255,255,0.55);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+    .preview-lens.is-visible {
+      opacity: 1;
+    }
+    @media (max-width: 720px) {
+      body {
+        padding: 10px;
+      }
+      .preview-shell {
+        height: calc(100vh - 20px);
+        padding: 10px;
+        gap: 10px;
+        border-radius: 18px;
+      }
+      .preview-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .preview-helper {
+        text-align: left;
+      }
+      .preview-lens {
+        width: 180px;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-shell">
+    <div class="preview-toolbar">
+      <button type="button" class="preview-back" id="previewBack">Back to Parts</button>
+      <p class="preview-helper">Hover or drag on the image to use the magnifier.</p>
+    </div>
+    <div class="preview-stage" id="previewStage">
+      <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(imageAlt)}" id="previewImage" />
+      <div class="preview-lens" id="previewLens" aria-hidden="true"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const stage = document.getElementById('previewStage');
+      const image = document.getElementById('previewImage');
+      const lens = document.getElementById('previewLens');
+      const backButton = document.getElementById('previewBack');
+      const zoom = 2.6;
+      let metrics = null;
+
+      const clamp = function (value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      };
+
+      const updateMetrics = function () {
+        const rect = stage.getBoundingClientRect();
+        const naturalWidth = image.naturalWidth || 1;
+        const naturalHeight = image.naturalHeight || 1;
+        const stageRatio = rect.width / Math.max(rect.height, 1);
+        const imageRatio = naturalWidth / naturalHeight;
+        let width;
+        let height;
+        let left;
+        let top;
+
+        if (imageRatio > stageRatio) {
+          width = rect.width;
+          height = width / imageRatio;
+          left = 0;
+          top = (rect.height - height) / 2;
+        } else {
+          height = rect.height;
+          width = height * imageRatio;
+          top = 0;
+          left = (rect.width - width) / 2;
+        }
+
+        metrics = { rect: rect, width: width, height: height, left: left, top: top };
+        lens.style.backgroundImage = 'url("${escapeHtml(imageSrc)}")';
+        lens.style.backgroundSize = (width * zoom) + 'px ' + (height * zoom) + 'px';
+      };
+
+      const hideLens = function () {
+        lens.classList.remove('is-visible');
+      };
+
+      const showLens = function (clientX, clientY) {
+        if (!metrics) updateMetrics();
+        const pointerX = clientX - metrics.rect.left;
+        const pointerY = clientY - metrics.rect.top;
+        const insideImage =
+          pointerX >= metrics.left &&
+          pointerX <= metrics.left + metrics.width &&
+          pointerY >= metrics.top &&
+          pointerY <= metrics.top + metrics.height;
+
+        if (!insideImage) {
+          hideLens();
+          return;
+        }
+
+        const lensHalfWidth = lens.offsetWidth / 2;
+        const lensHalfHeight = lens.offsetHeight / 2;
+        const lensX = clamp(pointerX, lensHalfWidth, metrics.rect.width - lensHalfWidth);
+        const lensY = clamp(pointerY, lensHalfHeight, metrics.rect.height - lensHalfHeight);
+        const relativeX = (pointerX - metrics.left) / metrics.width;
+        const relativeY = (pointerY - metrics.top) / metrics.height;
+        const backgroundX = -((relativeX * metrics.width * zoom) - lensHalfWidth);
+        const backgroundY = -((relativeY * metrics.height * zoom) - lensHalfHeight);
+
+        lens.style.left = lensX + 'px';
+        lens.style.top = lensY + 'px';
+        lens.style.backgroundPosition = backgroundX + 'px ' + backgroundY + 'px';
+        lens.classList.add('is-visible');
+      };
+
+      backButton.addEventListener('click', function () {
+        window.close();
+      });
+
+      stage.addEventListener('mousemove', function (event) {
+        showLens(event.clientX, event.clientY);
+      });
+      stage.addEventListener('mouseleave', hideLens);
+      stage.addEventListener('touchstart', function (event) {
+        if (!event.touches.length) return;
+        const touch = event.touches[0];
+        showLens(touch.clientX, touch.clientY);
+      }, { passive: true });
+      stage.addEventListener('touchmove', function (event) {
+        if (!event.touches.length) return;
+        const touch = event.touches[0];
+        showLens(touch.clientX, touch.clientY);
+      }, { passive: true });
+      stage.addEventListener('touchend', hideLens);
+      image.addEventListener('load', updateMetrics);
+      window.addEventListener('resize', updateMetrics);
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') window.close();
+      });
+      if (image.complete) updateMetrics();
+    }());
+  </script>
+</body>
+</html>`);
+        popup.document.close();
+        popup.focus();
+        return;
+      }
+
+      lightboxImage.src = image.currentSrc || image.src;
+      lightboxImage.alt = image.alt || 'Clone 16 component image preview';
+      lightbox.hidden = false;
+      lightbox.setAttribute('aria-hidden', 'false');
+      section.classList.add('components-lightbox-open');
+      lightbox.classList.add('mobile-fullscreen');
+    };
+
+    const closeLightbox = () => {
+      lightbox.hidden = true;
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+      lightboxImage.alt = '';
+      section.classList.remove('components-lightbox-open');
+      lightboxStage.classList.remove('magnifier-active');
+      lightbox.classList.remove('mobile-fullscreen');
+    };
+
+    const updateLens = (clientX, clientY) => {
+      const rect = lightboxImage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+      const y = Math.max(0, Math.min(clientY - rect.top, rect.height));
+      const xPercent = (x / rect.width) * 100;
+      const yPercent = (y / rect.height) * 100;
+      lightboxLens.style.backgroundImage = `url("${lightboxImage.currentSrc || lightboxImage.src}")`;
+      lightboxLens.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+      lightboxLens.style.left = `${x}px`;
+      lightboxLens.style.top = `${y}px`;
+    };
+
+    tiles.forEach((tile) => {
+      tile.addEventListener('click', () => {
+        const image = tile.querySelector('.clone16-components-tile-image');
+        if (image) openLightbox(image);
+      });
+
+      tile.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          const image = tile.querySelector('.clone16-components-tile-image');
+          if (image) openLightbox(image);
+        }
+      });
+    });
+
+    let activePointerId = null;
+
+    const showLens = () => lightboxStage.classList.add('magnifier-active');
+    const hideLens = () => {
+      lightboxStage.classList.remove('magnifier-active');
+      activePointerId = null;
+    };
+
+    lightboxStage.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'mouse' && !lightbox.hidden) {
+        showLens();
+        updateLens(event.clientX, event.clientY);
+      }
+    });
+
+    lightboxStage.addEventListener('pointermove', (event) => {
+      if (lightbox.hidden) return;
+      if (event.pointerType === 'mouse' || activePointerId === event.pointerId) {
+        showLens();
+        updateLens(event.clientX, event.clientY);
+        if (event.pointerType !== 'mouse') event.preventDefault();
+      }
+    });
+
+    lightboxStage.addEventListener('pointerleave', hideLens);
+
+    lightboxStage.addEventListener('pointerdown', (event) => {
+      if (lightbox.hidden) return;
+      activePointerId = event.pointerId;
+      showLens();
+      updateLens(event.clientX, event.clientY);
+      if (event.pointerType !== 'mouse') event.preventDefault();
+    });
+
+    lightboxStage.addEventListener('pointerup', hideLens);
+    lightboxStage.addEventListener('pointercancel', hideLens);
+
+    closeButton.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    section.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !lightbox.hidden) closeLightbox();
+    });
+  }
+
+  function renderClone16ComponentsInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.add('clone16-images-info-state');
+    infoCard.innerHTML = getClone16ComponentsInfoCardHtml();
+    bindClone16ComponentsMagnifier();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  window.showClone16ApplicationsInfoCard = renderClone16ApplicationsInfoCard;
+  window.showClone16ComponentsInfoCard = renderClone16ComponentsInfoCard;
+  window.showClone16ImagesFeatureInfoCard = renderClone16ImagesFeatureInfoCard;
+
+  function getClone16ReadMoreInfoCardHtml() {
+    return `
+      <section class="clone16-readmore-card" aria-label="Clone 16 overview">
+        <div class="clone16-readmore-card-hero">
+          <div class="clone16-readmore-card-summary">
+            <h3 class="clone16-readmore-hero-name">Clone 16</h3>
+            <p class="clone16-readmore-hero-copy">Portable interview teleprompter equipped with a 16-inch, 500 cd/m² 16:9 monitor</p>
+            <div class="clone16-readmore-feature-list" aria-label="Clone 16 quick specs">
+              <div class="clone16-readmore-feature-item">
+                <span class="clone16-readmore-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" role="presentation">
+                    <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"></rect>
+                    <path d="M9.5 19.5h5"></path>
+                    <path d="M12 16v3.5"></path>
+                  </svg>
+                </span>
+                <span class="clone16-readmore-feature-text">16-inch display</span>
+              </div>
+              <div class="clone16-readmore-feature-item">
+                <span class="clone16-readmore-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" role="presentation">
+                    <path d="M12 3.5v3"></path>
+                    <path d="M12 17.5v3"></path>
+                    <path d="M4.9 6.4l2.1 2.1"></path>
+                    <path d="M17 18.5l2.1 2"></path>
+                    <path d="M3.5 12h3"></path>
+                    <path d="M17.5 12h3"></path>
+                    <path d="M4.9 17.6l2.1-2.1"></path>
+                    <path d="M17 5.5l2.1-2"></path>
+                    <circle cx="12" cy="12" r="4"></circle>
+                  </svg>
+                </span>
+                <span class="clone16-readmore-feature-text">500 cd/m²</span>
+              </div>
+              <div class="clone16-readmore-feature-item">
+                <span class="clone16-readmore-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" role="presentation">
+                    <rect x="3.5" y="6" width="17" height="12" rx="2"></rect>
+                    <path d="M6.5 10.5h11"></path>
+                    <path d="M6.5 13.5h11"></path>
+                  </svg>
+                </span>
+                <span class="clone16-readmore-feature-text">16:9 monitor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clone16-readmore-card-stage">
+          <p class="clone16-readmore-stage-label">Product Highlights</p>
+          <div class="clone16-readmore-slides" aria-live="polite">
+            ${CLONE16_READMORE_SLIDES.map((slide, index) => `
+              <article class="clone16-readmore-slide${index === 0 ? ' active' : ''}" aria-label="Clone 16 detail ${index + 1}">
+                <h4 class="clone16-readmore-slide-title">${escapeHtml(slide.title)}</h4>
+                <p class="clone16-readmore-slide-body">${escapeHtml(slide.body)}</p>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function updateClone16ReadMoreSlides() {
+    if (!infoCard) return;
+    const slides = Array.from(infoCard.querySelectorAll('.clone16-readmore-slide'));
+    if (!slides.length) return;
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('active', index === clone16ReadMoreSlideIndex);
+    });
+  }
+
+  function updateClone16ReadMoreImages() {
+    if (!infoCard) return;
+    const frames = Array.from(infoCard.querySelectorAll('.clone16-readmore-gallery-frame'));
+    if (!frames.length) return;
+    frames.forEach((frame, index) => {
+      frame.classList.toggle('active', index === clone16ReadMoreImageIndex);
+    });
+  }
+
+  function bindClone16ReadMoreGalleryHover() {
+    if (!infoCard) return;
+    const card = infoCard.querySelector('.clone16-readmore-card');
+    const gallery = infoCard.querySelector('.clone16-readmore-card-gallery');
+    if (!card || !gallery) return;
+
+    const expandGallery = () => card.classList.add('gallery-expanded');
+    const collapseGallery = () => card.classList.remove('gallery-expanded');
+
+    gallery.addEventListener('mouseenter', expandGallery);
+    gallery.addEventListener('mouseleave', collapseGallery);
+    gallery.addEventListener('focusin', expandGallery);
+    gallery.addEventListener('focusout', collapseGallery);
+    gallery.addEventListener('click', (event) => {
+      event.stopPropagation();
+      card.classList.toggle('gallery-expanded');
+    });
+    infoCard.addEventListener('click', (event) => {
+      if (gallery.contains(event.target)) return;
+      collapseGallery();
+    });
+  }
+
+  function renderClone16ReadMoreInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    clone16ReadMoreSlideIndex = 0;
+    clone16ReadMoreImageIndex = 0;
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-readmore-info-state');
+    infoCard.innerHTML = getClone16ReadMoreInfoCardHtml();
+    updateClone16ReadMoreSlides();
+    updateClone16ReadMoreImages();
+    bindClone16ReadMoreGalleryHover();
+    if (CLONE16_READMORE_SLIDES.length > 1) {
+      clone16ReadMoreAutoplayTimer = window.setInterval(() => {
+        clone16ReadMoreSlideIndex = (clone16ReadMoreSlideIndex + 1) % CLONE16_READMORE_SLIDES.length;
+        clone16ReadMoreImageIndex = (clone16ReadMoreImageIndex + 1) % CLONE16_READMORE_IMAGES.length;
+        updateClone16ReadMoreSlides();
+        updateClone16ReadMoreImages();
+      }, 5000);
+    }
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function showClone16IntroReadMore() {
+    const product = PRODUCTS.clone16;
+    if (!product) return;
+    setProductSummaryMode(false);
+    setDetailFocusMode(true);
+    setInfoCardOnlyMode(false);
+    setBuyNowMode(false);
+    setCueSeriesMode(true);
+    setClone16ActionLayout(false);
+    setCardsPanelHidden(false);
+    setQuickActionsMode('all');
+    setQuickActionsHidden(false);
+    setSubtitleStripText(getProductSummaryStripText(product));
+    renderClone16ReadMoreInfoCard();
+  }
+
+  function getProductSelectionButtons(root = document) {
+    return Array.from(root.querySelectorAll('.placeholder-product-item.available'));
+  }
+
+  function bindProductSelectionButtons(root = document) {
+    const buttons = getProductSelectionButtons(root);
+    buttons.forEach((button) => {
+      if (button.dataset.bound === 'true') return;
+      button.dataset.bound = 'true';
+      button.addEventListener('click', () => {
+        selectProduct(button.dataset.product || 'clone16', { showQuickActions: true });
+      });
+    });
+  }
+
+  function getProductSelectionBadge(productKey, productName) {
+    const badgeMap = {
+      clone16: 'C16',
+      cueSeries: 'CS',
+      framerSeries: 'FS',
+      folder22n: '22N',
+      lessonQ: 'LQ',
+      mimeSeries: 'MS',
+      ultraSeries: 'US',
+      tab12: 'T12',
+      flex15: 'F15',
+      rotunda15: 'R15',
+      olleson18: 'O18',
+      plate: 'PL'
+    };
+    return badgeMap[productKey] || productName.slice(0, 2).toUpperCase();
+  }
+
+  function getNoMatchInfoCardHtml() {
+    return `
+      <section class="no-match-info-card" aria-label="No matching result">
+        <div class="no-match-info-card-header">
+          <p class="no-match-info-card-alert">
+            <span class="no-match-info-card-icon" aria-hidden="true">&#9888;</span>
+            <span>Oops!!</span>
+          </p>
+          <p class="no-match-info-card-subtitle">Please Select Product</p>
+        </div>
+        <div class="placeholder-product-grid no-match-product-grid">
+          ${PRODUCT_DEFINITIONS.map((definition) => `
+            <button class="placeholder-product-item available no-match-product-item" type="button" data-product="${definition.key}">
+              <span class="no-match-product-item-badge" aria-hidden="true">${getProductSelectionBadge(definition.key, definition.name)}</span>
+              <span class="no-match-product-item-label">${escapeHtml(definition.name)}</span>
+            </button>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderNoMatchInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('no-match-info-state');
+    infoCard.innerHTML = getNoMatchInfoCardHtml();
+    bindProductSelectionButtons(infoCard);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
   }
 
   function stopInfoCardAutoScroll() {
@@ -1438,16 +2385,24 @@
   }
 
   function updatePlaceholderProductSelection() {
-    if (!placeholderProductButtons.length) return;
-    placeholderProductButtons.forEach((button) => {
+    const buttons = getProductSelectionButtons();
+    if (!buttons.length) return;
+    buttons.forEach((button) => {
       button.classList.toggle('active', button.dataset.product === currentProductKey);
     });
   }
 
+  function requiresExplicitProductSelection(action) {
+    return ['images', 'videos', 'specification', 'installation'].includes(action);
+  }
+
+  function canUseProductDependentAction(action) {
+    return !requiresExplicitProductSelection(action) || hasExplicitProductSelection;
+  }
+
   function setQuickActionsMode(mode = 'all') {
     if (!quickActionButtons.length) return;
-    const isPreselectMode = mode === 'preselect' || (mode === 'all' && !hasExplicitProductSelection);
-    const isLimitedMode = mode === 'nomatch' || mode === 'limited' || isPreselectMode;
+    const isLimitedMode = mode === 'nomatch' || mode === 'limited';
     const allowedActions = isLimitedMode
       ? new Set(['about_us', 'buy_now'])
       : null;
@@ -1460,6 +2415,8 @@
       const action = button.dataset.action || '';
       const shouldShow = !allowedActions || allowedActions.has(action);
       button.style.display = shouldShow ? '' : 'none';
+      button.disabled = shouldShow ? !canUseProductDependentAction(action) : false;
+      button.setAttribute('aria-disabled', button.disabled ? 'true' : 'false');
     });
   }
 
@@ -1553,7 +2510,11 @@
     stopPanelVideo();
     showMergedEmptyBottomCard();
     setSubtitleStripText(getProductSummaryStripText(product));
-    clearInfoCard();
+    if (productKey === 'clone16') {
+      renderClone16IntroInfoCard();
+    } else {
+      clearInfoCard();
+    }
 
     if (options.showQuickActions && quickActions) {
       setQuickActionsMode('all');
@@ -1564,6 +2525,9 @@
   function showCurrentProductImages() {
     const product = getCurrentProduct();
     applyAboutStyleLayout(getProductSummaryStripText(product));
+    if (product.key === 'clone16') {
+      renderClone16ImagesFeatureInfoCard();
+    }
   }
 
   function showCurrentProductVideo() {
@@ -1575,6 +2539,9 @@
     const product = getCurrentProduct();
     if (section === 'specification') {
       applyAboutStyleLayout(getProductSummaryStripText(product));
+      if (product.key === 'clone16') {
+        renderClone16SpecificationInfoCard();
+      }
       return;
     }
     if (section === 'installation') {
@@ -1586,17 +2553,22 @@
     }
   }
 
-  if (placeholderProductButtons.length) {
-    placeholderProductButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        selectProduct(button.dataset.product || 'clone16', { showQuickActions: true });
-      });
-    });
+  {
+    const initialProductButtons = getProductSelectionButtons();
+    if (initialProductButtons.length) {
+      bindProductSelectionButtons();
+    }
     updatePlaceholderProductSelection();
   }
 
   function applyMatchedResponse(match) {
     if (!match) return;
+
+    if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
+      applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, or Installation.');
+      renderNoMatchInfoCard();
+      return;
+    }
 
     setIntroEmptyState(false);
     setDetailFocusMode(false);
@@ -1747,12 +2719,15 @@
     if (!match) {
       applyAboutStyleLayout('Please select a product to continue.');
       setPlaceholderMode('nomatch');
+      renderNoMatchInfoCard();
       return;
     }
     applyMatchedResponse(match);
   }
 
   function quickAction(label) {
+    const actionButton = quickActionButtons.find((button) => (button.dataset.action || '').toLowerCase() === label.toLowerCase().replace(/\s+/g, '_'));
+    if (actionButton && actionButton.disabled) return;
     document.getElementById('userInput').value = label;
     sendMessage(label);
   }
@@ -1797,7 +2772,7 @@
   if (appContainer) {
     applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.');
     setInfoCardText('', getInitialInfoCardHtml(), true);
-    hasExplicitProductSelection = true;
+    hasExplicitProductSelection = false;
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
   }
