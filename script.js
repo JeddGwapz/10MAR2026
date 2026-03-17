@@ -62,6 +62,7 @@
   const panelVideoSource = document.getElementById('panelVideoSource');
   const videoPlaceholder = document.getElementById('videoPlaceholder');
   const customPlaceholderContent = document.getElementById('customPlaceholderContent');
+  const noMatchPickerShell = document.getElementById('noMatchPickerShell');
   const customCenterContent = document.getElementById('customCenterContent');
   const avatarVideo = document.getElementById('avatarVideo');
   const avatarVideoSource = document.getElementById('avatarVideoSource');
@@ -69,6 +70,7 @@
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
   const PANEL_DEFAULT_VIDEO = 'assets/clone16-q1-answer.mp4';
+  const DEFAULT_SUBTITLE_TEXT = 'Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.';
   const CLONE16_INTRO_SLIDES = [
     {
       title: 'Equipped with a 16-inch Monitor',
@@ -307,7 +309,7 @@
           </div>
         </div>
         <div class="application-gallery-item" tabindex="0" role="button" aria-label="Open Clone 16 application image 2">
-          <img src="https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png" alt="Clone 16 application image 2" />
+          <img src="https://static.wixstatic.com/media/d0630a_221e63cfeb6743ab9373699001470a76~mv2.jpg/v1/crop/x_89,y_0,w_4446,h_3468/fill/w_245,h_191,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.jpg" alt="Clone 16 application image 2" />
           <div class="application-gallery-caption">
             <strong>Darakwon Publisher</strong>
             <span>Application image</span>
@@ -570,7 +572,7 @@
       images,
       video: {
         src: definition.videoSrc || '',
-        title: `${definition.name} Video`,
+        title: definition.videoTitle || `${definition.name} Video`,
         body: definition.videoBody || defaultVideoBody
       },
       specification: {
@@ -588,6 +590,39 @@
     };
   }
 
+  function getYouTubeEmbedUrl(url) {
+    if (!url) return '';
+    try {
+      const parsedUrl = new URL(url, window.location.href);
+      const hostname = parsedUrl.hostname.replace(/^www\./, '');
+
+      if (hostname === 'youtu.be') {
+        const id = parsedUrl.pathname.replace(/^\/+/, '').split('/')[0];
+        return id ? `https://www.youtube.com/embed/${id}?rel=0` : '';
+      }
+
+      if (hostname === 'youtube.com' || hostname === 'm.youtube.com') {
+        if (parsedUrl.pathname.startsWith('/shorts/')) {
+          const id = parsedUrl.pathname.split('/')[2];
+          return id ? `https://www.youtube.com/embed/${id}?rel=0` : '';
+        }
+
+        if (parsedUrl.pathname === '/watch') {
+          const id = parsedUrl.searchParams.get('v');
+          return id ? `https://www.youtube.com/embed/${id}?rel=0` : '';
+        }
+
+        if (parsedUrl.pathname.startsWith('/embed/')) {
+          return `https://www.youtube.com${parsedUrl.pathname}${parsedUrl.search || '?rel=0'}`;
+        }
+      }
+    } catch (error) {
+      return '';
+    }
+
+    return '';
+  }
+
   const PRODUCT_DEFINITIONS = [
     {
       key: 'clone16',
@@ -596,10 +631,10 @@
       summary: 'A portable teleprompter that connects to a laptop via HDMI for faster, more stable production. Ideal for interviews and product shoots, it allows instant script editing and smooth control. Its 16:9 widescreen display offers a wider view, replacing traditional 17-inch 4:3 models.',
       summaryHtml: `Portable interview teleprompter equipped with<br><br>a 16-inch, 500 cd/m², 16:9 monitor<br><br><strong>Portable and Precise Performance</strong><br><br>Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.<br><br><strong>Effortless Script Control and Wider View</strong><br><br>Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.`,
       images: [
-        'https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png',
-        'https://static.wixstatic.com/media/d0630a_ed0a7b8d61304f97a46954614a41b444~mv2.png/v1/crop/x_0,y_197,w_3468,h_2705/fill/w_245,h_191,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016_teleprompter_Darakwon%20Publisher_032123.png'
+        'https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png'
       ],
-      videoSrc: 'assets/clone16-q1-answer.mp4',
+      videoSrc: 'https://www.youtube.com/shorts/IJlVE8LUHZ0',
+      videoTitle: 'Clone 16 - Introduction',
       specification: 'Clone 16 uses a 16:9 widescreen display, laptop HDMI workflow, and smooth script control for studio and field production.',
       installation: 'Mount the prompter, align the camera and lens, connect the laptop via HDMI, then load the script and begin prompting.'
     },
@@ -712,6 +747,7 @@
   }));
 
   let currentProductKey = 'clone16';
+  let lastConfirmedProductKey = 'clone16';
   let hasExplicitProductSelection = false;
   let infoCardAutoScrollTimer = null;
   let infoCardAutoScrollDelayTimer = null;
@@ -763,16 +799,25 @@
       title: '',
       bodyHtml: `
         <section class="about-card-embed" aria-label="About Us">
-          <div class="about-content">
-            <h1>About Us</h1>
-            <h2>Crystal Prompter Co., Ltd.</h2>
-            <p>
-              established in 2017, is a leading broadcast equipment company specializing
-              in prompters and electric pedestals. With continuous innovation and
-              technical expertise, we deliver high-quality solutions focused on customer
-              satisfaction.
-            </p>
-            <button type="button" class="next-btn" onclick="quickAction('Buy Now')">Next</button>
+          <div class="about-shell">
+            <div class="about-copy-panel">
+              <h1>About Us</h1>
+              <h2>Crystal Prompter Co., Ltd.</h2>
+              <p class="about-lead">
+                Established in 2017, Crystal Prompter develops professional teleprompters
+                and electric pedestal solutions for studio, field, education, and creator
+                workflows with a focus on reliability, clarity, and practical production use.
+              </p>
+              <div class="about-pill-row" aria-label="Company highlights">
+                <span class="about-pill">Since 2017</span>
+                <span class="about-pill">Korea-based production</span>
+                <span class="about-pill">Studio to creator setups</span>
+              </div>
+            </div>
+            <div class="about-social-panel" aria-label="Crystal Prompter social links">
+              <p class="about-social-label">Follow Us :</p>
+              ${getSocialLinksHtml()}
+            </div>
           </div>
         </section>
       `
@@ -900,7 +945,7 @@
   }
 
   function getClone16ProductVisualHtml(product, options = {}) {
-    const showSecondaryImage = options.showSecondaryImage !== false;
+    const showSecondaryImage = options.showSecondaryImage !== false && Boolean(product.images[1]);
     return `
       <div class="clone16-card-visual">
         <span class="clone16-card-badge">Clone 16</span>
@@ -918,21 +963,40 @@
     `;
   }
 
-  function getClone16InfoCardHtml({ product, kicker, title, lead, sectionHtml, metrics = [], showSecondaryImage = true }) {
+  function getClone16InfoCardHtml({
+    product,
+    kicker,
+    title,
+    lead,
+    sectionHtml,
+    metrics = [],
+    showSecondaryImage = true,
+    showLead = true,
+    showSummary = true,
+    cardClass = '',
+    showHero = true
+  }) {
     const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
     const metricsHtml = metrics.length ? getClone16MetricPillsHtml(metrics) : '';
-    return `
-      <section class="clone16-card" aria-label="${escapeHtml(title)}">
+    const leadHtml = showLead && lead ? `<p class="clone16-card-lead">${escapeHtml(lead)}</p>` : '';
+    const summaryBlock = showSummary ? `<div class="clone16-card-summary">${summaryHtml}</div>` : '';
+    const heroHtml = showHero
+      ? `
         <div class="clone16-card-hero">
           <div class="clone16-card-copy">
             <p class="clone16-card-kicker">${escapeHtml(kicker)}</p>
             <h4 class="clone16-card-heading">${escapeHtml(title)}</h4>
-            <p class="clone16-card-lead">${escapeHtml(lead)}</p>
+            ${leadHtml}
             ${metricsHtml}
-            <div class="clone16-card-summary">${summaryHtml}</div>
+            ${summaryBlock}
           </div>
           ${getClone16ProductVisualHtml(product, { showSecondaryImage })}
         </div>
+      `
+      : '';
+    return `
+      <section class="clone16-card${cardClass ? ` ${escapeHtml(cardClass)}` : ''}" aria-label="${escapeHtml(title)}">
+        ${heroHtml}
         ${sectionHtml}
       </section>
     `;
@@ -959,41 +1023,104 @@
 
   function getClone16VideoInfoHtml(product) {
     const videoTitle = escapeHtml(product.video.title);
-    const videoBody = escapeHtml(product.video.body);
-    const videoSrc = escapeHtml(product.video.src || PANEL_DEFAULT_VIDEO);
+    const rawVideoSrc = product.video.src || PANEL_DEFAULT_VIDEO;
+    const youtubeEmbedSrc = getYouTubeEmbedUrl(rawVideoSrc);
+    const videoSrc = escapeHtml(rawVideoSrc);
+    const safeYoutubeEmbedSrc = escapeHtml(youtubeEmbedSrc);
     return getClone16InfoCardHtml({
       product,
-      kicker: 'Videos Info Card',
-      title: 'Video Preview',
-      lead: 'The demo video stays embedded in the main info card with supporting notes aligned beside it on larger screens.',
-      metrics: ['Embedded playback', 'Laptop HDMI workflow', 'Field and studio use'],
+      kicker: 'Clone 16 Video',
+      title: 'Clone 16 - Introduction',
+      metrics: ['16-inch display', '500 cd/m²', '16:9 monitor'],
+      cardClass: 'clone16-card-video-mode',
+      showHero: false,
+      showSecondaryImage: false,
+      showLead: false,
+      showSummary: false,
       sectionHtml: `
         <section class="clone16-video-layout" aria-label="Clone 16 video content">
-          <div class="clone16-card-panel clone16-card-panel-video">
-            <div class="clone16-card-section-header">
-              <h5>${videoTitle}</h5>
-              <p>${videoBody}</p>
+          <div class="clone16-card-panel clone16-card-panel-video clone16-video-showcase">
+            <div class="clone16-video-showcase-header">
+              <div class="clone16-video-showcase-header-bar">
+                <div class="clone16-card-section-header clone16-video-section-header">
+                  <span class="clone16-video-kicker-chip">Clone 16 Video</span>
+                  <h5>${videoTitle}</h5>
+                </div>
+              </div>
+              <div class="clone16-video-meta" aria-label="Clone 16 video highlights">
+                <span>16-inch display</span>
+                <span>500 cd/m²</span>
+                <span>16:9 monitor</span>
+                <span>HDMI workflow</span>
+              </div>
             </div>
-            <div class="clone16-video-card">
-              <video class="clone16-inline-video" controls playsinline preload="metadata">
-                <source src="${videoSrc}" type="video/mp4" />
-              </video>
+            <div class="clone16-video-card clone16-video-stage">
+              ${safeYoutubeEmbedSrc
+                ? `<iframe class="clone16-inline-video clone16-inline-video-embed" src="${safeYoutubeEmbedSrc}" title="${videoTitle}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+                : `<video class="clone16-inline-video" controls playsinline preload="metadata">
+                    <source src="${videoSrc}" type="video/mp4" />
+                  </video>`}
+            </div>
+            <div class="clone16-video-stage-footer">
+              <div class="clone16-video-stat-list" aria-label="Clone 16 video quick benefits">
+                <span class="clone16-video-stat-pill">Portable prompting</span>
+                <span class="clone16-video-stat-pill">Clear long-form reading</span>
+                <span class="clone16-video-stat-pill">Fast script updates</span>
+              </div>
+              ${safeYoutubeEmbedSrc
+                ? `<a class="clone16-video-open-link" href="${videoSrc}" target="_blank" rel="noopener noreferrer">Open on YouTube</a>`
+                : ''}
             </div>
           </div>
-          <aside class="clone16-card-panel clone16-card-panel-notes">
-            <div class="clone16-card-section-header">
-              <h5>Video Notes</h5>
-              <p>Use this block for quick talking points while previewing the product demo.</p>
+          <aside class="clone16-card-panel clone16-card-panel-notes clone16-video-sidepanel">
+            <div class="clone16-card-section-header clone16-video-notes-header">
+              <span class="clone16-video-kicker-chip">Quick specs</span>
+              <h5>Core format</h5>
             </div>
-            <ul class="clone16-card-list">
-              <li>Portable one-body build for interviews and on-location production.</li>
-              <li>Widescreen prompting supports clearer long-form script reading.</li>
-              <li>Direct laptop connection makes script changes faster during shooting.</li>
-            </ul>
+            <div class="clone16-video-spec-grid" aria-label="Clone 16 video specs">
+              <article class="clone16-video-spec-card">
+                <strong>16"</strong>
+                <span>Display</span>
+              </article>
+              <article class="clone16-video-spec-card">
+                <strong>500</strong>
+                <span>cd/m²</span>
+              </article>
+              <article class="clone16-video-spec-card">
+                <strong>16:9</strong>
+                <span>Monitor</span>
+              </article>
+              <article class="clone16-video-spec-card">
+                <strong>HDMI</strong>
+                <span>Input</span>
+              </article>
+            </div>
           </aside>
         </section>
       `
     });
+  }
+
+  function renderClone16VideoInfoCard() {
+    const product = PRODUCTS.clone16;
+    if (!product || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-show-scrollbar',
+      'info-card-slide-enter',
+      'cue-series-intro-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state'
+    );
+    infoCard.innerHTML = getClone16VideoInfoHtml(product);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
   }
 
   function getClone16SpecificationTableHtml() {
@@ -1072,15 +1199,37 @@
     return `
       <section class="clone16-spec-image-card" aria-label="Clone 16 specifications">
         <div class="clone16-spec-image-card-header">
-          <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">Clone 16 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openClone16Brochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openClone16MobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
         </div>
         <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar" aria-hidden="true">Specifications</div>
-          <img
-            src="https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png"
-            alt="Clone 16 specifications"
-            class="clone16-spec-image-asset"
-          />
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+            <div class="clone16-spec-image-meta" aria-label="Clone 16 specification highlights">
+              <span>16-inch</span>
+              <span>500 cd/m²</span>
+              <span>16:9</span>
+            </div>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png"
+              alt="Clone 16 specifications"
+              class="clone16-spec-image-asset"
+            />
+          </div>
         </div>
       </section>
     `;
@@ -1095,8 +1244,87 @@
     infoCard.classList.add('clone16-spec-image-state');
     infoCard.classList.toggle('info-card-show-scrollbar', true);
     infoCard.innerHTML = getClone16SpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function isClone16BrochureDesktopViewport() {
+    return window.matchMedia('(min-width: 961px)').matches;
+  }
+
+  function isClone16BrochureMobileViewport() {
+    return !isClone16BrochureDesktopViewport();
+  }
+
+  function updateClone16BrochureButtonState() {
+    const isDesktop = isClone16BrochureDesktopViewport();
+    const desktopButton = document.querySelector('.clone16-spec-brochure-link-desktop');
+    const mobileButton = document.querySelector('.clone16-spec-brochure-link-mobile');
+
+    if (desktopButton) {
+      desktopButton.disabled = !isDesktop;
+      desktopButton.setAttribute('aria-disabled', String(!isDesktop));
+      desktopButton.title = isDesktop
+        ? 'Open brochure in popup window'
+        : 'Brochure popup is available on desktop only.';
+    }
+
+    if (mobileButton) {
+      mobileButton.disabled = isDesktop;
+      mobileButton.setAttribute('aria-disabled', String(isDesktop));
+      mobileButton.title = isDesktop
+        ? 'Mobile brochure popup is available on mobile only.'
+        : 'Open mobile brochure in popup window';
+    }
+  }
+
+  function openClone16Brochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQBnSJjY-rlRT6Wmyx55p0L_AS2z4vts_iKVEOCphq3lfa4?e=J4zOL0';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'clone16Brochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openClone16MobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQB0zquiExYtS6pXzWZiKyIeAUZNSMLVaXsfRhA6mzQL3RE?e=6cZiPD';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'clone16MobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
   }
 
   function getClone16InstallationInfoHtml(product) {
@@ -1446,25 +1674,52 @@
 
   function getClone16IntroInfoCardHtml(product) {
     return `
-      <section class="product-intro-info-card" aria-label="${escapeHtml(product.name)} intro">
+      <section class="product-intro-info-card clone16-product-intro-card" aria-label="${escapeHtml(product.name)} intro">
         <div class="product-intro-info-card-copy">
-          <p class="product-intro-info-card-kicker">Featured Product</p>
           <div class="product-intro-info-card-copy-main">
-            <h3 class="product-intro-info-card-title">Portable HDMI teleprompter with a wide 16:9 display for interviews and production.</h3>
+            <div class="product-intro-info-card-title-block">
+              <h3 class="product-intro-info-card-title">Clone 16</h3>
+              <p class="product-intro-info-card-lead">Portable HDMI teleprompter</p>
+            </div>
           </div>
-          <div class="product-intro-info-card-meta" aria-label="Clone 16 highlights">
-            <span class="product-intro-info-card-tag">Portable Setup</span>
-            <span class="product-intro-info-card-tag">HDMI Workflow</span>
-            <span class="product-intro-info-card-tag">16:9 Display</span>
+          <div class="product-intro-info-card-specline" aria-label="Clone 16 quick specs">
+            <span>16-inch display</span>
+            <span>500 cd/m²</span>
+            <span>16:9 monitor</span>
           </div>
-          <button type="button" class="product-intro-read-more" onclick="showClone16IntroReadMore()">Read More</button>
+          <div class="product-intro-info-card-metric-grid" aria-label="Clone 16 key metrics">
+            <article class="product-intro-info-card-metric">
+              <strong>16"</strong>
+              <span>Display</span>
+            </article>
+            <article class="product-intro-info-card-metric">
+              <strong>HDMI</strong>
+              <span>Input</span>
+            </article>
+            <article class="product-intro-info-card-metric">
+              <strong>16:9</strong>
+              <span>View</span>
+            </article>
+          </div>
+          <div class="product-intro-info-card-footer">
+            <button type="button" class="product-intro-read-more" onclick="showClone16IntroReadMore()">Read More</button>
+          </div>
         </div>
         <div class="product-intro-info-card-visual" aria-hidden="true">
           <div class="product-intro-info-card-image-shell">
             <span class="product-intro-info-card-visual-label">Clone 16</span>
-            <div class="product-intro-info-card-image-wrap">
-              <img src="https://static.wixstatic.com/media/d0630a_7105d15163c240729eaa6cb65ac8b043~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/cl%2016.png" alt="${escapeHtml(product.name)} featured image" class="product-intro-info-card-image" />
+            <span class="product-intro-info-card-visual-orbit product-intro-info-card-visual-orbit-a"></span>
+            <span class="product-intro-info-card-visual-orbit product-intro-info-card-visual-orbit-b"></span>
+            <div class="product-intro-info-card-floating-specs">
+              <span class="product-intro-info-card-floating-spec">Portable</span>
+              <span class="product-intro-info-card-floating-spec">HDMI</span>
+              <span class="product-intro-info-card-floating-spec">Ready</span>
             </div>
+            <div class="product-intro-info-card-image-wrap">
+              <img src="${product.images[0]}" alt="${escapeHtml(product.name)} featured image" class="product-intro-info-card-image" />
+              ${product.images[1] ? `<img src="${product.images[1]}" alt="${escapeHtml(product.name)} secondary image" class="product-intro-info-card-image product-intro-info-card-image-secondary" />` : ''}
+            </div>
+            <span class="product-intro-info-card-visual-floor" aria-hidden="true"></span>
           </div>
         </div>
       </section>
@@ -1491,12 +1746,20 @@
           ${CLONE16_IMAGES_FEATURE_SLIDES.map((slide, index) => `
             <article class="clone16-images-feature-slide${index === 0 ? ' active' : ''}" aria-label="Clone 16 key attraction ${index + 1}">
               <div class="clone16-images-feature-copy">
-                <p class="clone16-images-feature-kicker">${escapeHtml(slide.kicker)}</p>
-                ${slide.question ? `<h3 class="clone16-images-feature-question">${escapeHtml(slide.question)}</h3>` : ''}
-                ${slide.subtitle ? `<p class="clone16-images-feature-subtitle">${escapeHtml(slide.subtitle)}</p>` : ''}
-                ${slide.body.map((paragraph) => `<p class="clone16-images-feature-body">${escapeHtml(paragraph)}</p>`).join('')}
+                <p class="clone16-images-feature-kicker">Clone 16 Images</p>
+                <h3 class="clone16-images-feature-title">${escapeHtml(slide.subtitle || slide.question || 'Clone 16')}</h3>
+                <div class="clone16-images-feature-specs" aria-label="Clone 16 image specs">
+                  <span>16-inch display</span>
+                  <span>500 cd/m²</span>
+                  <span>16:9 monitor</span>
+                </div>
+                <div class="clone16-images-feature-meta" aria-label="Clone 16 image slide info">
+                  <span class="clone16-images-feature-meta-item">View ${index + 1}</span>
+                  <span class="clone16-images-feature-meta-item">Portable setup</span>
+                </div>
               </div>
               <div class="clone16-images-feature-visual" aria-hidden="true">
+                <span class="clone16-images-feature-visual-tag">Preview ${index + 1}</span>
                 <img src="${slide.image}" alt="Clone 16 key attraction image ${index + 1}" class="clone16-images-feature-image" />
               </div>
             </article>
@@ -1542,19 +1805,24 @@
   function getClone16ApplicationsInfoCardHtml() {
     return `
       <section class="clone16-subview-card clone16-subview-applications" aria-label="Clone 16 applications">
-        <div class="clone16-subview-gallery-shell">
-          ${getClone16ApplicationGalleryHtml()}
-        </div>
-        <div class="clone16-subview-applications-footer">
+        <div class="clone16-subview-applications-topbar">
+          <div class="clone16-subview-header clone16-subview-applications-copy">
+            <p class="clone16-subview-kicker">Applications</p>
+            <h3 class="clone16-subview-title">Clone 16 in real-world production</h3>
+            <div class="clone16-applications-specline" aria-label="Clone 16 application categories">
+              <span>Education</span>
+              <span>Publishing</span>
+              <span>Culinary</span>
+              <span>Studio</span>
+            </div>
+          </div>
           <button type="button" class="clone16-subview-back-button clone16-subview-back-button-below" onclick="showClone16ImagesFeatureInfoCard()">
             <span aria-hidden="true">←</span>
             <span>Back to Images</span>
           </button>
-          <div class="clone16-subview-header clone16-subview-applications-copy">
-          <p class="clone16-subview-kicker">Applications</p>
-          <h3 class="clone16-subview-title">Clone 16 real-world usage</h3>
-          <p class="clone16-subview-copy">Examples of Clone 16 in education, publishing, culinary training, and practical on-site production environments.</p>
-          </div>
+        </div>
+        <div class="clone16-subview-gallery-shell">
+          ${getClone16ApplicationGalleryHtml()}
         </div>
       </section>
     `;
@@ -1631,6 +1899,10 @@
     frames.forEach((frame, index) => {
       frame.classList.toggle('active', index === clone16ComponentsImageIndex);
     });
+    const counter = infoCard.querySelector('.clone16-components-gallery-counter');
+    if (counter) {
+      counter.textContent = `${clone16ComponentsImageIndex + 1} / ${frames.length}`;
+    }
   }
 
   function getClone16ComponentsInfoCardHtml() {
@@ -1639,19 +1911,38 @@
         <div class="clone16-components-topbar">
           <div class="clone16-components-heading">
             <p class="clone16-subview-kicker">Components and Parts</p>
-            <h3 class="clone16-subview-title">Sturdy, Stable, and Optimized Structure for Maximum Efficiency</h3>
+            <h3 class="clone16-subview-title">Clone 16 Component System</h3>
+            <div class="clone16-components-specline" aria-label="Clone 16 component highlights">
+              <span>Aluminum frame</span>
+              <span>Portable build</span>
+              <span>Camera ready</span>
+            </div>
           </div>
           <button type="button" class="clone16-subview-back-button clone16-components-back-button" onclick="showClone16ImagesFeatureInfoCard()">
             <span aria-hidden="true">←</span>
             <span>Back to Images</span>
           </button>
         </div>
-        <div class="clone16-components-wall" aria-label="Clone 16 components gallery">
-          ${CLONE16_COMPONENTS_IMAGES.map((imageSrc, index) => `
-            <figure class="clone16-components-tile" tabindex="0" role="button" aria-label="Open Clone 16 component image ${index + 1}">
-              <img src="${imageSrc}" alt="Clone 16 component image ${index + 1}" class="clone16-components-tile-image" />
-            </figure>
-          `).join('')}
+        <div class="clone16-components-overview">
+          <div class="clone16-components-gallery" aria-label="Clone 16 highlighted component preview">
+            <div class="clone16-components-gallery-header">
+              <span class="clone16-components-gallery-badge">Preview</span>
+              <span class="clone16-components-gallery-counter">1 / ${CLONE16_COMPONENTS_IMAGES.length}</span>
+            </div>
+            ${CLONE16_COMPONENTS_IMAGES.map((imageSrc, index) => `
+              <figure class="clone16-components-gallery-frame${index === 0 ? ' active' : ''}">
+                <img src="${imageSrc}" alt="Clone 16 component preview image ${index + 1}" class="clone16-components-gallery-image" />
+              </figure>
+            `).join('')}
+          </div>
+          <div class="clone16-components-wall" aria-label="Clone 16 components gallery">
+            ${CLONE16_COMPONENTS_IMAGES.map((imageSrc, index) => `
+              <figure class="clone16-components-tile" tabindex="0" role="button" aria-label="Open Clone 16 component image ${index + 1}" data-component-index="${index}">
+                <span class="clone16-components-tile-index">Part ${index + 1}</span>
+                <img src="${imageSrc}" alt="Clone 16 component image ${index + 1}" class="clone16-components-tile-image" />
+              </figure>
+            `).join('')}
+          </div>
         </div>
         <div class="clone16-components-lightbox" hidden aria-hidden="true">
           <button type="button" class="clone16-components-lightbox-close" aria-label="Close image preview">×</button>
@@ -1960,7 +2251,15 @@
     };
 
     tiles.forEach((tile) => {
+      const tileIndex = Number(tile.dataset.componentIndex || '0');
+      const setPreview = () => {
+        clone16ComponentsImageIndex = Number.isFinite(tileIndex) ? tileIndex : 0;
+        updateClone16ComponentsImages();
+      };
+      tile.addEventListener('mouseenter', setPreview);
+      tile.addEventListener('focus', setPreview);
       tile.addEventListener('click', () => {
+        setPreview();
         const image = tile.querySelector('.clone16-components-tile-image');
         if (image) openLightbox(image);
       });
@@ -1968,6 +2267,7 @@
       tile.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
+          setPreview();
           const image = tile.querySelector('.clone16-components-tile-image');
           if (image) openLightbox(image);
         }
@@ -2025,9 +2325,11 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
+    clone16ComponentsImageIndex = 0;
     infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
     infoCard.classList.add('clone16-images-info-state');
     infoCard.innerHTML = getClone16ComponentsInfoCardHtml();
+    updateClone16ComponentsImages();
     bindClone16ComponentsMagnifier();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -2036,14 +2338,26 @@
   window.showClone16ApplicationsInfoCard = renderClone16ApplicationsInfoCard;
   window.showClone16ComponentsInfoCard = renderClone16ComponentsInfoCard;
   window.showClone16ImagesFeatureInfoCard = renderClone16ImagesFeatureInfoCard;
+  window.openClone16Brochure = openClone16Brochure;
+  window.openClone16MobileBrochure = openClone16MobileBrochure;
+  window.addEventListener('resize', updateClone16BrochureButtonState);
 
   function getClone16ReadMoreInfoCardHtml() {
     return `
       <section class="clone16-readmore-card" aria-label="Clone 16 overview">
         <div class="clone16-readmore-card-hero">
+          <div class="clone16-readmore-display-showcase" aria-label="Clone 16 display illustration">
+            <div class="clone16-readmore-laptop">
+              <div class="clone16-readmore-laptop-screen">
+                <span class="clone16-readmore-laptop-camera" aria-hidden="true"></span>
+                <span class="clone16-readmore-screen-guide clone16-readmore-screen-guide-top" aria-hidden="true"></span>
+                <span class="clone16-readmore-screen-guide clone16-readmore-screen-guide-bottom" aria-hidden="true"></span>
+                <span class="clone16-readmore-screen-size">16"</span>
+              </div>
+              <div class="clone16-readmore-laptop-base" aria-hidden="true"></div>
+            </div>
+          </div>
           <div class="clone16-readmore-card-summary">
-            <h3 class="clone16-readmore-hero-name">Clone 16</h3>
-            <p class="clone16-readmore-hero-copy">Portable interview teleprompter equipped with a 16-inch, 500 cd/m² 16:9 monitor</p>
             <div class="clone16-readmore-feature-list" aria-label="Clone 16 quick specs">
               <div class="clone16-readmore-feature-item">
                 <span class="clone16-readmore-feature-icon" aria-hidden="true">
@@ -2191,7 +2505,14 @@
       if (button.dataset.bound === 'true') return;
       button.dataset.bound = 'true';
       button.addEventListener('click', () => {
-        selectProduct(button.dataset.product || 'clone16', { showQuickActions: true });
+        const productKey = button.dataset.product || 'clone16';
+        const selectionMode = button.dataset.selectionMode || 'select';
+        if (selectionMode === 'preview') {
+          currentProductKey = productKey;
+          renderNoMatchInfoCard();
+          return;
+        }
+        selectProduct(productKey, { showQuickActions: true });
       });
     });
   }
@@ -2214,24 +2535,68 @@
     return badgeMap[productKey] || productName.slice(0, 2).toUpperCase();
   }
 
+  function getNoMatchPickerHeaderHtml() {
+    return `
+      <div class="no-match-picker-header">
+        <h3 class="no-match-picker-title">Select a Product</h3>
+        <p class="no-match-picker-subtitle">Please choose one of the products below to continue.</p>
+      </div>
+    `;
+  }
+
+  function getNoMatchPickerGridHtml() {
+    return `
+      <div class="placeholder-product-grid no-match-picker-grid">
+        ${PRODUCT_DEFINITIONS.map((definition) => `
+          <button class="placeholder-product-item available no-match-picker-item" type="button" data-product="${definition.key}" data-selection-mode="preview">
+            <span class="no-match-picker-item-badge" aria-hidden="true">${getProductSelectionBadge(definition.key, definition.name)}</span>
+            <span class="no-match-picker-item-label">${escapeHtml(definition.name)}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function getNoMatchPickerPanelHtml() {
+    return `
+      <div class="no-match-picker-panel" aria-label="Product selection">
+        ${getNoMatchPickerHeaderHtml()}
+        ${getNoMatchPickerGridHtml()}
+      </div>
+    `;
+  }
+
+  function renderNoMatchPicker() {
+    if (!noMatchPickerShell) return;
+    noMatchPickerShell.innerHTML = getNoMatchPickerPanelHtml();
+    bindProductSelectionButtons(noMatchPickerShell);
+    updatePlaceholderProductSelection();
+  }
+
   function getNoMatchInfoCardHtml() {
+    const selectedProduct = PRODUCTS[currentProductKey] || PRODUCTS.clone16;
+    const selectedBadge = getProductSelectionBadge(selectedProduct.key, selectedProduct.name);
     return `
       <section class="no-match-info-card" aria-label="No matching result">
-        <div class="no-match-info-card-header">
-          <p class="no-match-info-card-alert">
-            <span class="no-match-info-card-icon" aria-hidden="true">&#9888;</span>
-            <span>Oops!!</span>
-          </p>
-          <p class="no-match-info-card-subtitle">Please Select Product</p>
+        <div class="no-match-picker-column" aria-label="Product selection">
+          ${getNoMatchPickerHeaderHtml()}
+          ${getNoMatchPickerGridHtml()}
         </div>
-        <div class="placeholder-product-grid no-match-product-grid">
-          ${PRODUCT_DEFINITIONS.map((definition) => `
-            <button class="placeholder-product-item available no-match-product-item" type="button" data-product="${definition.key}">
-              <span class="no-match-product-item-badge" aria-hidden="true">${getProductSelectionBadge(definition.key, definition.name)}</span>
-              <span class="no-match-product-item-label">${escapeHtml(definition.name)}</span>
-            </button>
-          `).join('')}
-        </div>
+        <aside class="no-match-info-card-sidebar" aria-label="Selected product">
+          <div class="no-match-info-card-toolbar">
+            <button class="no-match-info-card-control" type="button" data-nomatch-action="cancel" aria-label="Go back">&#8592;</button>
+            <button class="no-match-info-card-control" type="button" data-nomatch-action="cancel" aria-label="Close selection">&#10005;</button>
+          </div>
+          <div class="no-match-info-card-selection">
+            <span class="no-match-info-card-selection-badge" aria-hidden="true">${selectedBadge}</span>
+            <span class="no-match-info-card-selection-label">${escapeHtml(selectedProduct.name)}</span>
+          </div>
+          <div class="no-match-info-card-spacer" aria-hidden="true"></div>
+          <div class="no-match-info-card-actions">
+            <button class="no-match-action-btn no-match-action-btn-cancel" type="button" data-nomatch-action="cancel">Cancel</button>
+            <button class="no-match-action-btn no-match-action-btn-continue" type="button" data-nomatch-action="continue">Continue</button>
+          </div>
+        </aside>
       </section>
     `;
   }
@@ -2245,8 +2610,41 @@
     infoCard.classList.add('no-match-info-state');
     infoCard.innerHTML = getNoMatchInfoCardHtml();
     bindProductSelectionButtons(infoCard);
+    bindNoMatchActionButtons(infoCard);
+    updatePlaceholderProductSelection();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function restoreDefaultExperience() {
+    currentProductKey = 'clone16';
+    lastConfirmedProductKey = 'clone16';
+    hasExplicitProductSelection = false;
+    applyAboutStyleLayout(DEFAULT_SUBTITLE_TEXT);
+    setInfoCardText('', getInitialInfoCardHtml(), true);
+    setQuickActionsMode('all');
+    setQuickActionsHidden(false);
+    updatePlaceholderProductSelection();
+  }
+
+  function bindNoMatchActionButtons(root = document) {
+    const buttons = Array.from(root.querySelectorAll('[data-nomatch-action]'));
+    buttons.forEach((button) => {
+      if (button.dataset.bound === 'true') return;
+      button.dataset.bound = 'true';
+      button.addEventListener('click', () => {
+        const action = button.dataset.nomatchAction || '';
+        if (action === 'continue') {
+          selectProduct(currentProductKey || 'clone16', { showQuickActions: true });
+          return;
+        }
+        if (hasExplicitProductSelection && PRODUCTS[lastConfirmedProductKey]) {
+          selectProduct(lastConfirmedProductKey, { showQuickActions: true });
+          return;
+        }
+        restoreDefaultExperience();
+      });
+    });
   }
 
   function stopInfoCardAutoScroll() {
@@ -2492,6 +2890,7 @@
     if (!product) return;
 
     currentProductKey = productKey;
+    lastConfirmedProductKey = productKey;
     hasExplicitProductSelection = true;
     setIntroEmptyState(false);
     setDetailFocusMode(false);
@@ -2533,6 +2932,9 @@
   function showCurrentProductVideo() {
     const product = getCurrentProduct();
     applyAboutStyleLayout(getProductSummaryStripText(product));
+    if (product.key === 'clone16') {
+      renderClone16VideoInfoCard();
+    }
   }
 
   function showCurrentProductText(section) {
@@ -2566,6 +2968,8 @@
 
     if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
       applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, or Installation.');
+      renderNoMatchPicker();
+      setPlaceholderMode('nomatch');
       renderNoMatchInfoCard();
       return;
     }
@@ -2588,7 +2992,7 @@
     }
     if (match.id === 'about_us') {
       applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false });
-      setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true, { includeSocial: true });
+      setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true);
     }
     if (match.id === 'images') showCurrentProductImages();
     if (match.id === 'videos') showCurrentProductVideo();
@@ -2707,6 +3111,7 @@
     const detectedProductKey = detectProductKeyFromText(msg);
     if (detectedProductKey && PRODUCTS[detectedProductKey]) {
       currentProductKey = detectedProductKey;
+      lastConfirmedProductKey = detectedProductKey;
       hasExplicitProductSelection = true;
       updatePlaceholderProductSelection();
       showDefaultBottomCards(PRODUCTS[detectedProductKey].images, PRODUCTS[detectedProductKey].name);
@@ -2718,6 +3123,7 @@
     const match = matchScriptedQuestion(msg);
     if (!match) {
       applyAboutStyleLayout('Please select a product to continue.');
+      renderNoMatchPicker();
       setPlaceholderMode('nomatch');
       renderNoMatchInfoCard();
       return;
@@ -2769,11 +3175,8 @@
   }
 
   resetInfoCardAutoScroll();
+  renderNoMatchPicker();
   if (appContainer) {
-    applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.');
-    setInfoCardText('', getInitialInfoCardHtml(), true);
-    hasExplicitProductSelection = false;
-    setQuickActionsMode('all');
-    setQuickActionsHidden(false);
+    restoreDefaultExperience();
   }
   window.addEventListener('resize', syncCueSeriesAvatarHeight);
