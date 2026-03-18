@@ -1249,6 +1249,28 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
+  function renderClone16InstallationInfoCard() {
+    const product = PRODUCTS.clone16;
+    if (!product || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state',
+      'clone16-spec-image-state'
+    );
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getClone16InstallationInfoHtml(product);
+    updateClone16InstallationDesktopOnlyVisibility();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
   function isClone16BrochureDesktopViewport() {
     return window.matchMedia('(min-width: 961px)').matches;
   }
@@ -1327,61 +1349,136 @@
     window.alert('Please allow pop-up windows to view the mobile brochure.');
   }
 
+  const CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-KR-Setup-2.6.2-win.exe?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6sOeMLD-o-eH2JASZnGp9JfTAwxJMq0taUVtlhXb7tmIWRtgne0IqBIld1Fg_aem_kImVGf3YRIpmPaTK92X-cw';
+  const CLONE16_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/qAH4Op5iGHk?si=DF932_xennbuwvz4&autoplay=1&mute=1&rel=0&playsinline=1';
+  const CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-arm64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6EfZztpL6zGDy2qfjjKoaC6hkQzD0VbpadQuYD8S3LJqFOa84sPfJiT-O2NA_aem_rhEs--noUKMf0Ud1m15R9Q';
+  const CLONE16_MAC_INTEL_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-x64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6DcejeudtCn6t4TWKi0cGmV2C01BJ3RvRCqYdAwV1MK-luD4LwpGIeROF-dw_aem_qkCIguxHtqEdCafs7ToN8w';
+  const CLONE16_MAC_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/hck8hsSO3FQ?si=Foi7e6_3OsfA9qwb&autoplay=1&rel=0&playsinline=1';
+
+  function isClone16MobileOrTabletClient() {
+    const userAgent = navigator.userAgent || '';
+    const maxTouchPoints = Number(navigator.maxTouchPoints || 0);
+    return /android|iphone|ipad|ipod|mobile|tablet|silk|kindle|playbook/i.test(userAgent)
+      || (/macintosh/i.test(userAgent) && maxTouchPoints > 1);
+  }
+
+  function isClone16WindowsDesktopClient() {
+    const userAgent = navigator.userAgent || '';
+    const platform = navigator.userAgentData?.platform || navigator.platform || '';
+    const isWindows = /windows/i.test(userAgent) || /^win/i.test(platform);
+    const isDesktopViewport = window.matchMedia('(min-width: 1025px)').matches;
+    return isWindows && !isClone16MobileOrTabletClient() && isDesktopViewport;
+  }
+
+  function isClone16MacDesktopClient() {
+    const userAgent = navigator.userAgent || '';
+    const platform = navigator.userAgentData?.platform || navigator.platform || '';
+    const isMac = /macintosh|mac os x/i.test(userAgent) || /^mac/i.test(platform);
+    const isDesktopViewport = window.matchMedia('(min-width: 1025px)').matches;
+    return isMac && !isClone16MobileOrTabletClient() && isDesktopViewport;
+  }
+
+  function updateClone16InstallationDesktopOnlyVisibility() {
+    const windowsDesktopElements = document.querySelectorAll('[data-clone16-windows-desktop-only]');
+    const macDesktopElements = document.querySelectorAll('[data-clone16-mac-desktop-only]');
+    const showWindowsDesktop = isClone16WindowsDesktopClient();
+    const showMacDesktop = isClone16MacDesktopClient();
+
+    windowsDesktopElements.forEach((element) => {
+      element.hidden = !showWindowsDesktop;
+      element.setAttribute('aria-hidden', String(!showWindowsDesktop));
+    });
+
+    macDesktopElements.forEach((element) => {
+      element.hidden = !showMacDesktop;
+      element.setAttribute('aria-hidden', String(!showMacDesktop));
+    });
+  }
+
+  function playClone16InstallationEmbed(button) {
+    const shell = button?.closest('.clone16-install-video-shell');
+    if (!shell) return;
+    const embedUrl = shell.getAttribute('data-embed-src');
+    if (!embedUrl) return;
+    shell.classList.add('is-playing');
+    shell.innerHTML = `
+      <h5 class="clone16-install-video-heading">Installation Guide Video</h5>
+      <iframe
+        class="clone16-install-video-embed"
+        width="560"
+        height="315"
+        src="${escapeHtml(embedUrl)}"
+        title="Installation Guide Video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    `;
+  }
+
   function getClone16InstallationInfoHtml(product) {
+    const downloadUrl = escapeHtml(CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL);
+    const guideVideoEmbedUrl = escapeHtml(CLONE16_INSTALLATION_GUIDE_EMBED_URL);
+    const macSiliconDownloadUrl = escapeHtml(CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL);
+    const macIntelDownloadUrl = escapeHtml(CLONE16_MAC_INTEL_GLOBAL_DOWNLOAD_URL);
+    const macGuideVideoEmbedUrl = escapeHtml(CLONE16_MAC_INSTALLATION_GUIDE_EMBED_URL);
     return getClone16InfoCardHtml({
       product,
       kicker: 'Installation Info Card',
-      title: 'Installation Guide',
-      lead: 'Setup instructions are arranged into compact steps and checks so the card stays dense without leaving dead space.',
-      metrics: ['Tripod-ready', 'Fast alignment', 'Remote control ready'],
+      title: 'Installation',
+      showHero: false,
+      showLead: false,
+      showSummary: false,
+      metrics: [],
       sectionHtml: `
-        <section class="clone16-install-layout" aria-label="Clone 16 installation guide">
-          <div class="clone16-card-panel clone16-card-panel-steps">
-            <div class="clone16-card-section-header">
-              <h5>Step-by-Step Setup</h5>
-              <p>${escapeHtml(product.installation.body)}</p>
+        <section class="clone16-install-layout" aria-label="Clone 16 installation resources">
+          <div class="clone16-card-panel clone16-card-panel-notes">
+            <div class="clone16-install-desktop-stack" data-clone16-windows-desktop-only hidden aria-hidden="true">
+              <a
+                class="clone16-install-download-link"
+                href="${downloadUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Windows 64bit Global version</a>
+              <div class="clone16-install-video-shell">
+                <h5 class="clone16-install-video-heading">Installation Guide Video</h5>
+                <iframe
+                  class="clone16-install-video-embed"
+                  width="560"
+                  height="315"
+                  src="${guideVideoEmbedUrl}"
+                  title="Installation Guide Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                ></iframe>
+              </div>
             </div>
-            <div class="detail-steps">
-              <article class="detail-step">
-                <span class="detail-step-number">1</span>
-                <div>
-                  <h4>Mount the teleprompter</h4>
-                  <p>Place Clone 16 on a stable tripod or compatible support and confirm the foldable body is locked in position.</p>
-                </div>
-              </article>
-              <article class="detail-step">
-                <span class="detail-step-number">2</span>
-                <div>
-                  <h4>Align camera and glass</h4>
-                  <p>Center the camera behind the prompter glass and adjust the lens position for a clean eyeline and balanced framing.</p>
-                </div>
-              </article>
-              <article class="detail-step">
-                <span class="detail-step-number">3</span>
-                <div>
-                  <h4>Connect the script source</h4>
-                  <p>Use HDMI from the laptop, then verify the mirrored script output, monitor brightness, and flip settings before recording.</p>
-                </div>
-              </article>
-              <article class="detail-step">
-                <span class="detail-step-number">4</span>
-                <div>
-                  <h4>Finalize prompt control</h4>
-                  <p>Load the script, test scroll speed, and confirm remote or operator control so the presenter can start smoothly.</p>
-                </div>
-              </article>
+            <div class="clone16-install-desktop-stack" data-clone16-mac-desktop-only hidden aria-hidden="true">
+              <a
+                class="clone16-install-download-link"
+                href="${macSiliconDownloadUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Mac Silicon Global version</a>
+              <a
+                class="clone16-install-download-link"
+                href="${macIntelDownloadUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Mac Intel Global version</a>
+              <div class="clone16-install-video-shell" data-embed-src="${macGuideVideoEmbedUrl}">
+                <h5 class="clone16-install-video-heading">Installation Guide Video</h5>
+                <button
+                  type="button"
+                  class="clone16-install-video-launch"
+                  onclick="playClone16InstallationEmbed(this)"
+                  aria-label="Play installation guide video"
+                >
+                  <span class="clone16-install-video-launch-icon" aria-hidden="true"></span>
+                </button>
+              </div>
             </div>
-          </div>
-          <aside class="clone16-card-panel clone16-card-panel-notes">
-            <div class="clone16-card-section-header">
-              <h5>Before Recording</h5>
-              <p>Quick checks to keep the setup stable and ready for talent.</p>
-            </div>
-            <ul class="clone16-card-list">
-              <li>Confirm tripod balance and camera centering before talent arrives.</li>
-              <li>Check monitor brightness and screen flip orientation.</li>
-              <li>Test remote scroll speed with the final script loaded.</li>
-            </ul>
           </div>
         </section>
       `
@@ -2340,7 +2437,9 @@
   window.showClone16ImagesFeatureInfoCard = renderClone16ImagesFeatureInfoCard;
   window.openClone16Brochure = openClone16Brochure;
   window.openClone16MobileBrochure = openClone16MobileBrochure;
+  window.playClone16InstallationEmbed = playClone16InstallationEmbed;
   window.addEventListener('resize', updateClone16BrochureButtonState);
+  window.addEventListener('resize', updateClone16InstallationDesktopOnlyVisibility);
 
   function getClone16ReadMoreInfoCardHtml() {
     return `
@@ -2948,6 +3047,9 @@
     }
     if (section === 'installation') {
       applyAboutStyleLayout(getProductSummaryStripText(product));
+      if (product.key === 'clone16') {
+        renderClone16InstallationInfoCard();
+      }
       return;
     }
     if (section === 'buy_now') {

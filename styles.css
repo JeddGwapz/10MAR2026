@@ -4996,6 +4996,115 @@
     .clone16-install-layout {
       grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
     }
+    .clone16-install-layout {
+      grid-template-columns: 1fr;
+    }
+    .clone16-install-desktop-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .clone16-install-download-link {
+      width: 100%;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top, rgba(108,157,255,0.2), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 16px 28px rgba(0,0,0,0.16);
+      color: #000000;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+    .clone16-install-download-link:hover {
+      transform: translateY(-1px);
+      background:
+        radial-gradient(circle at top, rgba(128,175,255,0.24), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.07));
+      border-color: rgba(255,255,255,0.24);
+    }
+    .clone16-install-video-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .clone16-install-video-shell.is-playing {
+      gap: 10px;
+    }
+    .clone16-install-video-heading {
+      margin: 0;
+      color: #000000;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+    .clone16-install-video-launch {
+      position: relative;
+      width: 100%;
+      min-height: 315px;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 18px;
+      cursor: pointer;
+      background:
+        radial-gradient(circle at top, rgba(108,157,255,0.16), transparent 40%),
+        linear-gradient(180deg, rgba(17,24,39,0.9), rgba(29,41,61,0.95));
+      box-shadow: 0 16px 28px rgba(0,0,0,0.16);
+    }
+    .clone16-install-video-launch::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 42%);
+    }
+    .clone16-install-video-launch-icon {
+      position: relative;
+      display: inline-block;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 12px 22px rgba(0,0,0,0.22);
+    }
+    .clone16-install-video-launch-icon::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-38%, -50%);
+      width: 0;
+      height: 0;
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+      border-left: 22px solid #18263b;
+    }
+    .clone16-install-video-embed {
+      width: 100%;
+      min-height: 315px;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      display: block;
+      background: #000000;
+      border-radius: 18px;
+      box-shadow: 0 16px 28px rgba(0,0,0,0.16);
+    }
     .clone16-card-panel-gallery .clone16-inline-gallery {
       min-height: 0;
     }
