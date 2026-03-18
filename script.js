@@ -627,7 +627,7 @@
     {
       key: 'clone16',
       name: 'Clone 16',
-      aliases: ['clone 16', 'clone16', 'crystal prompter clone 16'],
+      aliases: ['clone 16', 'clone16', 'clone', 'c16', 'c 16', 'crystal prompter clone 16'],
       summary: 'A portable teleprompter that connects to a laptop via HDMI for faster, more stable production. Ideal for interviews and product shoots, it allows instant script editing and smooth control. Its 16:9 widescreen display offers a wider view, replacing traditional 17-inch 4:3 models.',
       summaryHtml: `Portable interview teleprompter equipped with<br><br>a 16-inch, 500 cd/m², 16:9 monitor<br><br><strong>Portable and Precise Performance</strong><br><br>Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.<br><br><strong>Effortless Script Control and Wider View</strong><br><br>Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.`,
       images: [
@@ -639,17 +639,35 @@
       installation: 'Mount the prompter, align the camera and lens, connect the laptop via HDMI, then load the script and begin prompting.'
     },
     {
-      key: 'cueSeries',
-      name: 'Cue Series',
-      aliases: ['cue series', 'cue24', 'cue 24'],
-      summary: 'Cue Series is built for larger-format prompting workflows, giving creators and studios a more stable and readable teleprompter setup.',
-      summaryHtml: `Built for the next generation of professionals, these ultra-lightweight, high-brightness teleprompters set up effortlessly anywhere, delivering exceptional clarity and precision for creators and broadcasters alike.`,
+      key: 'cue24',
+      name: 'Cue 24',
+      aliases: ['cue24', 'cue 24'],
+      summary: 'Cue 24 is a Cue Series teleprompter configured for 24-inch class prompting workflows, balancing readability, stable framing, and efficient studio operation.',
+      summaryHtml: `Cue 24 delivers larger-format prompting with a stable, easy-to-read workflow for studio and presenter setups.`,
       images: [
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png',
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png'
       ],
-      specification: 'Cue Series focuses on larger screen prompting, stable framing, and a workflow suited for presenters, lessons, and studio-style production.',
-      installation: 'Set the frame on the support, align the monitor and camera, then connect your script source and fine-tune the viewing angle.'
+      specification: 'Cue 24 focuses on larger-screen prompting, stable framing, and a workflow suited for presenter, lesson, and studio production.',
+      installation: 'Set the Cue 24 frame on the support, align the monitor and camera, then connect the script source and fine-tune the viewing angle.'
+    },
+    {
+      key: 'cue27',
+      name: 'Cue 27',
+      aliases: ['cue27', 'cue 27'],
+      summary: 'Cue 27 is a Cue Series teleprompter designed for larger and more readable prompting in professional presentation and studio environments.',
+      summaryHtml: `Cue 27 is built for smooth larger-format prompting with dependable readability and stable production framing.`,
+      specification: 'Cue 27 prioritizes large-format readability, stable support, and a prompting workflow suitable for professional presentation and studio use.',
+      installation: 'Mount the Cue 27 frame on the support, align the monitor and camera, then connect the script source and adjust the viewing angle.'
+    },
+    {
+      key: 'cue32',
+      name: 'Cue 32',
+      aliases: ['cue32', 'cue 32'],
+      summary: 'Cue 32 is the largest Cue Series option for demanding prompting setups that need a broad reading area and dependable production stability.',
+      summaryHtml: `Cue 32 is designed for high-visibility prompting where a larger reading area and stable studio workflow are essential.`,
+      specification: 'Cue 32 emphasizes maximum readability, stable framing, and a robust prompting workflow for professional production environments.',
+      installation: 'Assemble the Cue 32 frame on the support, align the display and camera system, then connect the script source and finalize the prompting angle.'
     },
     {
       key: 'framerSeries',
@@ -1235,6 +1253,76 @@
     `;
   }
 
+  function getCue24SpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="Cue 24 specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">Cue 24 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openCue24Brochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openCue24MobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_b47696bb2b2c47e8a2584ee5906edb07~mv2.png/v1/fill/w_488,h_574,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2024.png"
+              alt="Cue 24 technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function getCue27SpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="Cue 27 specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">Cue 27 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openCue27Brochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openCue27MobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_1157c76add834be68349f813012f85bb~mv2.png/v1/fill/w_492,h_586,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2027.png"
+              alt="Cue 27 technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
   function renderClone16SpecificationInfoCard() {
     if (!infoCard) return;
     stopClone16ReadMoreAutoplay();
@@ -1249,8 +1337,35 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
-  function renderClone16InstallationInfoCard() {
-    const product = PRODUCTS.clone16;
+  function renderCue24SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getCue24SpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCue27SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getCue27SpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderProductInstallationInfoCard(product = getCurrentProduct()) {
     if (!product || !infoCard) return;
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
@@ -1265,7 +1380,7 @@
       'clone16-spec-image-state'
     );
     infoCard.classList.toggle('info-card-show-scrollbar', true);
-    infoCard.innerHTML = getClone16InstallationInfoHtml(product);
+    infoCard.innerHTML = getProductInstallationInfoHtml(product);
     updateClone16InstallationDesktopOnlyVisibility();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -1349,6 +1464,102 @@
     window.alert('Please allow pop-up windows to view the mobile brochure.');
   }
 
+  function openCue24Brochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQBkgJKicHuqSLBmTbEfBCs5AW8x20nYsojSWPYcYUTA0wA?e=Gh2OjJ';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue24Brochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openCue24MobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQAQFXNvfCPtSaAsU2XkoBr8AUnN_haULdmOMZF-vwNx63c?e=pfT1gl';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue24MobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
+  function openCue27Brochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQB9g6TUOFA4R419pkVb8QzDAe9HMik-Oq2BqUoGuAGgkZ4?e=Fbnn9j';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue27Brochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openCue27MobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQDbD-xVaj-eQq0GUq-EIXwyAbxgsNElxPcqfZpX8IIoNao?e=nBvqiu';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue27MobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
   const CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-KR-Setup-2.6.2-win.exe?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6sOeMLD-o-eH2JASZnGp9JfTAwxJMq0taUVtlhXb7tmIWRtgne0IqBIld1Fg_aem_kImVGf3YRIpmPaTK92X-cw';
   const CLONE16_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/qAH4Op5iGHk?si=DF932_xennbuwvz4&autoplay=1&rel=0&playsinline=1';
   const CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-arm64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6EfZztpL6zGDy2qfjjKoaC6hkQzD0VbpadQuYD8S3LJqFOa84sPfJiT-O2NA_aem_rhEs--noUKMf0Ud1m15R9Q';
@@ -1416,7 +1627,7 @@
     `;
   }
 
-  function getClone16InstallationInfoHtml(product) {
+  function getProductInstallationInfoHtml(product) {
     const downloadUrl = escapeHtml(CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL);
     const guideVideoEmbedUrl = escapeHtml(CLONE16_INSTALLATION_GUIDE_EMBED_URL);
     const macSiliconDownloadUrl = escapeHtml(CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL);
@@ -1431,7 +1642,7 @@
       showSummary: false,
       metrics: [],
       sectionHtml: `
-        <section class="clone16-install-layout" aria-label="Clone 16 installation resources">
+        <section class="clone16-install-layout" aria-label="${escapeHtml(product.name)} installation resources">
           <div class="clone16-card-panel clone16-card-panel-notes">
             <div class="clone16-install-desktop-stack" data-clone16-windows-desktop-only hidden aria-hidden="true">
               <a
@@ -1487,7 +1698,9 @@
 
   const PRODUCT_SHOWCASE_META = {
     clone16: 'Clone 16 | Portable HDMI Teleprompter',
-    cueSeries: 'Cue 24 | Cue 27 | Cue 32',
+    cue24: 'Cue 24 | Cue Series Teleprompter',
+    cue27: 'Cue 27 | Cue Series Teleprompter',
+    cue32: 'Cue 32 | Cue Series Teleprompter',
     framerSeries: 'Professional Framing Prompt Line',
     folder22n: 'Foldable Prompt System',
     lessonQ: 'Education and Lecture Prompt Line',
@@ -1501,10 +1714,6 @@
   };
 
   const PRODUCT_INTRO_IMAGE_MAP = {
-    cueSeries: {
-      src: 'assets/Cue Series - Intro.png',
-      alt: 'Cue Series - Intro'
-    },
     tab12: {
       src: 'assets/Tab 12 - Intro.png',
       alt: 'Tab 12 - Intro'
@@ -1513,9 +1722,6 @@
 
   function getProductSummaryStripText(product) {
     if (!product || !product.summary || !product.summary.body) return '';
-    if (product.key === 'cueSeries') {
-      return 'The Cue Series teleprompters are designed for professionals who need clear and reliable script display.';
-    }
     if (product.key === 'clone16') {
       return 'The Clone 16 teleprompter is designed for portable, reliable prompting in studio and on-location workflows.';
     }
@@ -1578,49 +1784,97 @@
       id: 'images',
       label: 'Images',
       phrases: [
+        'image',
         'images',
+        'img',
+        'imgs',
         'show images',
         'show me images',
         'product images',
+        'picture',
+        'pictures',
+        'pic',
+        'pics',
         'photos',
         'gallery'
       ],
-      keywords: ['image', 'images', 'photo', 'photos', 'gallery', 'picture']
+      keywords: ['image', 'images', 'img', 'imgs', 'photo', 'photos', 'gallery', 'picture', 'pic', 'pics']
     },
     {
       id: 'videos',
       label: 'Videos',
       phrases: [
+        'video',
         'videos',
+        'vid',
+        'vids',
+        'vido',
+        'vidos',
+        'vdo',
+        'vdos',
+        'vedio',
+        'vedios',
+        'vdeo',
+        'vdeos',
         'show videos',
         'show me videos',
+        'show video',
+        'play video',
+        'play videos',
         'video demo',
+        'videos demo',
         'product video'
       ],
-      keywords: ['video', 'videos', 'demo', 'play', 'introduction']
+      keywords: ['video', 'videos', 'vid', 'vids', 'vido', 'vidos', 'vdo', 'vdos', 'vedio', 'vedios', 'vdeo', 'vdeos', 'demo', 'play', 'intro', 'introduction']
     },
     {
       id: 'specification',
       label: 'Specification',
       phrases: [
+        'spec',
+        'specs',
         'specification',
         'specifications',
-        'specs',
+        'specification details',
+        'spec details',
+        'technical spec',
+        'technical specs',
+        'tech spec',
+        'tech specs',
+        'spc',
+        'specfication',
+        'specfications',
+        'spefication',
+        'spefications',
+        'spesification',
+        'spesifications',
         'what are the specifications'
       ],
-      keywords: ['spec', 'specs', 'specification', 'details']
+      keywords: ['spec', 'specs', 'spc', 'specification', 'specifications', 'specfication', 'specfications', 'spefication', 'spefications', 'spesification', 'spesifications', 'detail', 'details', 'technical', 'tech']
     },
     {
       id: 'installation',
       label: 'Installation',
       phrases: [
+        'instal',
         'installation',
+        'installations',
         'install',
+        'instalation',
+        'instalations',
+        'installation guide',
+        'install guide',
         'how to install',
         'setup',
+        'set up',
+        'setups',
+        'set up guide',
+        'setup guide',
+        'config',
+        'configuration',
         'how to set up'
       ],
-      keywords: ['install', 'installation', 'setup', 'mount', 'connect', 'hdmi']
+      keywords: ['install', 'instal', 'installation', 'installations', 'instalation', 'instalations', 'setup', 'set', 'guide', 'config', 'configuration', 'mount', 'connect', 'hdmi']
     },
     {
       id: 'buy_now',
@@ -2437,6 +2691,10 @@
   window.showClone16ImagesFeatureInfoCard = renderClone16ImagesFeatureInfoCard;
   window.openClone16Brochure = openClone16Brochure;
   window.openClone16MobileBrochure = openClone16MobileBrochure;
+  window.openCue24Brochure = openCue24Brochure;
+  window.openCue24MobileBrochure = openCue24MobileBrochure;
+  window.openCue27Brochure = openCue27Brochure;
+  window.openCue27MobileBrochure = openCue27MobileBrochure;
   window.playClone16InstallationEmbed = playClone16InstallationEmbed;
   window.addEventListener('resize', updateClone16BrochureButtonState);
   window.addEventListener('resize', updateClone16InstallationDesktopOnlyVisibility);
@@ -2619,7 +2877,9 @@
   function getProductSelectionBadge(productKey, productName) {
     const badgeMap = {
       clone16: 'C16',
-      cueSeries: 'CS',
+      cue24: 'C24',
+      cue27: 'C27',
+      cue32: 'C32',
       framerSeries: 'FS',
       folder22n: '22N',
       lessonQ: 'LQ',
@@ -3042,14 +3302,16 @@
       applyAboutStyleLayout(getProductSummaryStripText(product));
       if (product.key === 'clone16') {
         renderClone16SpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'cue24') {
+        renderCue24SpecificationInfoCard();
       }
       return;
     }
     if (section === 'installation') {
       applyAboutStyleLayout(getProductSummaryStripText(product));
-      if (product.key === 'clone16') {
-        renderClone16InstallationInfoCard();
-      }
+      renderProductInstallationInfoCard(product);
       return;
     }
     if (section === 'buy_now') {
@@ -3145,20 +3407,99 @@
     return false;
   }
 
+  function compactNormalizedText(text) {
+    return normalizeQuestion(text).replace(/\s+/g, '');
+  }
+
+  function phrasePartsMatchTokens(tokens, phrase) {
+    const parts = normalizeQuestion(phrase).split(' ').filter(Boolean);
+    if (!parts.length) return false;
+    return parts.every((part) => tokens.some((token) => tokenMatches(token, part)));
+  }
+
+  function scorePhraseAgainstText(normalized, compact, tokens, phrase) {
+    const normalizedPhrase = normalizeQuestion(phrase);
+    if (!normalizedPhrase) return 0;
+
+    const compactPhrase = normalizedPhrase.replace(/\s+/g, '');
+    if (normalized.includes(normalizedPhrase) || compact.includes(compactPhrase)) {
+      return 4;
+    }
+
+    if (phrasePartsMatchTokens(tokens, normalizedPhrase)) {
+      return 3;
+    }
+
+    return 0;
+  }
+
   function detectProductKeyFromText(rawText) {
     const normalized = normalizeQuestion(rawText);
+    const compact = compactNormalizedText(rawText);
+    const tokens = normalized.split(' ').filter(Boolean);
+    let bestKey = '';
+    let bestScore = -1;
+
     for (const product of PRODUCT_ALIAS_MAP) {
-      if (product.aliases.some((alias) => normalized.includes(alias))) {
-        return product.key;
+      let score = 0;
+      for (const alias of product.aliases) {
+        score = Math.max(score, scorePhraseAgainstText(normalized, compact, tokens, alias));
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestKey = product.key;
       }
     }
-    return '';
+
+    return bestScore >= 3 ? bestKey : '';
+  }
+
+  function getActionFaqItems() {
+    return scriptedFaq.filter((item) => ['images', 'videos', 'specification', 'installation', 'buy_now'].includes(item.id));
+  }
+
+  function detectActionFromText(rawText) {
+    const normalized = normalizeQuestion(rawText);
+    const compact = compactNormalizedText(rawText);
+    const tokens = normalized.split(' ').filter(Boolean);
+    let best = null;
+    let bestScore = -1;
+
+    for (const item of getActionFaqItems()) {
+      let score = 0;
+      for (const phrase of item.phrases) {
+        score = Math.max(score, scorePhraseAgainstText(normalized, compact, tokens, phrase));
+      }
+      for (const keyword of item.keywords) {
+        if (tokens.some((token) => tokenMatches(token, keyword))) score += 1;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    }
+
+    if (bestScore < 3) return null;
+    return best;
   }
 
   function matchScriptedQuestion(rawQuestion) {
     const normalized = normalizeQuestion(rawQuestion);
     const tokens = normalized.split(' ').filter(Boolean);
     if (!tokens.length) return null;
+
+    if (new Set(['images', 'videos', 'specification', 'installation', 'buy now']).has(normalized)) {
+      return null;
+    }
+
+    const detectedProductKey = detectProductKeyFromText(rawQuestion);
+    const detectedAction = detectActionFromText(rawQuestion);
+    if (detectedProductKey && detectedAction) {
+      return {
+        ...detectedAction,
+        productKey: detectedProductKey
+      };
+    }
 
     let best = null;
     let bestScore = -1;
@@ -3236,8 +3577,13 @@
   function quickAction(label) {
     const actionButton = quickActionButtons.find((button) => (button.dataset.action || '').toLowerCase() === label.toLowerCase().replace(/\s+/g, '_'));
     if (actionButton && actionButton.disabled) return;
-    document.getElementById('userInput').value = label;
-    sendMessage(label);
+    const actionId = actionButton?.dataset.action || '';
+    if (!actionId) return;
+    document.getElementById('userInput').value = '';
+    applyMatchedResponse({
+      id: actionId,
+      label
+    });
   }
 
   function handleKey(e) {
