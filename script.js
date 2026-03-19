@@ -670,16 +670,56 @@
       installation: 'Assemble the Cue 32 frame on the support, align the display and camera system, then connect the script source and finalize the prompting angle.'
     },
     {
-      key: 'framerSeries',
-      name: 'Framer Series',
-      aliases: ['framer series', 'framer32', 'framer 32'],
-      summary: 'Framer Series offers a practical prompter setup for modern camera framing, balancing usability, portability, and clear prompting performance.',
+      key: 'adamas19',
+      name: 'Adamas 19',
+      aliases: ['adamas 19', 'adamas19'],
+      summary: 'Adamas 19 is a compact professional teleprompter designed for readable prompting, stable support, and efficient production use in a 19-inch class format.',
+      specification: 'Adamas 19 emphasizes compact professional prompting, stable framing, and dependable readability for controlled production setups.',
+      installation: 'Mount Adamas 19 on the support, align the camera and display, then connect the script source and adjust the reading angle.'
+    },
+    {
+      key: 'adamas22',
+      name: 'Adamas 22',
+      aliases: ['adamas 22', 'adamas22'],
+      summary: 'Adamas 22 is a mid-size teleprompter option built for balanced readability, stable operation, and practical integration into studio and presentation workflows.',
+      specification: 'Adamas 22 focuses on mid-size readability, stable prompting support, and efficient use across presenter and studio environments.',
+      installation: 'Attach Adamas 22 to the support system, align the monitor and camera, then connect the prompt source and fine-tune the viewing position.'
+    },
+    {
+      key: 'adamas24',
+      name: 'Adamas 24',
+      aliases: ['adamas 24', 'adamas24'],
+      summary: 'Adamas 24 is a larger Adamas teleprompter model designed for broad script visibility, dependable support, and professional presentation workflows.',
+      specification: 'Adamas 24 prioritizes larger-format readability, stable support hardware, and a prompting workflow suited to professional use.',
+      installation: 'Secure Adamas 24 on the support frame, align the camera and display system, then connect the script source and finalize the prompting angle.'
+    },
+    {
+      key: 'framer24',
+      name: 'Framer 24',
+      aliases: ['framer 24', 'framer24'],
+      summary: 'Framer 24 is a practical teleprompter built for modern camera framing, balanced readability, and steady prompting performance in a 24-inch class setup.',
       images: [
         'https://static.wixstatic.com/media/d0630a_6b6a273d89914d5b937926477ea10668~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/Fr%2032.png',
         'https://static.wixstatic.com/media/d0630a_6b6a273d89914d5b937926477ea10668~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/Fr%2032.png'
       ],
-      specification: 'Framer Series is designed for framing flexibility, practical production setups, and clear presenter-to-camera eye contact.',
-      installation: 'Attach the Framer unit to the support system, align the monitor and camera, then connect the script source before use.'
+      specification: 'Framer 24 is designed for framing flexibility, practical production setups, and clear presenter-to-camera eye contact.',
+      installation: 'Attach Framer 24 to the support system, align the monitor and camera, then connect the script source before use.'
+    },
+    {
+      key: 'framer27',
+      name: 'Framer 27',
+      aliases: ['framer 27', 'framer27'],
+      summary: 'Framer 27 expands the Framer line with a larger viewing area while preserving stable support, framing control, and smooth prompting performance.',
+      specification: 'Framer 27 focuses on larger-format framing flexibility, stable prompting support, and reliable presenter eye-line control.',
+      installation: 'Mount Framer 27 on the support, align the display and camera, then connect the script source and adjust the final viewing angle.'
+    },
+    {
+      key: 'framer32',
+      name: 'Framer 32',
+      aliases: ['framer 32', 'framer32', 'framer series'],
+      summary: 'Framer 32 is the largest Framer model, built for spacious script visibility, practical framing control, and dependable professional prompting workflows.',
+      specification: 'Framer 32 prioritizes large-format framing, readable prompting, and stable presenter-to-camera eye contact in production setups.',
+      installation: 'Assemble Framer 32 on the support frame, align the monitor and camera system, then connect the script source and finalize the prompting position.'
     },
     {
       key: 'folder22n',
@@ -690,28 +730,84 @@
       installation: 'Unfold the frame, secure the monitor and camera position, then connect the script source and adjust the viewing angle.'
     },
     {
-      key: 'lessonQ',
-      name: 'Lesson Q',
-      aliases: ['lesson q', 'lessonq'],
-      summary: 'Lesson Q is designed for teaching, lecture capture, and presenter-led educational content where clear eye contact matters.',
-      specification: 'Lesson Q focuses on lecture use, steady prompting readability, and a workflow optimized for teaching environments.',
-      installation: 'Position Lesson Q with your teaching monitor or camera setup, connect the script source, and adjust the prompting height for the presenter.'
+      key: 'lessonQ24',
+      name: 'LessonQ 24',
+      aliases: ['lesson q 24', 'lessonq24', 'lessonq 24'],
+      summary: 'LessonQ 24 is designed for teaching, lecture capture, and presenter-led educational content where clear eye contact matters in a 24-inch class setup.',
+      specification: 'LessonQ 24 focuses on lecture use, steady prompting readability, and a workflow optimized for teaching environments.',
+      installation: 'Position LessonQ 24 with your teaching monitor or camera setup, connect the script source, and adjust the prompting height for the presenter.'
     },
     {
-      key: 'mimeSeries',
-      name: 'Mime Series',
-      aliases: ['mime series', 'mime27', 'mime 27', 'mime32', 'mime 32'],
-      summary: 'Mime Series is a monitor-oriented prompting solution for productions that need a clean display workflow and stable prompting support.',
-      specification: 'Mime Series emphasizes clear monitor integration, stable viewing, and a configuration suited to controlled production spaces.',
-      installation: 'Place the Mime Series monitor unit, route the display feed, secure the support hardware, then align the viewing position.'
+      key: 'lessonQ27',
+      name: 'LessonQ 27',
+      aliases: ['lesson q 27', 'lessonq27', 'lessonq 27'],
+      summary: 'LessonQ 27 is built for lecture capture and presenter-led educational content that benefits from a larger and more readable prompting area.',
+      specification: 'LessonQ 27 prioritizes larger-format lecture readability, stable support, and dependable prompting for teaching environments.',
+      installation: 'Mount LessonQ 27 on the support system, align the display and camera, then connect the script source and adjust the presenter eyeline.'
     },
     {
-      key: 'ultraSeries',
-      name: 'Ultra Series',
-      aliases: ['ultra series', 'ultra'],
-      summary: 'Ultra Series is built for demanding professional prompting workflows that need a larger, more premium presentation setup.',
-      specification: 'Ultra Series prioritizes large-format readability, robust support, and production reliability for professional users.',
-      installation: 'Assemble the Ultra Series frame, secure the display and camera system, then balance the unit and connect the script feed.'
+      key: 'lessonQ32',
+      name: 'LessonQ 32',
+      aliases: ['lesson q 32', 'lessonq32', 'lessonq 32'],
+      summary: 'LessonQ 32 is a larger teaching teleprompter option designed for lecture delivery where maximum script visibility is important.',
+      specification: 'LessonQ 32 emphasizes broad reading visibility, stable classroom or studio support, and a workflow suited to educational production.',
+      installation: 'Assemble LessonQ 32 on the support, align the monitor and camera system, then connect the script source and finalize the viewing angle.'
+    },
+    {
+      key: 'lessonQ43',
+      name: 'LessonQ 43',
+      aliases: ['lesson q 43', 'lessonq43', 'lessonq 43'],
+      summary: 'LessonQ 43 is the largest LessonQ option for large-scale lecture, training, and presentation workflows that require maximum readability.',
+      specification: 'LessonQ 43 is designed around large-format educational prompting, robust support, and dependable readability in demanding teaching environments.',
+      installation: 'Secure LessonQ 43 on the support frame, align the display and camera system, then connect the script source and adjust the final reading position.'
+    },
+    {
+      key: 'mime24',
+      name: 'Mime 24',
+      aliases: ['mime 24', 'mime24'],
+      summary: 'Mime 24 is a monitor-oriented prompting solution designed for clean display workflows, stable viewing, and practical use in controlled production spaces.',
+      specification: 'Mime 24 emphasizes clear monitor integration, stable reading visibility, and dependable use in structured production environments.',
+      installation: 'Position Mime 24 on the support, route the display feed, secure the hardware, and align the viewing position before use.'
+    },
+    {
+      key: 'mime27',
+      name: 'Mime 27',
+      aliases: ['mime 27', 'mime27'],
+      summary: 'Mime 27 provides a larger monitor-based prompting experience while maintaining clean display routing and steady prompting support.',
+      specification: 'Mime 27 focuses on larger-format monitor prompting, stable support hardware, and clear viewing in controlled production setups.',
+      installation: 'Mount Mime 27 on the support system, connect the display feed, then secure and align the viewing position.'
+    },
+    {
+      key: 'mime32',
+      name: 'Mime 32',
+      aliases: ['mime 32', 'mime32', 'mime series'],
+      summary: 'Mime 32 is the largest Mime model, built for wide reading visibility, stable display integration, and dependable prompting in professional spaces.',
+      specification: 'Mime 32 prioritizes broad monitor readability, stable viewing support, and reliable prompting for larger production environments.',
+      installation: 'Assemble Mime 32 on the support, route the display connection, secure the hardware, and finalize the reading position.'
+    },
+    {
+      key: 'speech19',
+      name: 'Speech 19',
+      aliases: ['speech 19', 'speech19'],
+      summary: 'Speech 19 is a compact speech teleprompter model designed for direct presenter delivery, readable prompting, and efficient setup.',
+      specification: 'Speech 19 centers on compact speech prompting, stable support, and practical readability for presenter-facing workflows.',
+      installation: 'Position Speech 19 on the support, align it with the presenter setup, then connect the script source and adjust the reading angle.'
+    },
+    {
+      key: 'speech22',
+      name: 'Speech 22',
+      aliases: ['speech 22', 'speech22'],
+      summary: 'Speech 22 provides a larger speech prompting format for presentations that need clear script visibility and stable stage or studio support.',
+      specification: 'Speech 22 emphasizes larger speech readability, dependable hardware support, and smooth prompting for presentation environments.',
+      installation: 'Secure Speech 22 on the support hardware, connect the script source, and adjust the final reading position for the presenter.'
+    },
+    {
+      key: 'speech24',
+      name: 'Speech 24',
+      aliases: ['speech 24', 'speech24'],
+      summary: 'Speech 24 is a larger speech teleprompter option intended for highly visible presenter prompting with dependable support and readable delivery.',
+      specification: 'Speech 24 focuses on broad presenter readability, stable support hardware, and a workflow suited to stage or studio prompting.',
+      installation: 'Assemble Speech 24 on the support frame, connect the script source, and align the unit for comfortable presenter reading.'
     },
     {
       key: 'tab12',
@@ -720,6 +816,22 @@
       summary: 'Tab 12 is a compact teleprompter designed around tablet-based prompting for portable and fast-moving content production.',
       specification: 'Tab 12 is optimized for tablet prompting, compact transport, and quick deployment in small-space productions.',
       installation: 'Mount the tablet holder, align the camera and reflective glass, then load the script app and adjust the reading angle.'
+    },
+    {
+      key: 'ultra43',
+      name: 'Ultra 43',
+      aliases: ['ultra 43', 'ultra43'],
+      summary: 'Ultra 43 is a large-format professional teleprompter designed for demanding workflows that need broad readability and robust support.',
+      specification: 'Ultra 43 prioritizes large-screen readability, strong support hardware, and dependable prompting for professional production teams.',
+      installation: 'Assemble Ultra 43 on the support frame, secure the display and camera system, then balance the unit and connect the script feed.'
+    },
+    {
+      key: 'ultra55',
+      name: 'Ultra 55',
+      aliases: ['ultra 55', 'ultra55', 'ultra series'],
+      summary: 'Ultra 55 is the largest Ultra model, built for maximum script visibility, robust support, and high-end studio prompting environments.',
+      specification: 'Ultra 55 emphasizes maximum readability, heavy-duty support, and production reliability in large-format professional setups.',
+      installation: 'Secure Ultra 55 on the support structure, align the display and camera system, then connect the prompt feed and finalize the balance.'
     },
     {
       key: 'flex15',
@@ -752,6 +864,46 @@
       summary: 'Plate is a supporting teleprompter component designed to stabilize and simplify mounting for production workflows.',
       specification: 'Plate centers on support stability, mounting compatibility, and dependable use in modular teleprompter systems.',
       installation: 'Position the plate on the designated support points, lock the hardware in place, and attach the compatible production components.'
+    },
+    {
+      key: 'electricPedestal',
+      name: 'Electric Pedestal',
+      aliases: ['electric pedestal'],
+      summary: 'Electric Pedestal is a motorized support system designed for smooth vertical adjustment and stable studio camera or teleprompter workflows.',
+      specification: 'Electric Pedestal focuses on controlled height adjustment, steady support, and practical integration into studio production environments.',
+      installation: 'Position the electric pedestal on the studio floor, secure the mounted equipment, connect power, and verify smooth lift operation before use.'
+    },
+    {
+      key: 'ep30k',
+      name: 'EP 30K',
+      aliases: ['ep 30k', 'ep30k'],
+      summary: 'EP 30K is an electric pedestal model designed for smooth height control, steady operation, and reliable support in studio production workflows.',
+      specification: 'EP 30K emphasizes controlled motorized lift movement, stable equipment support, and dependable day-to-day studio operation.',
+      installation: 'Set EP 30K in position, mount the compatible equipment, connect power, and test the lift range before production use.'
+    },
+    {
+      key: 'ep40k',
+      name: 'EP 40K',
+      aliases: ['ep 40k', 'ep40k'],
+      summary: 'EP 40K is a motorized pedestal solution built for controlled height adjustment and stable studio support across professional workflows.',
+      specification: 'EP 40K focuses on smooth pedestal movement, stable mounted support, and practical use in demanding studio environments.',
+      installation: 'Place EP 40K on the studio floor, secure the mounted system, connect power, and verify balanced lift movement.'
+    },
+    {
+      key: 'ep50k',
+      name: 'EP 50K',
+      aliases: ['ep 50k', 'ep50k'],
+      summary: 'EP 50K is an electric pedestal model intended for steady vertical movement, reliable support, and professional studio equipment handling.',
+      specification: 'EP 50K prioritizes controlled elevation, stable support hardware, and dependable operation for professional studio setups.',
+      installation: 'Position EP 50K, attach the compatible mounted equipment, power the system, and confirm smooth lift performance.'
+    },
+    {
+      key: 'ep60k',
+      name: 'EP 60K',
+      aliases: ['ep 60k', 'ep60k'],
+      summary: 'EP 60K is a high-capability electric pedestal designed for smooth lift adjustment, stable support, and reliable studio production performance.',
+      specification: 'EP 60K emphasizes strong motorized support, steady vertical control, and dependable use in heavier-duty studio workflows.',
+      installation: 'Install EP 60K in the intended studio position, secure the mounted system, connect power, and test the full movement range before operation.'
     }
   ];
 
@@ -1323,6 +1475,146 @@
     `;
   }
 
+  function getCue32SpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="Cue 32 specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">Cue 32 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openCue32Brochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openCue32MobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_5f68de7b66ec46f591254ac8dbd89e07~mv2.png/v1/fill/w_481,h_568,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032.png"
+              alt="Cue 32 technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function getFolder22NSpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="Folder 22N specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">Folder 22N Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openFolder22NBrochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openFolder22NMobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://static.wixstatic.com/media/d0630a_30ab1fb89a614b6bbb9bd1d66ca814f5~mv2.png/v1/fill/w_490,h_595,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FOLDER%2022N.png"
+              alt="Folder 22N technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function getLessonQSpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="LessonQ 24 specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">LessonQ 24 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openLessonQBrochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openLessonQMobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://www.dropbox.com/scl/fi/tzbgc3ysxfr1evns2x28m/LessonQ-24.png?rlkey=lmqfpoh748aeyyiee1jt4gak9&raw=1"
+              alt="LessonQ 24 technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function getLessonQ27SpecificationImageInfoHtml() {
+    return `
+      <section class="clone16-spec-image-card" aria-label="LessonQ 27 specifications">
+        <div class="clone16-spec-image-card-header">
+          <div class="clone16-spec-image-header-copy">
+            <p class="clone16-spec-image-eyebrow">LessonQ 27 Specification</p>
+            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+          </div>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+            onclick="openLessonQ27Brochure()"
+          >Click Here to view Brochure -&gt;&gt;</button>
+          <button
+            type="button"
+            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+            onclick="openLessonQ27MobileBrochure()"
+          >Click Here to view Mobile -&gt;&gt;</button>
+        </div>
+        <div class="clone16-spec-image-shell">
+          <div class="clone16-spec-image-titlebar">
+            <span class="clone16-spec-image-title">Technical Sheet</span>
+          </div>
+          <div class="clone16-spec-image-frame">
+            <img
+              src="https://1drv.ms/i/c/94a3066e2e4acdae/IQTn8Ukz2fevTqYg9kwqoMbpAXUZ-dYoZfoLwb-hMU6mBA0"
+              alt="LessonQ 27 technical sheet"
+              class="clone16-spec-image-asset"
+            />
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
   function renderClone16SpecificationInfoCard() {
     if (!infoCard) return;
     stopClone16ReadMoreAutoplay();
@@ -1360,6 +1652,62 @@
     infoCard.classList.add('clone16-spec-image-state');
     infoCard.classList.toggle('info-card-show-scrollbar', true);
     infoCard.innerHTML = getCue27SpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCue32SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getCue32SpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderFolder22NSpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getFolder22NSpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderLessonQSpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getLessonQSpecificationImageInfoHtml();
+    updateClone16BrochureButtonState();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderLessonQ27SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getLessonQ27SpecificationImageInfoHtml();
     updateClone16BrochureButtonState();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -1560,6 +1908,198 @@
     window.alert('Please allow pop-up windows to view the mobile brochure.');
   }
 
+  function openCue32Brochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQAl3FQepTdKRoplovpLzAmHAVmSHlpbyx9zsdZHeJr-JKk?e=xNXpyN';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue32Brochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openCue32MobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQAsMmcmo9wuT5Rsawn5uTmXAcXptcUsIG5F7jFCvMwWS7E?e=XsbrM9';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'cue32MobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
+  function openFolder22NBrochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQALPzR2XTHmTppru2Q9RvfbAdfvmFJwRRqEDJF3FWETY4Q?e=XnhhU0';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'folder22nBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openFolder22NMobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQDsbg_Yx7XBTLZdZa2S5CfTAW_3kHf963OFPIZWIwbsECk?e=kl0wcZ';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'folder22nMobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
+  function openLessonQBrochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQDW1DD_lM8EQbJNkOYGkgM1AV1iQ48qdhvDdzSEn67UMw0?e=VpEksU';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'lessonQBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openLessonQMobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQA3ayi96WxESoNG2T0mHxkiAfbKzNhw9-Ox90N3RsMNzhg?e=jhUgV0';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'lessonQMobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
+  function openLessonQ27Brochure() {
+    if (!isClone16BrochureDesktopViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQRUzYa6_0XoTpnMbXHXvlAgAePL9yEyTjKav0clYYsesMw';
+    const popupWidth = Math.max(720, Math.floor(window.outerWidth * 0.5));
+    const popupHeight = Math.max(760, Math.floor(window.outerHeight * 0.88));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'lessonQ27Brochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the brochure.');
+  }
+
+  function openLessonQ27MobileBrochure() {
+    if (!isClone16BrochureMobileViewport()) {
+      return;
+    }
+
+    const brochureUrl = 'https://1drv.ms/b/c/94a3066e2e4acdae/IQBn2IpYenEaToIw6GYTENldAX6Xx5mbSNXqZEikfpFijSU?e=fccbsm';
+    const popupWidth = Math.max(320, Math.floor(window.outerWidth * 0.92));
+    const popupHeight = Math.max(520, Math.floor(window.outerHeight * 0.78));
+    const popupLeft = window.screenX + Math.max(0, Math.floor((window.outerWidth - popupWidth) / 2));
+    const popupTop = window.screenY + Math.max(0, Math.floor((window.outerHeight - popupHeight) / 2));
+    const popup = window.open(
+      brochureUrl,
+      'lessonQ27MobileBrochure',
+      `popup=yes,width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes`
+    );
+
+    if (popup) {
+      popup.focus();
+      return;
+    }
+
+    window.alert('Please allow pop-up windows to view the mobile brochure.');
+  }
+
   const CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-KR-Setup-2.6.2-win.exe?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6sOeMLD-o-eH2JASZnGp9JfTAwxJMq0taUVtlhXb7tmIWRtgne0IqBIld1Fg_aem_kImVGf3YRIpmPaTK92X-cw';
   const CLONE16_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/qAH4Op5iGHk?si=DF932_xennbuwvz4&autoplay=1&rel=0&playsinline=1';
   const CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-arm64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6EfZztpL6zGDy2qfjjKoaC6hkQzD0VbpadQuYD8S3LJqFOa84sPfJiT-O2NA_aem_rhEs--noUKMf0Ud1m15R9Q';
@@ -1701,16 +2241,35 @@
     cue24: 'Cue 24 | Cue Series Teleprompter',
     cue27: 'Cue 27 | Cue Series Teleprompter',
     cue32: 'Cue 32 | Cue Series Teleprompter',
-    framerSeries: 'Professional Framing Prompt Line',
+    adamas19: 'Adamas 19 | Adamas Prompt Line',
+    adamas22: 'Adamas 22 | Adamas Prompt Line',
+    adamas24: 'Adamas 24 | Adamas Prompt Line',
+    framer24: 'Framer 24 | Framer Prompt Line',
+    framer27: 'Framer 27 | Framer Prompt Line',
+    framer32: 'Framer 32 | Framer Prompt Line',
     folder22n: 'Foldable Prompt System',
-    lessonQ: 'Education and Lecture Prompt Line',
-    mimeSeries: 'Monitor Prompt Series',
-    ultraSeries: 'Large-format Professional Prompt Line',
+    lessonQ24: 'LessonQ 24 | Education Prompt Line',
+    lessonQ27: 'LessonQ 27 | Education Prompt Line',
+    lessonQ32: 'LessonQ 32 | Education Prompt Line',
+    lessonQ43: 'LessonQ 43 | Education Prompt Line',
+    mime24: 'Mime 24 | Monitor Prompt Line',
+    mime27: 'Mime 27 | Monitor Prompt Line',
+    mime32: 'Mime 32 | Monitor Prompt Line',
+    speech19: 'Speech 19 | Speech Prompt Line',
+    speech22: 'Speech 22 | Speech Prompt Line',
+    speech24: 'Speech 24 | Speech Prompt Line',
     tab12: 'Compact Tablet Prompt System',
+    ultra43: 'Ultra 43 | Large-format Prompt Line',
+    ultra55: 'Ultra 55 | Large-format Prompt Line',
     flex15: 'Flexible Mid-size Prompt System',
     rotunda15: 'Compact Creator Prompt System',
     olleson18: '18-inch Presentation Prompt System',
-    plate: 'Mounting and Support Component'
+    plate: 'Mounting and Support Component',
+    electricPedestal: 'Electric Pedestal | Motorized Studio Support',
+    ep30k: 'EP 30K | Electric Pedestal Line',
+    ep40k: 'EP 40K | Electric Pedestal Line',
+    ep50k: 'EP 50K | Electric Pedestal Line',
+    ep60k: 'EP 60K | Electric Pedestal Line'
   };
 
   const PRODUCT_INTRO_IMAGE_MAP = {
@@ -1779,6 +2338,23 @@
         'about crystal prompter'
       ],
       keywords: ['about', 'company', 'us', 'crystal', 'prompter']
+    },
+    {
+      id: 'product_list',
+      label: 'Product List',
+      phrases: [
+        'product list',
+        'products list',
+        'list of products',
+        'show product list',
+        'show products',
+        'show me products',
+        'all products',
+        'products',
+        'catalog',
+        'product loist'
+      ],
+      keywords: ['product', 'products', 'list', 'listing', 'catalog']
     },
     {
       id: 'images',
@@ -2695,6 +3271,14 @@
   window.openCue24MobileBrochure = openCue24MobileBrochure;
   window.openCue27Brochure = openCue27Brochure;
   window.openCue27MobileBrochure = openCue27MobileBrochure;
+  window.openCue32Brochure = openCue32Brochure;
+  window.openCue32MobileBrochure = openCue32MobileBrochure;
+  window.openFolder22NBrochure = openFolder22NBrochure;
+  window.openFolder22NMobileBrochure = openFolder22NMobileBrochure;
+  window.openLessonQBrochure = openLessonQBrochure;
+  window.openLessonQMobileBrochure = openLessonQMobileBrochure;
+  window.openLessonQ27Brochure = openLessonQ27Brochure;
+  window.openLessonQ27MobileBrochure = openLessonQ27MobileBrochure;
   window.playClone16InstallationEmbed = playClone16InstallationEmbed;
   window.addEventListener('resize', updateClone16BrochureButtonState);
   window.addEventListener('resize', updateClone16InstallationDesktopOnlyVisibility);
@@ -2880,16 +3464,35 @@
       cue24: 'C24',
       cue27: 'C27',
       cue32: 'C32',
-      framerSeries: 'FS',
+      adamas19: 'A19',
+      adamas22: 'A22',
+      adamas24: 'A24',
+      framer24: 'F24',
+      framer27: 'F27',
+      framer32: 'F32',
       folder22n: '22N',
-      lessonQ: 'LQ',
-      mimeSeries: 'MS',
-      ultraSeries: 'US',
+      lessonQ24: 'L24',
+      lessonQ27: 'L27',
+      lessonQ32: 'L32',
+      lessonQ43: 'L43',
+      mime24: 'M24',
+      mime27: 'M27',
+      mime32: 'M32',
+      speech19: 'S19',
+      speech22: 'S22',
+      speech24: 'S24',
       tab12: 'T12',
+      ultra43: 'U43',
+      ultra55: 'U55',
       flex15: 'F15',
       rotunda15: 'R15',
       olleson18: 'O18',
-      plate: 'PL'
+      plate: 'PL',
+      electricPedestal: 'EP',
+      ep30k: 'E30',
+      ep40k: 'E40',
+      ep50k: 'E50',
+      ep60k: 'E60'
     };
     return badgeMap[productKey] || productName.slice(0, 2).toUpperCase();
   }
@@ -3161,7 +3764,7 @@
     if (!quickActionButtons.length) return;
     const isLimitedMode = mode === 'nomatch' || mode === 'limited';
     const allowedActions = isLimitedMode
-      ? new Set(['about_us', 'buy_now'])
+      ? new Set(['about_us', 'product_list', 'buy_now'])
       : null;
 
     if (bottomArea) {
@@ -3306,6 +3909,27 @@
       }
       if (product.key === 'cue24') {
         renderCue24SpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'cue27') {
+        renderCue27SpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'cue32') {
+        renderCue32SpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'folder22n') {
+        renderFolder22NSpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'lessonQ24') {
+        renderLessonQSpecificationInfoCard();
+        return;
+      }
+      if (product.key === 'lessonQ27') {
+        renderLessonQ27SpecificationInfoCard();
+        return;
       }
       return;
     }
@@ -3357,6 +3981,12 @@
     if (match.id === 'about_us') {
       applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false });
       setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true);
+    }
+    if (match.id === 'product_list') {
+      applyAboutStyleLayout('Browse the available Crystal Prompter models and select one to continue.');
+      renderNoMatchPicker();
+      setPlaceholderMode('nomatch');
+      renderNoMatchInfoCard();
     }
     if (match.id === 'images') showCurrentProductImages();
     if (match.id === 'videos') showCurrentProductVideo();
