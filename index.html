@@ -4,9 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crystal Prompter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="assistant-closed">
 
 <div class="app-container layout-locked" id="appContainer">
 
@@ -37,11 +40,14 @@
       <img class="app-title-logo" src="favicon_cp.ico" alt="Crystal Prompter logo" width="22" height="22" />
       <span class="app-title-text">CRYSTAL PROMPTER</span>
     </div>
-    <div class="assistant-status" aria-label="Assistant status">
-      <span class="assistant-status-dot" aria-hidden="true"></span>
-      <div class="assistant-status-copy">
-        <span class="assistant-status-label" id="assistantName">AI Assistant Online</span>
+    <div class="header-actions">
+      <div class="assistant-status" aria-label="Assistant status">
+        <span class="assistant-status-dot" aria-hidden="true"></span>
+        <div class="assistant-status-copy">
+          <span class="assistant-status-label" id="assistantName">AI Assistant Online</span>
+        </div>
       </div>
+      <button class="assistant-minimize-btn" id="assistantMinimizeBtn" type="button" aria-label="Minimize assistant">-</button>
     </div>
   </div>
 
@@ -55,6 +61,9 @@
         <video id="avatarVideo" muted loop playsinline preload="metadata">
           <source id="avatarVideoSource" src="assets/steady.mp4" type="video/mp4" />
         </video>
+        <div class="avatar-lipsync-shell" id="avatarLipsyncShell" aria-hidden="true">
+          <div class="avatar-mouth mouth-X" id="avatarMouth"></div>
+        </div>
       </div>
     </div>
 
@@ -144,13 +153,31 @@
             placeholder="Ask Anything..."
             onkeydown="handleKey(event)"
           />
+          <button
+            class="voice-btn speaker-btn is-active"
+            id="speakerBtn"
+            type="button"
+            aria-label="Turn voice output off"
+            title="Voice output"
+            onclick="toggleSpeechOutput()"
+            hidden
+          >🔊</button>
         </div>
-        <button class="send-btn" onclick="sendMessage()">➤</button>
+        <button class="send-btn mic-mode" id="composerActionBtn" type="button" onclick="handleComposerAction()">🎙</button>
       </div>
     </div>
 
   </div>
 </div>
+
+<button class="assistant-launcher" id="assistantLauncher" type="button" aria-label="Open assistant">
+  <span class="launcher-message">need assistant click me</span>
+  <span class="launcher-bubble">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3C6.477 3 2 6.94 2 11.8c0 2.335 1.041 4.46 2.748 6.04L4 21l3.602-1.89A11.47 11.47 0 0 0 12 20.6c5.523 0 10-3.94 10-8.8S17.523 3 12 3Zm-4 7.9a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm4 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm4 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"></path>
+    </svg>
+  </span>
+</button>
 
 <script src="script.js"></script>
 </body>

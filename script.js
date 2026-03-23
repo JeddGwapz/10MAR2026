@@ -3,7 +3,8 @@
   let langIdx = 0;
   function cycleLang() {
     langIdx = (langIdx + 1) % langs.length;
-    document.getElementById('langBtn').textContent = langs[langIdx];
+    const langButton = document.getElementById('langBtn');
+    if (langButton) langButton.textContent = langs[langIdx];
   }
 
   /* ── PLAY BUTTON (simulated) ── */
@@ -66,6 +67,8 @@
   const customCenterContent = document.getElementById('customCenterContent');
   const avatarVideo = document.getElementById('avatarVideo');
   const avatarVideoSource = document.getElementById('avatarVideoSource');
+  const avatarLipsyncShell = document.getElementById('avatarLipsyncShell');
+  const avatarMouth = document.getElementById('avatarMouth');
   const mainContentPanel = document.querySelector('.main-content');
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
@@ -385,28 +388,376 @@
 
   /* ── MIC ── */
   let micActive = false;
-  const micBtn = document.getElementById('micBtn');
+  let voiceOutputEnabled = true;
+  const micBtn = document.getElementById('composerActionBtn');
+  const userInputField = document.getElementById('userInput');
+  const speakerBtn = document.getElementById('speakerBtn');
+  const langBtn = document.getElementById('langBtn');
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const speechRec = SpeechRecognition ? new SpeechRecognition() : null;
+  const speechSynth = window.speechSynthesis || null;
+  const SPEECH_LANG_CODES = {
+    EN: 'en-US',
+    FIL: 'fil-PH',
+    ES: 'es-ES',
+    JA: 'ja-JP'
+  };
+  const SPEECH_LANG_FALLBACKS = {
+    'en-US': ['en-US', 'en-GB', 'en'],
+    'fil-PH': ['fil-PH', 'tl-PH', 'fil', 'tl', 'en-US', 'en'],
+    'es-ES': ['es-ES', 'es-US', 'es-MX', 'es'],
+    'ja-JP': ['ja-JP', 'ja']
+  };
+  const LOCAL_TTS_ENDPOINT = '/api/tts';
+  const LOCAL_SPEAK_ENDPOINT = '/api/speak';
+  const LOCAL_TTS_LANGUAGE_MAP = {
+    EN: 'EN',
+    FIL: 'FIL',
+    ES: 'ES',
+    JA: 'JA'
+  };
+  const LOCAL_TTS_VOICE_MAP = {
+    EN: 'Daniel',
+    FIL: 'Eddy (English (US))',
+    ES: 'Eddy (Spanish (Spain))',
+    JA: 'Eddy (Japanese (Japan))'
+  };
+  const MALE_VOICE_HINTS = [
+    'david', 'daniel', 'thomas', 'jorge', 'diego', 'raul', 'raul', 'carlos',
+    'james', 'john', 'mark', 'paul', 'matthew', 'matt', 'alex', 'fred',
+    'gordon', 'aaron', 'arthur', 'guy', 'male', 'man', 'boy', 'tom', 'eddy'
+  ];
+  const FEMALE_VOICE_HINTS = [
+    'zira', 'hazel', 'samantha', 'victoria', 'karen', 'moira', 'ava', 'allison',
+    'susan', 'monica', 'paulina', 'female', 'woman', 'girl', 'kate', 'serena'
+  ];
+
+  function getSelectedVoiceLanguage() {
+    const settingLang = document.getElementById('settingLang');
+    return settingLang ? settingLang.value : 'EN';
+  }
+
+  function getSpeechLangCode() {
+    return SPEECH_LANG_CODES[getSelectedVoiceLanguage()] || 'en-US';
+  }
+
+  function getLocalTtsLanguageCode() {
+    return LOCAL_TTS_LANGUAGE_MAP[getSelectedVoiceLanguage()] || 'EN';
+  }
+
+  function getLocalTtsVoiceName() {
+    return LOCAL_TTS_VOICE_MAP[getSelectedVoiceLanguage()] || LOCAL_TTS_VOICE_MAP.EN;
+  }
+
+  function normalizeLangCode(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  function setMicVisualState(active) {
+    micActive = active;
+    if (!micBtn) return;
+    micBtn.classList.toggle('is-listening', active);
+    updateComposerActionButton();
+  }
+
+  function updateComposerActionButton() {
+    if (!micBtn || !userInputField) return;
+    const hasText = Boolean(userInputField.value.trim());
+    const isListening = micActive && !hasText;
+
+    micBtn.textContent = hasText ? '➤' : '🎙';
+    micBtn.classList.toggle('mic-mode', !hasText);
+    micBtn.classList.toggle('is-listening', isListening);
+    micBtn.setAttribute('aria-label', hasText ? 'Send message' : (isListening ? 'Stop voice input' : 'Start voice input'));
+    micBtn.title = hasText ? 'Send message' : (isListening ? 'Stop voice input' : 'Voice input');
+  }
+
+  function handleComposerAction() {
+    if (userInputField && userInputField.value.trim()) {
+      sendMessage();
+      return;
+    }
+    toggleMic();
+  }
+
+  function updateSpeakerButtonState() {
+    if (!speakerBtn) return;
+    const supported = Boolean(speechSynth);
+    speakerBtn.classList.toggle('is-active', supported && voiceOutputEnabled);
+    speakerBtn.classList.toggle('is-disabled', !supported);
+    speakerBtn.textContent = !supported ? '🔈' : voiceOutputEnabled ? '🔊' : '🔇';
+    speakerBtn.setAttribute('aria-label', voiceOutputEnabled ? 'Turn voice output off' : 'Turn voice output on');
+    speakerBtn.title = supported
+      ? (voiceOutputEnabled ? 'Turn voice output off' : 'Turn voice output on')
+      : 'Voice output not supported';
+  }
+
+  function updateSpeechRecognitionLanguage() {
+    if (!speechRec) return;
+    speechRec.lang = getSpeechLangCode();
+  }
+
+  function getPreferredSpeechVoice(langCode) {
+    if (!speechSynth || typeof speechSynth.getVoices !== 'function') return null;
+    const availableVoices = speechSynth.getVoices();
+    if (!availableVoices.length) return null;
+
+    const normalizedLangCode = normalizeLangCode(langCode);
+    const languageFamily = normalizedLangCode.split('-')[0];
+    const candidates = (SPEECH_LANG_FALLBACKS[langCode] || [langCode, 'en-US']).map(normalizeLangCode);
+
+    function getVoiceNameScore(voice) {
+      const haystack = `${voice.name || ''} ${voice.voiceURI || ''}`.toLowerCase();
+      const maleScore = MALE_VOICE_HINTS.some((hint) => haystack.includes(hint)) ? 2 : 0;
+      const femalePenalty = FEMALE_VOICE_HINTS.some((hint) => haystack.includes(hint)) ? -2 : 0;
+      return maleScore + femalePenalty;
+    }
+
+    function getVoiceLanguageScore(voice) {
+      const voiceLang = normalizeLangCode(voice.lang);
+      if (candidates.includes(voiceLang)) return 4;
+      if (voiceLang.startsWith(`${languageFamily}-`)) return 3;
+      if (voiceLang === languageFamily) return 2;
+      if (voiceLang.startsWith('en')) return 1;
+      return 0;
+    }
+
+    const rankedVoices = [...availableVoices]
+      .map((voice) => ({
+        voice,
+        languageScore: getVoiceLanguageScore(voice),
+        genderScore: getVoiceNameScore(voice),
+        localScore: voice.localService ? 1 : 0,
+        defaultScore: voice.default ? 1 : 0
+      }))
+      .sort((a, b) => (
+        b.languageScore - a.languageScore
+        || b.genderScore - a.genderScore
+        || b.localScore - a.localScore
+        || b.defaultScore - a.defaultScore
+      ));
+
+    return rankedVoices[0]?.voice || null;
+  }
+
+  function sanitizeSpokenText(text) {
+    return String(text || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  const RHUBARB_MOUTH_SHAPES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'X'];
+  let avatarLipSyncTimers = [];
+
+  let localTtsAudio = null;
+  let localTtsObjectUrl = '';
+  let localTtsAbortController = null;
+  let localTtsRequestToken = 0;
+
+  function setAvatarMouthShape(shape = 'X') {
+    if (!avatarMouth) return;
+    const normalizedShape = RHUBARB_MOUTH_SHAPES.includes(String(shape || '').toUpperCase())
+      ? String(shape || '').toUpperCase()
+      : 'X';
+    avatarMouth.className = `avatar-mouth mouth-${normalizedShape}`;
+  }
+
+  function clearAvatarLipSyncTimers() {
+    if (!avatarLipSyncTimers.length) return;
+    avatarLipSyncTimers.forEach((timerId) => window.clearTimeout(timerId));
+    avatarLipSyncTimers = [];
+  }
+
+  function stopAvatarLipSync() {
+    clearAvatarLipSyncTimers();
+    setAvatarMouthShape('X');
+    if (avatarLipsyncShell) avatarLipsyncShell.classList.remove('is-active');
+  }
+
+  function playAvatarLipSync(mouthCues = [], durationMs = 0) {
+    stopAvatarLipSync();
+    if (!avatarLipsyncShell || !avatarMouth || !mouthCues.length) return;
+
+    avatarLipsyncShell.classList.add('is-active');
+
+    mouthCues.forEach((cue) => {
+      const shape = String(cue?.value || 'X').toUpperCase();
+      const startMs = Math.max(0, Number(cue?.startMs || 0));
+      avatarLipSyncTimers.push(window.setTimeout(() => {
+        setAvatarMouthShape(shape);
+      }, startMs));
+    });
+
+    const lastCue = mouthCues[mouthCues.length - 1];
+    const stopAtMs = Math.max(
+      durationMs || 0,
+      Number(lastCue?.endMs || 0),
+      Number(lastCue?.startMs || 0) + 120
+    );
+
+    avatarLipSyncTimers.push(window.setTimeout(() => {
+      stopAvatarLipSync();
+    }, stopAtMs + 80));
+  }
+
+  function base64ToUint8Array(base64Value) {
+    const binary = window.atob(base64Value);
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) {
+      bytes[index] = binary.charCodeAt(index);
+    }
+    return bytes;
+  }
+
+  function cleanupLocalTtsAudio() {
+    if (localTtsAudio) {
+      localTtsAudio.pause();
+      localTtsAudio.src = '';
+      localTtsAudio = null;
+    }
+    if (localTtsObjectUrl) {
+      URL.revokeObjectURL(localTtsObjectUrl);
+      localTtsObjectUrl = '';
+    }
+  }
+
+  function canUseLocalTts() {
+    return Boolean(window.location.protocol === 'http:' || window.location.protocol === 'https:');
+  }
+
+  async function trySpeakWithLocalTts(spokenText) {
+    if (!canUseLocalTts()) return false;
+
+    const requestToken = ++localTtsRequestToken;
+    if (localTtsAbortController) localTtsAbortController.abort();
+
+    const abortController = new AbortController();
+    localTtsAbortController = abortController;
+
+    try {
+      const response = await fetch(LOCAL_SPEAK_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: spokenText,
+          language: getLocalTtsLanguageCode(),
+          voice: getLocalTtsVoiceName()
+        }),
+        signal: abortController.signal
+      });
+
+      if (!response.ok) return false;
+
+      const speechPackage = await response.json();
+      if (requestToken !== localTtsRequestToken) return true;
+
+      cleanupLocalTtsAudio();
+
+      const audioBytes = base64ToUint8Array(speechPackage.audioBase64 || '');
+      if (!audioBytes.length) return false;
+
+      localTtsObjectUrl = URL.createObjectURL(new Blob([audioBytes], {
+        type: speechPackage.audioMimeType || 'audio/wav'
+      }));
+      localTtsAudio = new Audio(localTtsObjectUrl);
+      localTtsAudio.preload = 'auto';
+      playAvatarLipSync(speechPackage.mouthCues || [], Number(speechPackage.durationMs || 0));
+      localTtsAudio.addEventListener('ended', stopAvatarLipSync, { once: true });
+      localTtsAudio.addEventListener('error', stopAvatarLipSync, { once: true });
+
+      await localTtsAudio.play();
+      return true;
+    } catch (error) {
+      if (abortController.signal.aborted) return true;
+      stopAvatarLipSync();
+      return false;
+    } finally {
+      if (localTtsAbortController === abortController) {
+        localTtsAbortController = null;
+      }
+    }
+  }
+
+  function stopAssistantSpeech() {
+    localTtsRequestToken += 1;
+    if (localTtsAbortController) {
+      localTtsAbortController.abort();
+      localTtsAbortController = null;
+    }
+    stopAvatarLipSync();
+    cleanupLocalTtsAudio();
+    if (!speechSynth) return;
+    speechSynth.cancel();
+  }
+
+  async function speakAssistantText(text) {
+    const spokenText = sanitizeSpokenText(text);
+    if (!spokenText || !voiceOutputEnabled) return;
+
+    stopAssistantSpeech();
+
+    const usedLocalTts = await trySpeakWithLocalTts(spokenText);
+    if (usedLocalTts) return;
+
+    if (!speechSynth) return;
+
+    const utterance = new SpeechSynthesisUtterance(spokenText);
+    const langCode = getSpeechLangCode();
+    const preferredVoice = getPreferredSpeechVoice(langCode);
+
+    utterance.lang = langCode;
+    utterance.rate = langCode === 'ja-JP' ? 0.96 : 0.94;
+    utterance.pitch = 0.82;
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    speechSynth.speak(utterance);
+  }
+
+  function toggleSpeechOutput() {
+    if (!speechSynth) {
+      updateSpeakerButtonState();
+      return;
+    }
+
+    voiceOutputEnabled = !voiceOutputEnabled;
+    if (!voiceOutputEnabled) stopAssistantSpeech();
+    updateSpeakerButtonState();
+  }
 
   if (speechRec) {
-    speechRec.lang = 'en-US';
+    updateSpeechRecognitionLanguage();
     speechRec.interimResults = false;
     speechRec.maxAlternatives = 1;
     speechRec.onresult = (e) => {
       const transcript = (e.results?.[0]?.[0]?.transcript || '').trim();
       if (!transcript) return;
       document.getElementById('userInput').value = transcript;
+      updateComposerActionButton();
       sendMessage(transcript);
     };
     speechRec.onerror = () => {
-      micActive = false;
-      if (micBtn) micBtn.style.background = 'rgba(255,255,255,0.12)';
+      setMicVisualState(false);
     };
     speechRec.onend = () => {
-      micActive = false;
-      if (micBtn) micBtn.style.background = 'rgba(255,255,255,0.12)';
+      setMicVisualState(false);
     };
+  }
+
+  if (speechSynth && 'onvoiceschanged' in speechSynth) {
+    speechSynth.onvoiceschanged = () => {
+      updateSpeakerButtonState();
+    };
+  }
+
+  setMicVisualState(false);
+  updateSpeakerButtonState();
+  updateComposerActionButton();
+
+  if (userInputField) {
+    userInputField.addEventListener('input', updateComposerActionButton);
   }
 
   function toggleMic() {
@@ -423,9 +774,12 @@
       speechRec.stop();
       return;
     }
-    micActive = true;
-    if (micBtn) micBtn.style.background = 'rgba(255,80,80,0.4)';
-    speechRec.start();
+    setMicVisualState(true);
+    try {
+      speechRec.start();
+    } catch (error) {
+      setMicVisualState(false);
+    }
   }
 
   /* ── ATTACH FILE ── */
@@ -435,6 +789,7 @@
     inp.onchange = (e) => {
       if (e.target.files[0]) {
         document.getElementById('userInput').value = `[File: ${e.target.files[0].name}]`;
+        updateComposerActionButton();
       }
     };
     inp.click();
@@ -923,6 +1278,9 @@
   let infoCardAutoScrollDelayTimer = null;
   let introInfoCardSlideIndex = 0;
   let introInfoCardSliderTimer = null;
+  let aboutUsTypingTimer = null;
+  let aboutUsDisappearTimer = null;
+  let aboutUsRestartTimer = null;
 
   const INTRO_INFO_CARD_SLIDES = [
     'https://static.wixstatic.com/media/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png',
@@ -968,20 +1326,22 @@
     aboutUs: {
       title: '',
       bodyHtml: `
-        <section class="about-card-embed" aria-label="About Us">
+        <section class="about-card-embed about-card-animated" aria-label="About Us">
           <div class="about-shell">
             <div class="about-copy-panel">
-              <h1>About Us</h1>
-              <h2>Crystal Prompter Co., Ltd.</h2>
-              <p class="about-lead">
-                Established in 2017, Crystal Prompter develops professional teleprompters
-                and electric pedestal solutions for studio, field, education, and creator
-                workflows with a focus on reliability, clarity, and practical production use.
+              <span class="about-kicker">Crystal Prompter</span>
+              <h1 class="about-window-flip-text">About Us</h1>
+              <h2 class="about-pop-text" style="--about-delay: 0.22s;">Crystal Prompter Co., Ltd.</h2>
+              <p class="about-lead" aria-live="polite">
+                <span
+                  class="about-typing-target"
+                  data-full-text="Established in 2017, Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows with a focus on reliability, clarity, and practical production use."
+                ></span>
               </p>
               <div class="about-pill-row" aria-label="Company highlights">
-                <span class="about-pill">Since 2017</span>
-                <span class="about-pill">Korea-based production</span>
-                <span class="about-pill">Studio to creator setups</span>
+                <span class="about-pill" style="--about-delay: 0.92s;">Since 2017</span>
+                <span class="about-pill" style="--about-delay: 1.04s;">Korea-based production</span>
+                <span class="about-pill" style="--about-delay: 1.16s;">Studio to creator setups</span>
               </div>
             </div>
             <div class="about-social-panel" aria-label="Crystal Prompter social links">
@@ -2526,11 +2886,98 @@
     infoCard.classList.add('info-card-slide-enter');
   }
 
+  function prefersReducedMotion() {
+    return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function stopAboutUsAnimationCycle() {
+    if (aboutUsTypingTimer) {
+      window.clearTimeout(aboutUsTypingTimer);
+      aboutUsTypingTimer = null;
+    }
+    if (aboutUsDisappearTimer) {
+      window.clearTimeout(aboutUsDisappearTimer);
+      aboutUsDisappearTimer = null;
+    }
+    if (aboutUsRestartTimer) {
+      window.clearTimeout(aboutUsRestartTimer);
+      aboutUsRestartTimer = null;
+    }
+  }
+
+  function runAboutUsTypingCycle() {
+    if (!infoCard) return;
+    const typingTarget = infoCard.querySelector('.about-card-animated .about-typing-target');
+    if (!typingTarget) return;
+
+    stopAboutUsAnimationCycle();
+
+    const fullText = (typingTarget.dataset.fullText || '').trim();
+    if (!fullText) return;
+
+    if (prefersReducedMotion()) {
+      typingTarget.textContent = fullText;
+      typingTarget.classList.add('is-typing-complete');
+      typingTarget.classList.remove('is-disappearing');
+      return;
+    }
+
+    typingTarget.textContent = '';
+    typingTarget.classList.remove('is-disappearing', 'is-typing-complete');
+
+    let charIndex = 0;
+    const typeNextCharacter = () => {
+      const activeTarget = infoCard.querySelector('.about-card-animated .about-typing-target');
+      if (activeTarget !== typingTarget) {
+        stopAboutUsAnimationCycle();
+        return;
+      }
+
+      charIndex += 1;
+      typingTarget.textContent = fullText.slice(0, charIndex);
+
+      if (charIndex < fullText.length) {
+        const delay = charIndex < 18 ? 24 : 18;
+        aboutUsTypingTimer = window.setTimeout(typeNextCharacter, delay);
+        return;
+      }
+
+      typingTarget.classList.add('is-typing-complete');
+      aboutUsDisappearTimer = window.setTimeout(() => {
+        const currentTarget = infoCard.querySelector('.about-card-animated .about-typing-target');
+        if (currentTarget !== typingTarget) {
+          stopAboutUsAnimationCycle();
+          return;
+        }
+
+        typingTarget.classList.add('is-disappearing');
+        typingTarget.classList.remove('is-typing-complete');
+
+        aboutUsRestartTimer = window.setTimeout(() => {
+          runAboutUsTypingCycle();
+        }, 620);
+      }, 2400);
+    };
+
+    aboutUsTypingTimer = window.setTimeout(typeNextCharacter, 520);
+  }
+
+  function startAboutUsAnimations() {
+    if (!infoCard || !infoCard.querySelector('.about-card-animated')) return;
+
+    const animatedSection = infoCard.querySelector('.about-card-animated');
+    animatedSection.classList.remove('about-animations-ready');
+    void animatedSection.offsetWidth;
+    animatedSection.classList.add('about-animations-ready');
+    runAboutUsTypingCycle();
+  }
+
   function setInfoCardText(title, body, useHtml = false, options = {}) {
     if (!infoCard) return;
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
     infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     const includeSocial = Boolean(options.includeSocial);
     const animation = options.animation || '';
@@ -2550,6 +2997,7 @@
     `;
     resetInfoCardAutoScroll();
     playInfoCardAnimation(animation);
+    startAboutUsAnimations();
     scheduleCueSeriesAvatarHeightSync();
     if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
   }
@@ -2559,6 +3007,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
     infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     infoCard.innerHTML = '';
     resetInfoCardAutoScroll();
@@ -2570,6 +3019,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
     infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
@@ -3959,6 +4409,7 @@
       renderNoMatchPicker();
       setPlaceholderMode('nomatch');
       renderNoMatchInfoCard();
+      speakAssistantText('Please select a product first before opening images, videos, specification, or installation.');
       return;
     }
 
@@ -3976,6 +4427,7 @@
       stopAvatarVideo();
       setInitialVideoPanelHidden(true);
       selectProduct(match.productKey || 'clone16', { showQuickActions: true });
+      speakAssistantText(buildSpokenResponse(match));
       return;
     }
     if (match.id === 'about_us') {
@@ -3997,6 +4449,9 @@
       setQuickActionsHidden(true);
       showCurrentProductText('buy_now');
     }
+
+    const spokenResponse = buildSpokenResponse(match);
+    if (spokenResponse) speakAssistantText(spokenResponse);
   }
 
   function normalizeQuestion(text) {
@@ -4086,6 +4541,48 @@
 
   function getActionFaqItems() {
     return scriptedFaq.filter((item) => ['images', 'videos', 'specification', 'installation', 'buy_now'].includes(item.id));
+  }
+
+  function buildSpokenResponse(match) {
+    if (!match) return '';
+
+    const product = match.productKey && PRODUCTS[match.productKey]
+      ? PRODUCTS[match.productKey]
+      : getCurrentProduct();
+
+    if (match.id.startsWith('product_')) {
+      return `Now showing ${product.name}. ${getProductSummaryStripText(product) || product.summary.body}`;
+    }
+
+    if (match.id === 'about_us') {
+      return 'Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows.';
+    }
+
+    if (match.id === 'product_list') {
+      return 'Please choose one of the products to continue.';
+    }
+
+    if (match.id === 'images') {
+      return `${product.name} images are now ready. ${getProductSummaryStripText(product) || product.summary.body}`;
+    }
+
+    if (match.id === 'videos') {
+      return `${product.name} video is ready. ${product.video.body}`;
+    }
+
+    if (match.id === 'specification') {
+      return `${product.name}. ${product.specification.body}`;
+    }
+
+    if (match.id === 'installation') {
+      return `${product.name}. ${product.installation.body}`;
+    }
+
+    if (match.id === 'buy_now') {
+      return `To buy ${product.name}, prepare your quantity, delivery country, and preferred setup, then contact Crystal Prompter for pricing and availability.`;
+    }
+
+    return '';
   }
 
   function detectActionFromText(rawText) {
@@ -4180,6 +4677,7 @@
     const msg = text || input.value.trim();
     if (!msg) return;
     input.value = '';
+    updateComposerActionButton();
     setIntroEmptyState(false);
     const detectedProductKey = detectProductKeyFromText(msg);
     if (detectedProductKey && PRODUCTS[detectedProductKey]) {
@@ -4199,6 +4697,7 @@
       renderNoMatchPicker();
       setPlaceholderMode('nomatch');
       renderNoMatchInfoCard();
+      speakAssistantText('I could not match that request. Please choose a product to continue.');
       return;
     }
     applyMatchedResponse(match);
@@ -4234,10 +4733,14 @@
 
     const assistantNameEl = document.getElementById('assistantName');
     if (assistantNameEl) assistantNameEl.textContent = name;
-    document.getElementById('langBtn').textContent = lang === 'EN' ? '🇺🇸 EN' : lang === 'FIL' ? '🇵🇭 FIL' : lang === 'ES' ? '🇪🇸 ES' : '🇯🇵 JA';
+    if (langBtn) {
+      langBtn.textContent = lang === 'EN' ? '🇺🇸 EN' : lang === 'FIL' ? '🇵🇭 FIL' : lang === 'ES' ? '🇪🇸 ES' : '🇯🇵 JA';
+    }
 
     const app = document.getElementById('appContainer');
     app.style.background = `linear-gradient(135deg, ${adjustColor(color,-30)} 0%, ${color} 40%, ${adjustColor(color,30)} 100%)`;
+    updateSpeechRecognitionLanguage();
+    updateSpeakerButtonState();
 
     closeSettings();
   }
@@ -4250,6 +4753,32 @@
     g = Math.max(0, Math.min(255, g + amount));
     b = Math.max(0, Math.min(255, b + amount));
     return `rgb(${r},${g},${b})`;
+  }
+
+  function openAssistant() {
+    document.body.classList.remove('assistant-closed');
+    document.body.classList.add('assistant-open');
+    window.requestAnimationFrame(function () {
+      syncCueSeriesAvatarHeight();
+      window.dispatchEvent(new Event('resize'));
+      const userInput = document.getElementById('userInput');
+      if (userInput) userInput.focus();
+    });
+  }
+
+  function minimizeAssistant() {
+    document.body.classList.remove('assistant-open');
+    document.body.classList.add('assistant-closed');
+  }
+
+  const assistantLauncher = document.getElementById('assistantLauncher');
+  if (assistantLauncher) {
+    assistantLauncher.addEventListener('click', openAssistant);
+  }
+
+  const assistantMinimizeBtn = document.getElementById('assistantMinimizeBtn');
+  if (assistantMinimizeBtn) {
+    assistantMinimizeBtn.addEventListener('click', minimizeAssistant);
   }
 
   resetInfoCardAutoScroll();
