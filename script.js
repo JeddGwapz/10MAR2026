@@ -73,6 +73,12 @@
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
   const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
+  const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
+  const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
+  const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
+  const CLONE16_VIDEO_AVATAR_VIDEO = 'assets/clone 16 - video.mp4';
+  const CLONE16_SPEC_AVATAR_VIDEO = 'assets/clone 16 - specification.mp4';
+  const CLONE16_INSTALLATION_AVATAR_VIDEO = 'assets/clone 16 - installation.mp4';
   const PANEL_DEFAULT_VIDEO = 'assets/clone16-q1-answer.mp4';
   const DEFAULT_SUBTITLE_TEXT = 'Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.';
   const CLONE16_INTRO_SLIDES = [
@@ -959,7 +965,7 @@
     return Boolean(window.location.protocol === 'http:' || window.location.protocol === 'https:');
   }
 
-  async function trySpeakWithLocalTts(spokenText) {
+  async function trySpeakWithLocalTts(spokenText, options = {}) {
     if (!canUseLocalTts()) return false;
 
     const requestToken = ++localTtsRequestToken;
@@ -999,7 +1005,11 @@
       localTtsAudio = new Audio(localTtsObjectUrl);
       localTtsAudio.preload = 'auto';
       setAssistantSpeakingState(true);
-      playAvatarResponseVideo();
+      playAvatarResponseVideo(options.videoSrc || AVATAR_RESPONSE_VIDEO, {
+        muted: true,
+        loop: false,
+        restoreOnEnd: true
+      });
       playAvatarLipSync(speechPackage.mouthCues || [], Number(speechPackage.durationMs || 0));
       const handleAudioFinished = () => {
         stopAvatarLipSync();
@@ -1115,16 +1125,35 @@
     speechSynth.cancel();
   }
 
-  async function speakAssistantText(text) {
+  async function speakAssistantText(text, options = {}) {
     const spokenText = sanitizeSpokenText(text);
-    if (!spokenText || !voiceOutputEnabled) return;
+    if ((!spokenText && !options.videoSrc) || !voiceOutputEnabled) return;
 
     stopAssistantSpeech();
 
-    const usedAvatarVideo = await trySpeakWithAvatarVideo(spokenText);
-    if (usedAvatarVideo) return;
+    if (options.videoSrc && options.useEmbeddedAudio) {
+      stopAvatarLipSync();
+      setAssistantSpeakingState(true);
+      playAvatarResponseVideo(options.videoSrc, {
+        muted: false,
+        loop: false,
+        restoreOnEnd: false
+      });
+      if (avatarVideo) {
+        avatarVideo.onended = () => {
+          restoreAvatarIdleVideo();
+          setAssistantSpeakingState(false);
+        };
+      }
+      return;
+    }
 
-    const usedLocalTts = await trySpeakWithLocalTts(spokenText);
+    if (!options.videoSrc) {
+      const usedAvatarVideo = await trySpeakWithAvatarVideo(spokenText);
+      if (usedAvatarVideo) return;
+    }
+
+    const usedLocalTts = await trySpeakWithLocalTts(spokenText, options);
     if (usedLocalTts) return;
 
     if (!speechSynth) return;
@@ -1139,7 +1168,11 @@
     utterance.pitch = 0.96;
     if (preferredVoice) utterance.voice = preferredVoice;
     utterance.onstart = () => {
-      playAvatarResponseVideo();
+      playAvatarResponseVideo(options.videoSrc || AVATAR_RESPONSE_VIDEO, {
+        muted: true,
+        loop: false,
+        restoreOnEnd: true
+      });
       setAssistantSpeakingState(true);
       playAvatarLipSync(generateFallbackAvatarMouthCues(spokenText, estimatedDurationMs), estimatedDurationMs);
     };
@@ -5870,7 +5903,10 @@
       stopAvatarVideo();
       setInitialVideoPanelHidden(true);
       selectProduct(match.productKey || 'clone16', { showQuickActions: true });
-      speakAssistantText(buildSpokenResponse(match));
+      const speechOptions = match.productKey === 'clone16'
+        ? { videoSrc: CLONE16_AVATAR_VIDEO, useEmbeddedAudio: true }
+        : {};
+      speakAssistantText(buildSpokenResponse(match), speechOptions);
       return;
     }
     if (match.id === 'about_us') {
@@ -5895,7 +5931,22 @@
     }
 
     const spokenResponse = buildSpokenResponse(match);
-    if (spokenResponse) speakAssistantText(spokenResponse);
+    if (spokenResponse) {
+      const activeProductKey = match.productKey || currentProductKey;
+      let speechOptions = {};
+      if (match.id === 'about_us') {
+        speechOptions = { videoSrc: ABOUT_US_AVATAR_VIDEO, useEmbeddedAudio: true };
+      } else if (match.id === 'images' && activeProductKey === 'clone16') {
+        speechOptions = { videoSrc: CLONE16_IMAGES_AVATAR_VIDEO, useEmbeddedAudio: true };
+      } else if (match.id === 'videos' && activeProductKey === 'clone16') {
+        speechOptions = { videoSrc: CLONE16_VIDEO_AVATAR_VIDEO, useEmbeddedAudio: true };
+      } else if (match.id === 'specification' && activeProductKey === 'clone16') {
+        speechOptions = { videoSrc: CLONE16_SPEC_AVATAR_VIDEO, useEmbeddedAudio: true };
+      } else if (match.id === 'installation' && activeProductKey === 'clone16') {
+        speechOptions = { videoSrc: CLONE16_INSTALLATION_AVATAR_VIDEO, useEmbeddedAudio: true };
+      }
+      speakAssistantText(spokenResponse, speechOptions);
+    }
   }
 
   function normalizeQuestion(text) {
