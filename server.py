@@ -1144,38 +1144,14 @@ def chat_with_openai(message, *, product_slug=None, history=None, language="EN",
         llmMs=llm_duration_ms,
     )
 
-    split_started_at = time.monotonic()
-    chunk_texts = split_into_sentence_chunks(openai_result["answer"])
-    split_duration_ms = int((time.monotonic() - split_started_at) * 1000)
-    log_timing(
-        "chat_split_done",
-        chunkCount=len(chunk_texts),
-        splitMs=split_duration_ms,
-    )
-
-    resolved_voice = voice or VOICE_MAP.get(language, VOICE_MAP["EN"])
-    chunk_session_id = create_chunk_session(
-        answer=openai_result["answer"],
-        chunks=chunk_texts,
-        voice=resolved_voice,
-        language=language,
-        product_slug=product_slug or (context["product"] or {}).get("slug"),
-    )
-
-    first_chunk_response = None
-    first_chunk_ready_ms = 0
-    if chunk_texts:
-        first_chunk_started_at = time.monotonic()
-        first_chunk_response = get_or_create_chunk_response(chunk_session_id, 0)
-        first_chunk_ready_ms = int((time.monotonic() - first_chunk_started_at) * 1000)
-
+    # Chunked avatar playback is disabled, so /api/chat returns text immediately and leaves
+    # the full single-clip speech generation to the follow-up speak/avatar-speak request.
+    split_duration_ms = 0
     total_request_ms = int((time.monotonic() - request_started_at) * 1000)
     log_timing(
-        "chat_first_chunk_ready",
-        sessionId=chunk_session_id,
-        firstChunkReadyMs=first_chunk_ready_ms,
+        "chat_single_response_ready",
         totalRequestMs=total_request_ms,
-        chunkCount=len(chunk_texts),
+        answerChars=len(openai_result["answer"]),
     )
 
     return {
@@ -1184,16 +1160,9 @@ def chat_with_openai(message, *, product_slug=None, history=None, language="EN",
         "productSlug": product_slug or (context["product"] or {}).get("slug"),
         "knowledgeItems": context["knowledgeItems"],
         "priceItems": context["priceItems"],
-        "chunking": {
-            "sessionId": chunk_session_id,
-            "totalChunks": len(chunk_texts),
-            "firstChunk": (first_chunk_response or {}).get("chunk"),
-            "hasMore": len(chunk_texts) > 1,
-        },
         "timings": {
             "llmMs": llm_duration_ms,
             "splitMs": split_duration_ms,
-            "firstChunkReadyMs": first_chunk_ready_ms,
             "totalRequestMs": total_request_ms,
         },
         "sources": {
