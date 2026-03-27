@@ -1064,7 +1064,11 @@ def call_openai_responses_api(*, message, context_text, history=None):
         "Keep answers concise and practical. "
         "Reply in short spoken sentences only. "
         "Maximum 3 short sentences. "
+        "Prefer exactly 2 or 3 sentences when helpful. "
+        "Make the first sentence very short and direct, ideally under 10 words. "
+        "Put extra detail in sentence 2 or sentence 3. "
         "Each sentence should be natural for voice output. "
+        "Avoid compound run-on sentences. "
         "Do not use long paragraphs or intro fluff."
     )
 
