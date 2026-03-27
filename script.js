@@ -572,6 +572,14 @@
   let assistantChunkFetchPromise = null;
   let assistantChunkPlaybackToken = 0;
 
+  function logChunkDebug(eventName, details = {}) {
+    const timestamp = new Date().toISOString();
+    console.log(`[Crystal Chunk Debug] ${eventName}`, {
+      timestamp,
+      ...details
+    });
+  }
+
   function setAssistantSpeakingState(active) {
     if (avatarBox) avatarBox.classList.toggle('is-speaking', active);
     if (assistantStatus) assistantStatus.classList.toggle('is-speaking', active);
@@ -579,6 +587,9 @@
 
   function resetAssistantChunkState() {
     assistantChunkPlaybackToken += 1;
+    logChunkDebug('reset-state', {
+      playbackToken: assistantChunkPlaybackToken
+    });
     assistantChunkSessionId = '';
     assistantChunkQueue = [];
     assistantChunkRequestedIndexes = new Set();
@@ -714,15 +725,31 @@
 
   async function fetchAssistantChunk(sessionId, chunkIndex, playbackToken) {
     if (!apiState.enabled || !sessionId || !Number.isInteger(chunkIndex) || chunkIndex < 0) return null;
+    logChunkDebug('fetch-chunk-start', {
+      sessionId,
+      chunkIndex,
+      playbackToken
+    });
     try {
       const payload = await fetchJson('/api/avatar-chunk', {
         session_id: sessionId,
         index: chunkIndex
       });
       if (playbackToken !== assistantChunkPlaybackToken) return null;
+      logChunkDebug('fetch-chunk-success', {
+        sessionId,
+        chunkIndex,
+        hasVideo: Boolean(payload?.chunk?.videoUrl),
+        durationMs: Number(payload?.chunk?.durationMs || 0)
+      });
       return payload?.chunk || null;
     } catch (error) {
       console.warn('Crystal Prompter chunk fetch failed:', error);
+      logChunkDebug('fetch-chunk-failed', {
+        sessionId,
+        chunkIndex,
+        error: error?.message || String(error)
+      });
       return null;
     }
   }
@@ -730,6 +757,12 @@
   function enqueueAssistantChunk(chunk) {
     if (!chunk) return;
     assistantChunkQueue.push(chunk);
+    logChunkDebug('enqueue-chunk', {
+      queueLength: assistantChunkQueue.length,
+      chunkIndex: Number(chunk?.index ?? -1),
+      hasVideo: Boolean(chunk?.videoUrl),
+      durationMs: Number(chunk?.durationMs || 0)
+    });
     if (!assistantChunkIsPlaying) {
       void playNextAssistantChunk();
     }
@@ -745,6 +778,12 @@
     const chunkIndex = assistantChunkNextIndex;
     const playbackToken = assistantChunkPlaybackToken;
     assistantChunkRequestedIndexes.add(chunkIndex);
+    logChunkDebug('fetch-next-chunk-scheduled', {
+      sessionId: assistantChunkSessionId,
+      chunkIndex,
+      totalChunks: assistantChunkTotal,
+      playbackToken
+    });
     assistantChunkFetchPromise = fetchAssistantChunk(assistantChunkSessionId, chunkIndex, playbackToken)
       .then((chunk) => {
         if (playbackToken !== assistantChunkPlaybackToken) return null;
@@ -766,8 +805,17 @@
   async function playAssistantChunkMedia(chunk) {
     // Reuse the same avatar video element and swap media sources instead of remounting the player.
     const playbackToken = assistantChunkPlaybackToken;
+    logChunkDebug('play-chunk-start', {
+      chunkIndex: Number(chunk?.index ?? -1),
+      playbackToken,
+      hasVideo: Boolean(chunk?.videoUrl),
+      durationMs: Number(chunk?.durationMs || 0)
+    });
     const audioBytes = base64ToUint8Array(chunk?.audioBase64 || '');
     if (!audioBytes.length) {
+      logChunkDebug('play-chunk-empty-audio', {
+        chunkIndex: Number(chunk?.index ?? -1)
+      });
       restoreAvatarIdleVideo();
       setAssistantSpeakingState(false);
       return;
@@ -797,6 +845,10 @@
           restoreAvatarIdleVideo();
           setAssistantSpeakingState(false);
         }
+        logChunkDebug('play-chunk-finished', {
+          chunkIndex: Number(chunk?.index ?? -1),
+          playbackToken
+        });
         resolve();
       };
 
@@ -816,6 +868,11 @@
       }
       await playbackFinished;
     } catch (error) {
+      logChunkDebug('play-chunk-failed', {
+        chunkIndex: Number(chunk?.index ?? -1),
+        playbackToken,
+        error: error?.message || String(error)
+      });
       if (playbackToken === assistantChunkPlaybackToken) {
         stopAvatarLipSync();
         restoreAvatarIdleVideo();
@@ -828,6 +885,9 @@
     if (assistantChunkIsPlaying) return;
     const playbackToken = assistantChunkPlaybackToken;
     assistantChunkIsPlaying = true;
+    logChunkDebug('playback-loop-start', {
+      playbackToken
+    });
 
     while (playbackToken === assistantChunkPlaybackToken) {
       if (!assistantChunkQueue.length) {
@@ -844,6 +904,10 @@
     }
 
     assistantChunkIsPlaying = false;
+    logChunkDebug('playback-loop-end', {
+      playbackToken,
+      remainingQueueLength: assistantChunkQueue.length
+    });
     if (!assistantChunkQueue.length) {
       restoreAvatarIdleVideo();
       setAssistantSpeakingState(false);
@@ -856,9 +920,20 @@
     const firstChunk = chunking?.firstChunk || null;
     const totalChunks = Math.max(0, Number(chunking?.totalChunks || 0));
     const sessionId = String(chunking?.sessionId || '').trim();
+    logChunkDebug('chat-response-received', {
+      hasChunking: Boolean(chunking),
+      sessionId,
+      totalChunks,
+      hasFirstChunk: Boolean(firstChunk),
+      firstChunkReadyMs: Number(chunking?.firstChunkReadyMs || 0)
+    });
 
     if (!sessionId || !firstChunk || totalChunks <= 0) {
       const fallbackText = sanitizeSpokenText(response?.answer || '');
+      logChunkDebug('chunking-fallback-to-local-speech', {
+        reason: 'missing-session-or-first-chunk',
+        answerLength: fallbackText.length
+      });
       if (fallbackText) speakAssistantText(fallbackText);
       return;
     }
@@ -871,6 +946,11 @@
     assistantChunkIsPlaying = false;
     assistantChunkNextIndex = 1;
     assistantChunkTotal = totalChunks;
+    logChunkDebug('chunk-session-started', {
+      sessionId,
+      totalChunks,
+      firstChunkIndex: Number(firstChunk?.index ?? 0)
+    });
 
     enqueueAssistantChunk(firstChunk);
   }
