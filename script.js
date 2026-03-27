@@ -1135,7 +1135,7 @@
     const estimatedDurationMs = estimateSpeechDurationMs(spokenText);
 
     utterance.lang = langCode;
-    utterance.rate = langCode === 'ja-JP' ? 0.98 : 0.97;
+    utterance.rate = langCode === 'ja-JP' ? 1.03 : 1.08;
     utterance.pitch = 0.96;
     if (preferredVoice) utterance.voice = preferredVoice;
     utterance.onstart = () => {

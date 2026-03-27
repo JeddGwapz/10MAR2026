@@ -32,6 +32,7 @@ DEFAULT_OPENAI_TTS_VOICE = os.environ.get("OPENAI_TTS_VOICE", "").strip() or "co
 DEFAULT_XTTS_LANGUAGE = os.environ.get("XTTS_LANGUAGE", "").strip() or "en"
 DEFAULT_XTTS_PYTHON = os.environ.get("XTTS_PYTHON", "").strip() or "/venv/xtts/bin/python"
 DEFAULT_XTTS_DEVICE = os.environ.get("XTTS_DEVICE", "").strip() or "auto"
+DEFAULT_TTS_SPEED = os.environ.get("TTS_SPEED", "").strip() or "1.12"
 MAX_TEXT_LENGTH = 700
 VOICE_MAP = {
     "EN": "Daniel",
@@ -585,6 +586,15 @@ def get_xtts_device():
 
 def get_avatar_source_image():
     return os.environ.get("AVATAR_SOURCE_IMAGE", "").strip()
+
+
+def get_tts_speed():
+    raw_value = os.environ.get("TTS_SPEED", "").strip() or DEFAULT_TTS_SPEED
+    try:
+        speed = float(raw_value)
+    except ValueError:
+        return 1.0
+    return min(2.0, max(0.5, speed))
 
 
 def get_avatar_generator_command():
@@ -1226,12 +1236,22 @@ def build_speech_package(text, voice, language):
         elif not os.path.exists(wav_path):
             raise RuntimeError("No TTS backend is available. Configure OPENAI_API_KEY or use macOS say.")
 
+        tts_speed = get_tts_speed()
+        tts_speed_applied = False
+        if os.path.exists(wav_path):
+            try:
+                tts_speed_applied = apply_tts_speed_to_wav(wav_path, tts_speed)
+            except subprocess.CalledProcessError as error:
+                log_timing("tts_speed_adjust_failed", speed=tts_speed, error=(error.stderr or error.stdout or str(error)).strip())
+
         log_timing(
             "tts_backend_selected",
             backend=tts_backend or "unknown",
             requestedVoice=voice,
             voiceUsed=voice_used,
             language=language,
+            ttsSpeed=tts_speed,
+            ttsSpeedApplied=tts_speed_applied,
             xttsEnabled=is_xtts_enabled(),
             xttsDevice=get_xtts_device(),
             xttsSpeaker=os.path.basename(get_xtts_speaker_wav() or ""),
@@ -1278,6 +1298,8 @@ def build_speech_package(text, voice, language):
                 "requestedVoice": voice,
                 "voiceUsed": voice_used,
                 "language": language,
+                "ttsSpeed": tts_speed,
+                "ttsSpeedApplied": tts_speed_applied,
                 "xttsEnabled": is_xtts_enabled(),
                 "xttsDevice": get_xtts_device(),
                 "xttsSpeakerWav": get_xtts_speaker_wav(),
@@ -1413,6 +1435,32 @@ def get_wav_duration_ms(wav_path):
         frame_rate = wav_file.getframerate() or 1
         frame_count = wav_file.getnframes()
         return max(1, round((frame_count / frame_rate) * 1000))
+
+
+def apply_tts_speed_to_wav(wav_path, speed):
+    if speed == 1.0:
+        return False
+
+    ffmpeg_binary = shutil.which("ffmpeg")
+    if not ffmpeg_binary:
+        return False
+
+    sped_path = os.path.join(os.path.dirname(wav_path), "speech_sped.wav")
+    subprocess.run(
+        [
+            ffmpeg_binary,
+            "-loglevel", "error",
+            "-y",
+            "-i", wav_path,
+            "-filter:a", f"atempo={speed:.3f}",
+            sped_path,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    os.replace(sped_path, wav_path)
+    return True
 
 
 def run_rhubarb_lipsync(rhubarb_binary, wav_path, dialog_path, language):
