@@ -1,0 +1,3 @@
+product_slug,asset_slug,usage_type,display_order,is_primary
+cue24,cue24-brochure,brochure,1,true
+clone16,clone16-intro-video,video,1,true

@@ -1,0 +1,5 @@
+product_slug,faq_key,question,answer,keywords,display_order,is_published
+cue24,overview,What is the Cue 24 Crystal Prompter?,Cue 24 is a professional teleprompter designed for broadcasting online lectures presentations and video production.,"cue 24,overview,prompter,broadcasting",1,true
+cue24,brightness,How bright is the display?,Cue 24 features 1000 cd/m2 brightness for clear visibility in professional environments.,"cue 24,brightness,display,1000",2,true
+clone16,overview,What is the Clone 16 Crystal Prompter used for?,Clone 16 is a portable professional teleprompter for broadcasting in-house studios cable TV and content creation.,"clone 16,overview,portable,prompter",1,true
+clone16,software,Is there software included?,Clone 16 includes Windows 10 compatible prompter software with text editing scrolling speed control and wired or wireless control.,"clone 16,software,windows,control",2,true

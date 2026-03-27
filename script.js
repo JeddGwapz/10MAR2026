@@ -72,6 +72,7 @@
   const mainContentPanel = document.querySelector('.main-content');
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
+  const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
   const PANEL_DEFAULT_VIDEO = 'assets/clone16-q1-answer.mp4';
   const DEFAULT_SUBTITLE_TEXT = 'Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.';
   const CLONE16_INTRO_SLIDES = [
@@ -393,6 +394,7 @@
   const userInputField = document.getElementById('userInput');
   const speakerBtn = document.getElementById('speakerBtn');
   const langBtn = document.getElementById('langBtn');
+  const assistantStatus = document.querySelector('.assistant-status');
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const speechRec = SpeechRecognition ? new SpeechRecognition() : null;
   const speechSynth = window.speechSynthesis || null;
@@ -410,6 +412,7 @@
   };
   const LOCAL_TTS_ENDPOINT = '/api/tts';
   const LOCAL_SPEAK_ENDPOINT = '/api/speak';
+  const LOCAL_AVATAR_SPEAK_ENDPOINT = '/api/avatar-speak';
   const LOCAL_TTS_LANGUAGE_MAP = {
     EN: 'EN',
     FIL: 'FIL',
@@ -480,9 +483,14 @@
     toggleMic();
   }
 
+  function hasVoiceOutputSupport() {
+    return canUseLocalTts() || Boolean(speechSynth);
+  }
+
   function updateSpeakerButtonState() {
     if (!speakerBtn) return;
-    const supported = Boolean(speechSynth);
+    const supported = hasVoiceOutputSupport();
+    speakerBtn.hidden = false;
     speakerBtn.classList.toggle('is-active', supported && voiceOutputEnabled);
     speakerBtn.classList.toggle('is-disabled', !supported);
     speakerBtn.textContent = !supported ? '🔈' : voiceOutputEnabled ? '🔊' : '🔇';
@@ -549,11 +557,81 @@
 
   const RHUBARB_MOUTH_SHAPES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'X'];
   let avatarLipSyncTimers = [];
+  let assistantSpeechEndingHandlers = [];
 
   let localTtsAudio = null;
   let localTtsObjectUrl = '';
   let localTtsAbortController = null;
   let localTtsRequestToken = 0;
+  let assistantChunkSessionId = '';
+  let assistantChunkQueue = [];
+  let assistantChunkRequestedIndexes = new Set();
+  let assistantChunkIsPlaying = false;
+  let assistantChunkNextIndex = 0;
+  let assistantChunkTotal = 0;
+  let assistantChunkFetchPromise = null;
+  let assistantChunkPlaybackToken = 0;
+
+  function setAssistantSpeakingState(active) {
+    if (avatarBox) avatarBox.classList.toggle('is-speaking', active);
+    if (assistantStatus) assistantStatus.classList.toggle('is-speaking', active);
+  }
+
+  function resetAssistantChunkState() {
+    assistantChunkPlaybackToken += 1;
+    assistantChunkSessionId = '';
+    assistantChunkQueue = [];
+    assistantChunkRequestedIndexes = new Set();
+    assistantChunkIsPlaying = false;
+    assistantChunkNextIndex = 0;
+    assistantChunkTotal = 0;
+    assistantChunkFetchPromise = null;
+  }
+
+  function estimateSpeechDurationMs(text) {
+    const normalized = sanitizeSpokenText(text);
+    if (!normalized) return 0;
+    const wordCount = normalized.split(/\s+/).filter(Boolean).length;
+    const baseDuration = getSpeechLangCode() === 'ja-JP' ? 500 : 430;
+    return Math.max(1000, wordCount * baseDuration);
+  }
+
+  function generateFallbackAvatarMouthCues(text, durationMs) {
+    const letters = Array.from(String(text || '').toLowerCase()).filter((char) => /[a-z]/.test(char));
+    if (!letters.length) {
+      return [{ startMs: 0, endMs: Math.max(220, durationMs || 1200), value: 'X' }];
+    }
+
+    const shapes = ['B', 'C', 'D', 'C', 'E', 'F', 'C', 'B'];
+    const vowelMap = { a: 'D', e: 'C', i: 'B', o: 'E', u: 'F' };
+    const activeDuration = Math.max(420, (durationMs || 0) - 140);
+    const stepCount = Math.max(4, Math.min(letters.length, Math.max(4, Math.floor(activeDuration / 110))));
+    const stepMs = Math.max(80, Math.floor(activeDuration / stepCount));
+    const cues = [{ startMs: 0, endMs: 80, value: 'X' }];
+
+    for (let index = 0; index < stepCount; index += 1) {
+      const startMs = 80 + (index * stepMs);
+      const endMs = Math.min(durationMs || activeDuration, startMs + stepMs);
+      if (endMs <= startMs) continue;
+      const letter = letters[Math.min(index, letters.length - 1)];
+      cues.push({
+        startMs,
+        endMs,
+        value: vowelMap[letter] || shapes[index % shapes.length]
+      });
+    }
+
+    const finalEndMs = cues[cues.length - 1]?.endMs || 0;
+    if (finalEndMs < (durationMs || activeDuration)) {
+      cues.push({
+        startMs: finalEndMs,
+        endMs: durationMs || activeDuration,
+        value: 'X'
+      });
+    }
+
+    return cues;
+  }
 
   function setAvatarMouthShape(shape = 'X') {
     if (!avatarMouth) return;
@@ -567,6 +645,18 @@
     if (!avatarLipSyncTimers.length) return;
     avatarLipSyncTimers.forEach((timerId) => window.clearTimeout(timerId));
     avatarLipSyncTimers = [];
+  }
+
+  function clearAssistantSpeechEndingHandlers() {
+    if (!assistantSpeechEndingHandlers.length) return;
+    assistantSpeechEndingHandlers.forEach((cleanup) => {
+      try {
+        cleanup();
+      } catch (error) {
+        // Ignore cleanup failures during speech resets.
+      }
+    });
+    assistantSpeechEndingHandlers = [];
   }
 
   function stopAvatarLipSync() {
@@ -622,6 +712,169 @@
     }
   }
 
+  async function fetchAssistantChunk(sessionId, chunkIndex, playbackToken) {
+    if (!apiState.enabled || !sessionId || !Number.isInteger(chunkIndex) || chunkIndex < 0) return null;
+    try {
+      const payload = await fetchJson('/api/avatar-chunk', {
+        session_id: sessionId,
+        index: chunkIndex
+      });
+      if (playbackToken !== assistantChunkPlaybackToken) return null;
+      return payload?.chunk || null;
+    } catch (error) {
+      console.warn('Crystal Prompter chunk fetch failed:', error);
+      return null;
+    }
+  }
+
+  function enqueueAssistantChunk(chunk) {
+    if (!chunk) return;
+    assistantChunkQueue.push(chunk);
+    if (!assistantChunkIsPlaying) {
+      void playNextAssistantChunk();
+    }
+  }
+
+  function maybeFetchNextAssistantChunk() {
+    if (!assistantChunkSessionId) return Promise.resolve(null);
+    if (assistantChunkNextIndex >= assistantChunkTotal) return Promise.resolve(null);
+    if (assistantChunkRequestedIndexes.has(assistantChunkNextIndex)) {
+      return assistantChunkFetchPromise || Promise.resolve(null);
+    }
+
+    const chunkIndex = assistantChunkNextIndex;
+    const playbackToken = assistantChunkPlaybackToken;
+    assistantChunkRequestedIndexes.add(chunkIndex);
+    assistantChunkFetchPromise = fetchAssistantChunk(assistantChunkSessionId, chunkIndex, playbackToken)
+      .then((chunk) => {
+        if (playbackToken !== assistantChunkPlaybackToken) return null;
+        if (chunk) {
+          assistantChunkNextIndex = Math.max(assistantChunkNextIndex, chunkIndex + 1);
+          enqueueAssistantChunk(chunk);
+        }
+        return chunk;
+      })
+      .finally(() => {
+        if (playbackToken === assistantChunkPlaybackToken) {
+          assistantChunkFetchPromise = null;
+        }
+      });
+
+    return assistantChunkFetchPromise;
+  }
+
+  async function playAssistantChunkMedia(chunk) {
+    // Reuse the same avatar video element and swap media sources instead of remounting the player.
+    const playbackToken = assistantChunkPlaybackToken;
+    const audioBytes = base64ToUint8Array(chunk?.audioBase64 || '');
+    if (!audioBytes.length) {
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
+      return;
+    }
+
+    cleanupLocalTtsAudio();
+
+    localTtsObjectUrl = URL.createObjectURL(new Blob([audioBytes], {
+      type: chunk?.audioMimeType || 'audio/wav'
+    }));
+    localTtsAudio = new Audio(localTtsObjectUrl);
+    localTtsAudio.preload = 'auto';
+
+    setAssistantSpeakingState(true);
+    if (chunk?.videoUrl) {
+      stopAvatarLipSync();
+      playAvatarResponseVideo(chunk.videoUrl, { muted: true, loop: false, restoreOnEnd: false });
+    } else {
+      playAvatarResponseVideo();
+      playAvatarLipSync(chunk?.mouthCues || [], Number(chunk?.durationMs || 0));
+    }
+
+    const playbackFinished = new Promise((resolve) => {
+      const handleChunkFinished = () => {
+        if (playbackToken === assistantChunkPlaybackToken) {
+          stopAvatarLipSync();
+          restoreAvatarIdleVideo();
+          setAssistantSpeakingState(false);
+        }
+        resolve();
+      };
+
+      localTtsAudio.addEventListener('ended', handleChunkFinished, { once: true });
+      localTtsAudio.addEventListener('error', handleChunkFinished, { once: true });
+      assistantSpeechEndingHandlers.push(() => {
+        if (!localTtsAudio) return;
+        localTtsAudio.removeEventListener('ended', handleChunkFinished);
+        localTtsAudio.removeEventListener('error', handleChunkFinished);
+      });
+    });
+
+    try {
+      await localTtsAudio.play();
+      if (playbackToken === assistantChunkPlaybackToken) {
+        void maybeFetchNextAssistantChunk();
+      }
+      await playbackFinished;
+    } catch (error) {
+      if (playbackToken === assistantChunkPlaybackToken) {
+        stopAvatarLipSync();
+        restoreAvatarIdleVideo();
+        setAssistantSpeakingState(false);
+      }
+    }
+  }
+
+  async function playNextAssistantChunk() {
+    if (assistantChunkIsPlaying) return;
+    const playbackToken = assistantChunkPlaybackToken;
+    assistantChunkIsPlaying = true;
+
+    while (playbackToken === assistantChunkPlaybackToken) {
+      if (!assistantChunkQueue.length) {
+        if (assistantChunkFetchPromise) {
+          await assistantChunkFetchPromise.catch(() => null);
+          if (assistantChunkQueue.length) continue;
+        }
+        break;
+      }
+
+      const nextChunk = assistantChunkQueue.shift();
+      if (!nextChunk) break;
+      await playAssistantChunkMedia(nextChunk);
+    }
+
+    assistantChunkIsPlaying = false;
+    if (!assistantChunkQueue.length) {
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
+    }
+  }
+
+  function startChunkedAssistantPlayback(response) {
+    // The chat API returns full text plus chunk 1; later chunks are pulled while playback is ongoing.
+    const chunking = response?.chunking || null;
+    const firstChunk = chunking?.firstChunk || null;
+    const totalChunks = Math.max(0, Number(chunking?.totalChunks || 0));
+    const sessionId = String(chunking?.sessionId || '').trim();
+
+    if (!sessionId || !firstChunk || totalChunks <= 0) {
+      const fallbackText = sanitizeSpokenText(response?.answer || '');
+      if (fallbackText) speakAssistantText(fallbackText);
+      return;
+    }
+
+    stopAssistantSpeech();
+
+    assistantChunkSessionId = sessionId;
+    assistantChunkQueue = [];
+    assistantChunkRequestedIndexes = new Set([0]);
+    assistantChunkIsPlaying = false;
+    assistantChunkNextIndex = 1;
+    assistantChunkTotal = totalChunks;
+
+    enqueueAssistantChunk(firstChunk);
+  }
+
   function canUseLocalTts() {
     return Boolean(window.location.protocol === 'http:' || window.location.protocol === 'https:');
   }
@@ -664,15 +917,98 @@
       }));
       localTtsAudio = new Audio(localTtsObjectUrl);
       localTtsAudio.preload = 'auto';
+      setAssistantSpeakingState(true);
+      playAvatarResponseVideo();
       playAvatarLipSync(speechPackage.mouthCues || [], Number(speechPackage.durationMs || 0));
-      localTtsAudio.addEventListener('ended', stopAvatarLipSync, { once: true });
-      localTtsAudio.addEventListener('error', stopAvatarLipSync, { once: true });
+      const handleAudioFinished = () => {
+        stopAvatarLipSync();
+        restoreAvatarIdleVideo();
+        setAssistantSpeakingState(false);
+      };
+      localTtsAudio.addEventListener('ended', handleAudioFinished, { once: true });
+      localTtsAudio.addEventListener('error', handleAudioFinished, { once: true });
+      assistantSpeechEndingHandlers.push(() => {
+        if (!localTtsAudio) return;
+        localTtsAudio.removeEventListener('ended', handleAudioFinished);
+        localTtsAudio.removeEventListener('error', handleAudioFinished);
+      });
 
       await localTtsAudio.play();
       return true;
     } catch (error) {
       if (abortController.signal.aborted) return true;
       stopAvatarLipSync();
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
+      return false;
+    } finally {
+      if (localTtsAbortController === abortController) {
+        localTtsAbortController = null;
+      }
+    }
+  }
+
+  async function trySpeakWithAvatarVideo(spokenText) {
+    if (!canUseLocalTts()) return false;
+
+    const requestToken = ++localTtsRequestToken;
+    if (localTtsAbortController) localTtsAbortController.abort();
+
+    const abortController = new AbortController();
+    localTtsAbortController = abortController;
+
+    try {
+      const response = await fetch(LOCAL_AVATAR_SPEAK_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: spokenText,
+          language: getLocalTtsLanguageCode(),
+          voice: getLocalTtsVoiceName()
+        }),
+        signal: abortController.signal
+      });
+
+      if (!response.ok) return false;
+
+      const avatarPackage = await response.json();
+      if (requestToken !== localTtsRequestToken) return true;
+
+      cleanupLocalTtsAudio();
+
+      const audioBytes = base64ToUint8Array(avatarPackage.audioBase64 || '');
+      if (!audioBytes.length || !avatarPackage.videoUrl) return false;
+
+      localTtsObjectUrl = URL.createObjectURL(new Blob([audioBytes], {
+        type: avatarPackage.audioMimeType || 'audio/wav'
+      }));
+      localTtsAudio = new Audio(localTtsObjectUrl);
+      localTtsAudio.preload = 'auto';
+
+      setAssistantSpeakingState(true);
+      stopAvatarLipSync();
+      playAvatarResponseVideo(avatarPackage.videoUrl, { muted: true, loop: false, restoreOnEnd: true });
+
+      const handleAudioFinished = () => {
+        restoreAvatarIdleVideo();
+        setAssistantSpeakingState(false);
+      };
+      localTtsAudio.addEventListener('ended', handleAudioFinished, { once: true });
+      localTtsAudio.addEventListener('error', handleAudioFinished, { once: true });
+      assistantSpeechEndingHandlers.push(() => {
+        if (!localTtsAudio) return;
+        localTtsAudio.removeEventListener('ended', handleAudioFinished);
+        localTtsAudio.removeEventListener('error', handleAudioFinished);
+      });
+
+      await localTtsAudio.play();
+      return true;
+    } catch (error) {
+      if (abortController.signal.aborted) return true;
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
       return false;
     } finally {
       if (localTtsAbortController === abortController) {
@@ -687,8 +1023,12 @@
       localTtsAbortController.abort();
       localTtsAbortController = null;
     }
+    resetAssistantChunkState();
+    clearAssistantSpeechEndingHandlers();
     stopAvatarLipSync();
+    setAssistantSpeakingState(false);
     cleanupLocalTtsAudio();
+    restoreAvatarIdleVideo();
     if (!speechSynth) return;
     speechSynth.cancel();
   }
@@ -699,6 +1039,9 @@
 
     stopAssistantSpeech();
 
+    const usedAvatarVideo = await trySpeakWithAvatarVideo(spokenText);
+    if (usedAvatarVideo) return;
+
     const usedLocalTts = await trySpeakWithLocalTts(spokenText);
     if (usedLocalTts) return;
 
@@ -707,17 +1050,33 @@
     const utterance = new SpeechSynthesisUtterance(spokenText);
     const langCode = getSpeechLangCode();
     const preferredVoice = getPreferredSpeechVoice(langCode);
+    const estimatedDurationMs = estimateSpeechDurationMs(spokenText);
 
     utterance.lang = langCode;
-    utterance.rate = langCode === 'ja-JP' ? 0.96 : 0.94;
-    utterance.pitch = 0.82;
+    utterance.rate = langCode === 'ja-JP' ? 0.98 : 0.97;
+    utterance.pitch = 0.96;
     if (preferredVoice) utterance.voice = preferredVoice;
+    utterance.onstart = () => {
+      playAvatarResponseVideo();
+      setAssistantSpeakingState(true);
+      playAvatarLipSync(generateFallbackAvatarMouthCues(spokenText, estimatedDurationMs), estimatedDurationMs);
+    };
+    utterance.onend = () => {
+      stopAvatarLipSync();
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
+    };
+    utterance.onerror = () => {
+      stopAvatarLipSync();
+      restoreAvatarIdleVideo();
+      setAssistantSpeakingState(false);
+    };
 
     speechSynth.speak(utterance);
   }
 
   function toggleSpeechOutput() {
-    if (!speechSynth) {
+    if (!hasVoiceOutputSupport()) {
       updateSpeakerButtonState();
       return;
     }
@@ -809,6 +1168,13 @@
   const card2 = document.getElementById('card2');
   const card3 = document.getElementById('card3');
   const subtitleStrip = document.getElementById('subtitleStrip');
+  const settingsModal = document.getElementById('settingsModal');
+  const assistantLauncher = document.getElementById('assistantLauncher');
+  const assistantMinimizeBtn = document.getElementById('assistantMinimizeBtn');
+  const assistantSettingsBtn = document.getElementById('assistantSettingsBtn');
+  const launcherMessage = document.getElementById('launcherMessage');
+  const ASSISTANT_SHELL_STATE_KEY = 'cpAssistantShellState';
+  const ASSISTANT_HINT_DISMISSED_KEY = 'cpAssistantLauncherHintDismissed';
 
   function isLayoutLocked() {
     return Boolean(appContainer && appContainer.classList.contains('layout-locked'));
@@ -938,6 +1304,12 @@
         title: `${definition.name} Installation`,
         body: definition.installation
       },
+      faq: {
+        title: definition.faq?.title || `${definition.name} FAQs`,
+        intro: definition.faq?.intro || '',
+        badges: definition.faq?.badges || [],
+        items: definition.faq?.items || []
+      },
       buyNow: {
         title: `Buy ${definition.name}`,
         body: definition.buyNow || `Contact Crystal Prompter for ${definition.name} pricing, availability, and ordering details.`
@@ -991,20 +1363,224 @@
       videoSrc: 'https://www.youtube.com/shorts/IJlVE8LUHZ0',
       videoTitle: 'Clone 16 - Introduction',
       specification: 'Clone 16 uses a 16:9 widescreen display, laptop HDMI workflow, and smooth script control for studio and field production.',
-      installation: 'Mount the prompter, align the camera and lens, connect the laptop via HDMI, then load the script and begin prompting.'
+      installation: 'Mount the prompter, align the camera and lens, connect the laptop via HDMI, then load the script and begin prompting.',
+      faq: {
+        title: 'Clone 16 FAQs',
+        intro: 'Quick answers covering Clone 16 portability, compatible content, display brightness, supported cameras, included software, and key specifications.',
+        badges: ['15.6-inch Panel', '500 cd/m2', 'HDMI Input', '2.4 GHz Remote'],
+        items: [
+          {
+            id: 'overview',
+            question: 'What is the Clone 16 Crystal Prompter used for?',
+            answer: 'Clone 16 is a portable professional teleprompter designed for broadcasting, in-house studios, cable TV, and content creation. It helps users deliver scripts smoothly while maintaining eye contact with the camera.',
+            phrases: ['what is clone 16 used for', 'what is the clone 16 crystal prompter used for', 'clone 16 overview', 'tell me about clone 16'],
+            keywords: ['overview', 'used', 'broadcasting', 'studio', 'cable', 'content', 'prompter']
+          },
+          {
+            id: 'content',
+            question: 'What types of content can it display?',
+            answer: 'Clone 16 supports large text display, PowerPoint presentations, PDF files, and video playback, making it suitable for presentations, lectures, and video production.',
+            phrases: ['what can clone 16 display', 'what types of content can it display', 'does clone 16 support powerpoint', 'does clone 16 support pdf', 'can clone 16 play video'],
+            keywords: ['content', 'display', 'text', 'powerpoint', 'ppt', 'pdf', 'video']
+          },
+          {
+            id: 'setup',
+            question: 'Is the Clone 16 easy to set up and carry?',
+            answer: 'Yes. Clone 16 has a foldable design that makes it easy to install, store, and transport, and it comes with a dedicated hard case for protection and portability.',
+            phrases: ['is clone 16 easy to set up', 'is clone 16 easy to carry', 'is clone 16 portable', 'does clone 16 come with a hard case'],
+            keywords: ['easy', 'setup', 'carry', 'portable', 'foldable', 'transport', 'hard', 'case']
+          },
+          {
+            id: 'brightness',
+            question: 'How bright is the display?',
+            answer: 'Clone 16 has a brightness of approximately 500 cd/m2, giving clear visibility and better image quality than standard monitors.',
+            phrases: ['how bright is clone 16', 'clone 16 brightness', 'how bright is the display', 'what is the brightness of clone 16'],
+            keywords: ['bright', 'brightness', 'display', 'monitor', '500']
+          },
+          {
+            id: 'camera',
+            question: 'What cameras are compatible with this prompter?',
+            answer: 'Clone 16 supports a wide range of cameras, including DSLR cameras and ENG cameras. Its adjustable structure helps keep the setup stable and balanced.',
+            phrases: ['what cameras work with clone 16', 'what cameras are compatible with clone 16', 'does clone 16 support dslr', 'does clone 16 support eng cameras'],
+            keywords: ['camera', 'cameras', 'compatible', 'dslr', 'eng', 'balanced', 'stable']
+          },
+          {
+            id: 'remote',
+            question: 'Does it include a remote control?',
+            answer: 'Yes. Clone 16 includes a 2.4 GHz wireless remote control with an operating range of up to 10 meters for convenient control.',
+            phrases: ['does clone 16 include a remote', 'does it include a remote control', 'clone 16 remote control', 'wireless remote'],
+            keywords: ['remote', 'wireless', 'control', '10', 'meters', '2.4ghz']
+          },
+          {
+            id: 'software',
+            question: 'Is there software included?',
+            answer: 'Yes. Clone 16 includes dedicated prompter software for Windows 10 with easy text editing, adjustable scrolling speed, and both wired and wireless control.',
+            phrases: ['does clone 16 include software', 'is there software included', 'clone 16 software', 'is clone 16 windows 10 compatible'],
+            keywords: ['software', 'windows', 'editing', 'scrolling', 'speed', 'wired', 'wireless']
+          },
+          {
+            id: 'beginner',
+            question: 'Is it beginner-friendly?',
+            answer: 'Yes. Clone 16 uses simple controls, so even first-time users can operate it without a complicated learning curve.',
+            phrases: ['is clone 16 beginner friendly', 'is clone 16 easy for beginners', 'is it beginner friendly', 'is clone 16 easy to use'],
+            keywords: ['beginner', 'friendly', 'easy', 'simple', 'operate', 'first', 'time']
+          },
+          {
+            id: 'users',
+            question: 'Who commonly uses the Clone 16?',
+            answer: 'Clone 16 is widely used by broadcasting companies, schools and educational institutions, government organizations, churches and religious groups, and content creators including YouTubers.',
+            phrases: ['who uses clone 16', 'who commonly uses the clone 16', 'who is clone 16 for', 'what is clone 16 used for in schools'],
+            keywords: ['users', 'broadcasting', 'schools', 'educational', 'government', 'churches', 'creators', 'youtubers']
+          },
+          {
+            id: 'cost',
+            question: 'Is the Clone 16 cost-effective?',
+            answer: 'Yes. By reducing filming time and equipment rental needs, Clone 16 becomes highly cost-efficient, especially when used regularly.',
+            phrases: ['is clone 16 cost effective', 'is the clone 16 cost effective', 'does clone 16 save cost', 'can clone 16 reduce filming time'],
+            keywords: ['cost', 'effective', 'save', 'filming', 'rental', 'efficient']
+          },
+          {
+            id: 'specs',
+            question: 'What are the key specifications?',
+            answer: 'The key specifications are a 15.6-inch screen, 1920 x 1080 Full HD resolution, 16:9 aspect ratio, 500 cd/m2 brightness, 6.73 kg weight, and HDMI input.',
+            phrases: ['what are the key specifications', 'clone 16 specifications', 'clone 16 specs', 'technical specifications of clone 16'],
+            keywords: ['spec', 'specs', 'specification', 'technical', 'screen', 'resolution', 'weight', 'hdmi']
+          }
+        ]
+      }
     },
     {
       key: 'cue24',
       name: 'Cue 24',
-      aliases: ['cue24', 'cue 24'],
-      summary: 'Cue 24 is a Cue Series teleprompter configured for 24-inch class prompting workflows, balancing readability, stable framing, and efficient studio operation.',
-      summaryHtml: `Cue 24 delivers larger-format prompting with a stable, easy-to-read workflow for studio and presenter setups.`,
+      aliases: ['cue24', 'cue 24', 'cue 24 crystal prompter', 'crystal prompter cue 24'],
+      summary: 'Cue 24 is a professional 23.8-inch teleprompter for broadcasting, online lectures, presentations, and video production. It supports text, PowerPoint, PDF, and video playback, and is built for stable single-person professional production.',
+      summaryHtml: `
+        <strong>Broadcast-ready 23.8-inch prompting</strong><br><br>
+        Cue 24 is designed for broadcasting, online lectures, presentations, and video production with a comfortable viewing size for single-person, high-end production workflows.<br><br>
+        <strong>Flexible content and connectivity</strong><br><br>
+        It supports text, PowerPoint, PDF, and video playback, with HDMI input/output plus DVI and DP input for clear and flexible signal handling.<br><br>
+        <strong>Bright display and stable camera support</strong><br><br>
+        The 1000 cd/m2 monitor helps keep scripts readable, while the hardware supports cameras from DSLR systems up to medium-sized ENG cameras.
+      `,
       images: [
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png',
         'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png'
       ],
-      specification: 'Cue 24 focuses on larger-screen prompting, stable framing, and a workflow suited for presenter, lesson, and studio production.',
-      installation: 'Set the Cue 24 frame on the support, align the monitor and camera, then connect the script source and fine-tune the viewing angle.'
+      specification: 'Cue 24 uses a 23.8-inch 1920 x 1080 panel with a 16:9 aspect ratio, 1000 cd/m2 brightness, 12V/5A power input, and an 11.31 kg anodized aluminum body. It supports HDMI input/output plus DVI and DP input, and includes a 2.4 GHz wireless remote with about 10 meters of operating range.',
+      installation: 'Cue 24 is designed for simple installation and easy disassembly. Set the frame on the support, mount the glass and hood, align the camera with the adjustable balance hardware, connect the script source, and fine-tune the viewing angle.',
+      buyNow: 'Contact Crystal Prompter through the phone numbers or email listed in the product information for purchase, consultation, after-sales service, and technical support. A professional electric pedestal is available separately.',
+      faq: {
+        title: 'Cue 24 FAQs',
+        intro: 'Quick answers covering the Cue 24 display, supported content, connectivity, included components, and purchasing details.',
+        badges: ['23.8-inch Panel', '1000 cd/m2', 'HDMI / DVI / DP', '2.4 GHz Remote'],
+        items: [
+          {
+            id: 'overview',
+            question: 'What is the Cue 24 Crystal Prompter?',
+            answer: 'Cue 24 is a professional teleprompter designed for broadcasting, online lectures, presentations, and video production. It is built for comfortable viewing in single-person, high-end production environments.',
+            phrases: ['what is cue 24', 'what is the cue 24 crystal prompter', 'cue 24 overview', 'tell me about cue 24'],
+            keywords: ['overview', 'about', 'what', 'prompter', 'professional']
+          },
+          {
+            id: 'content',
+            question: 'What type of content can it display?',
+            answer: 'Cue 24 can display text, PowerPoint presentations, PDF files, and videos, giving more flexibility than a text-only teleprompter.',
+            phrases: ['what can cue 24 display', 'what type of content can it display', 'does cue 24 support powerpoint', 'does cue 24 support pdf', 'can cue 24 play video'],
+            keywords: ['content', 'display', 'powerpoint', 'ppt', 'pdf', 'video', 'text']
+          },
+          {
+            id: 'setup',
+            question: 'Is the Cue 24 easy to set up?',
+            answer: 'Yes. Cue 24 is designed for simple installation and easy disassembly, which makes it practical to transport and use in different spaces.',
+            phrases: ['is cue 24 easy to set up', 'is cue 24 easy to install', 'how easy is cue 24 to set up', 'is it easy to assemble'],
+            keywords: ['easy', 'setup', 'install', 'installation', 'assemble', 'disassembly', 'transport']
+          },
+          {
+            id: 'brightness',
+            question: 'How bright is the display?',
+            answer: 'Cue 24 has a 1000 cd/m2 display, which is brighter than a general monitor and helps keep the script clearly visible during use.',
+            phrases: ['how bright is cue 24', 'how bright is the display', 'cue 24 brightness', 'what is the brightness of cue 24'],
+            keywords: ['bright', 'brightness', 'display', 'monitor', '1000']
+          },
+          {
+            id: 'camera',
+            question: 'What kind of cameras are compatible with it?',
+            answer: 'Cue 24 supports stable setup with cameras ranging from DSLR systems to medium-sized ENG cameras, helped by its center-of-gravity adjustment and professional hardware design.',
+            phrases: ['what cameras work with cue 24', 'what kind of cameras are compatible', 'does cue 24 support dslr', 'does cue 24 support eng cameras'],
+            keywords: ['camera', 'cameras', 'compatible', 'compatibility', 'dslr', 'eng']
+          },
+          {
+            id: 'hdmi',
+            question: 'Does it support HDMI connectivity?',
+            answer: 'Yes. Cue 24 supports HDMI input/output, and it also accepts DVI and DP input signals for flexible, clear image transmission.',
+            phrases: ['does cue 24 support hdmi', 'does it support hdmi connectivity', 'cue 24 hdmi', 'does cue 24 have hdmi output', 'does cue 24 support dvi', 'does cue 24 support dp'],
+            keywords: ['hdmi', 'dvi', 'dp', 'displayport', 'connectivity', 'input', 'output']
+          },
+          {
+            id: 'orientation',
+            question: 'Can the screen orientation be adjusted?',
+            answer: 'Yes. With an external converter, the monitor supports up, down, left, and right inversion so it is easier to work with PowerPoint files and video formats.',
+            phrases: ['can the screen orientation be adjusted', 'can cue 24 invert the screen', 'does cue 24 support screen inversion', 'can the monitor be flipped'],
+            keywords: ['orientation', 'invert', 'inversion', 'flip', 'screen', 'monitor']
+          },
+          {
+            id: 'remote',
+            question: 'Is there a remote control included?',
+            answer: 'Yes. Cue 24 includes a 2.4 GHz wireless remote control with an operating range of about 10 meters.',
+            phrases: ['does cue 24 include a remote', 'is there a remote control included', 'cue 24 remote control', 'wireless remote'],
+            keywords: ['remote', 'wireless', 'control', '10', 'meters', '2.4ghz']
+          },
+          {
+            id: 'software',
+            question: 'Does it come with software?',
+            answer: 'Yes. Cue 24 includes a lightweight in-house Windows 10 software program that supports wired and wireless remote control, simple text editing, and adjustable scrolling speed.',
+            phrases: ['does cue 24 come with software', 'what software comes with cue 24', 'cue 24 software', 'is there windows software'],
+            keywords: ['software', 'windows', 'remote', 'editing', 'scroll', 'speed']
+          },
+          {
+            id: 'users',
+            question: 'Who typically uses the Cue 24?',
+            answer: 'Cue 24 is used by schools, broadcasting stations, churches, government offices, businesses, in-house studios, and independent creators such as YouTubers.',
+            phrases: ['who uses cue 24', 'who typically uses the cue 24', 'what is cue 24 used for', 'who is cue 24 for'],
+            keywords: ['users', 'use', 'schools', 'broadcasting', 'churches', 'government', 'businesses', 'studios', 'youtubers']
+          },
+          {
+            id: 'cost',
+            question: 'Is the Cue 24 cost-effective?',
+            answer: 'Yes. By improving filming quality and reducing lecture shooting and editing time, Cue 24 can lower long-term production costs for daily use.',
+            phrases: ['is cue 24 cost effective', 'is the cue 24 cost effective', 'does cue 24 save cost', 'can cue 24 reduce production cost'],
+            keywords: ['cost', 'effective', 'costeffective', 'save', 'production', 'editing']
+          },
+          {
+            id: 'specs',
+            question: 'What are the main specifications of the Cue 24?',
+            answer: 'The main specifications are a 23.8-inch panel, 1920 x 1080 resolution, 16:9 aspect ratio, 1000 cd/m2 brightness, 12V/5A input power, 11.31 kg total weight, and a 2.5 mm black-anodized aluminum body.',
+            phrases: ['what are the main specifications of cue 24', 'cue 24 specifications', 'cue 24 specs', 'technical specifications of cue 24'],
+            keywords: ['spec', 'specs', 'specification', 'technical', 'resolution', 'weight', 'power', 'aluminum']
+          },
+          {
+            id: 'components',
+            question: 'What components are included with the product?',
+            answer: 'Cue 24 includes the display panel body, prompter glass, camera hood, mounting plate, camera plate, power adapter, hard case, HDMI cable, protective cover, glass cleaning cloth, glass cleaner, wireless remote control, and software.',
+            phrases: ['what components are included with cue 24', 'what is included with cue 24', 'what comes in the box', 'cue 24 package contents'],
+            keywords: ['components', 'included', 'include', 'package', 'box', 'accessories', 'adapter', 'glass', 'hood', 'hard', 'case']
+          },
+          {
+            id: 'pedestal',
+            question: 'Is a pedestal included with the Cue 24?',
+            answer: 'No. A professional electric pedestal is available for Cue 24, but it is sold separately.',
+            phrases: ['is a pedestal included with cue 24', 'does cue 24 include a pedestal', 'cue 24 pedestal', 'is the electric pedestal included'],
+            keywords: ['pedestal', 'included', 'separate', 'electric']
+          },
+          {
+            id: 'contact',
+            question: 'Where can customers contact Crystal Prompter for purchase or support?',
+            answer: 'Customers can contact Crystal Prompter through the phone numbers and email addresses listed in the product information for purchase, consultation, after-sales service, and technical support.',
+            phrases: ['where can customers contact crystal prompter', 'how do i contact crystal prompter for cue 24', 'cue 24 purchase support contact', 'where can i buy cue 24'],
+            keywords: ['contact', 'purchase', 'support', 'email', 'phone', 'consultation', 'service']
+          }
+        ]
+      }
     },
     {
       key: 'cue27',
@@ -1013,7 +1589,98 @@
       summary: 'Cue 27 is a Cue Series teleprompter designed for larger and more readable prompting in professional presentation and studio environments.',
       summaryHtml: `Cue 27 is built for smooth larger-format prompting with dependable readability and stable production framing.`,
       specification: 'Cue 27 prioritizes large-format readability, stable support, and a prompting workflow suitable for professional presentation and studio use.',
-      installation: 'Mount the Cue 27 frame on the support, align the monitor and camera, then connect the script source and adjust the viewing angle.'
+      installation: 'Mount the Cue 27 frame on the support, align the monitor and camera, then connect the script source and adjust the viewing angle.',
+      faq: {
+        title: 'Cue 27 FAQs',
+        intro: 'Quick answers covering Cue 27 use cases, supported content, display brightness, compatibility, included control options, and key specifications.',
+        badges: ['27-inch Panel', '1000 cd/m2', 'HDMI / DVI / DP', '2.4 GHz Remote'],
+        items: [
+          {
+            id: 'overview',
+            question: 'What is the Cue 27 Crystal Prompter used for?',
+            answer: 'Cue 27 is a professional teleprompter designed for high-end broadcasting, online lectures, and content production. It helps users deliver scripts naturally while maintaining eye contact with the camera.',
+            phrases: ['what is cue 27 used for', 'what is the cue 27 crystal prompter used for', 'cue 27 overview', 'tell me about cue 27'],
+            keywords: ['overview', 'broadcasting', 'lectures', 'content', 'production', 'prompter']
+          },
+          {
+            id: 'content',
+            question: 'What types of content can it display?',
+            answer: 'Cue 27 supports text scripts, PowerPoint presentations, PDF files, and video playback, making it highly versatile for different production needs.',
+            phrases: ['what can cue 27 display', 'what types of content can it display', 'does cue 27 support powerpoint', 'does cue 27 support pdf', 'can cue 27 play video'],
+            keywords: ['content', 'text', 'scripts', 'powerpoint', 'ppt', 'pdf', 'video', 'display']
+          },
+          {
+            id: 'setup',
+            question: 'Is the Cue 27 easy to set up and transport?',
+            answer: 'Yes. Cue 27 is designed for easy installation and quick disassembly, so it can be used in different locations with minimal effort.',
+            phrases: ['is cue 27 easy to set up', 'is cue 27 easy to transport', 'is cue 27 portable', 'does cue 27 disassemble quickly'],
+            keywords: ['easy', 'setup', 'transport', 'installation', 'disassembly', 'portable']
+          },
+          {
+            id: 'brightness',
+            question: 'How bright is the display?',
+            answer: 'Cue 27 features 1000 cd/m2 brightness, which is much brighter than standard monitors and supports excellent visibility in professional environments.',
+            phrases: ['how bright is cue 27', 'cue 27 brightness', 'how bright is the display', 'what is the brightness of cue 27'],
+            keywords: ['bright', 'brightness', 'display', 'monitor', '1000']
+          },
+          {
+            id: 'camera',
+            question: 'What cameras are compatible with this prompter?',
+            answer: 'Cue 27 supports a wide range of cameras, including DSLR cameras and medium-sized ENG cameras. Its adjustable structure helps keep the setup stable and balanced.',
+            phrases: ['what cameras work with cue 27', 'what cameras are compatible with cue 27', 'does cue 27 support dslr', 'does cue 27 support eng cameras'],
+            keywords: ['camera', 'cameras', 'compatible', 'dslr', 'eng', 'stable', 'balanced']
+          },
+          {
+            id: 'remote',
+            question: 'Does it support remote control operation?',
+            answer: 'Yes. Cue 27 includes a 2.4 GHz wireless remote control with a range of up to 10 meters for convenient operation.',
+            phrases: ['does cue 27 support remote control', 'does it support remote control operation', 'cue 27 remote control', 'wireless remote'],
+            keywords: ['remote', 'wireless', 'control', '10', 'meters', '2.4ghz']
+          },
+          {
+            id: 'software',
+            question: 'Is there software included?',
+            answer: 'Yes. Cue 27 includes dedicated prompter software for Windows 10 with simple text editing, adjustable scrolling speed, and wired and wireless control.',
+            phrases: ['does cue 27 include software', 'is there software included', 'cue 27 software', 'is cue 27 windows 10 compatible'],
+            keywords: ['software', 'windows', 'editing', 'scrolling', 'speed', 'wired', 'wireless']
+          },
+          {
+            id: 'orientation',
+            question: 'Can the screen be flipped or adjusted?',
+            answer: 'Yes. Cue 27 supports up, down, left, and right screen inversion, making it easier to use different content formats without complex setup.',
+            phrases: ['can cue 27 flip the screen', 'can the screen be flipped or adjusted', 'does cue 27 support screen inversion', 'can cue 27 invert the display'],
+            keywords: ['screen', 'flip', 'flipped', 'adjusted', 'inversion', 'invert', 'orientation']
+          },
+          {
+            id: 'beginner',
+            question: 'Is it user-friendly for beginners?',
+            answer: 'Yes. Cue 27 is designed for easy operation, so users can quickly adjust height, alignment, and settings without difficulty.',
+            phrases: ['is cue 27 beginner friendly', 'is cue 27 user friendly for beginners', 'is it user friendly for beginners', 'is cue 27 easy to operate'],
+            keywords: ['beginner', 'friendly', 'easy', 'operation', 'height', 'alignment', 'settings']
+          },
+          {
+            id: 'users',
+            question: 'Who commonly uses the Cue 27?',
+            answer: 'Cue 27 is widely used by broadcasting stations, schools and universities, government organizations, churches and religious institutions, and content creators including YouTubers.',
+            phrases: ['who uses cue 27', 'who commonly uses the cue 27', 'who is cue 27 for', 'where is cue 27 commonly used'],
+            keywords: ['users', 'broadcasting', 'schools', 'universities', 'government', 'churches', 'religious', 'creators', 'youtubers']
+          },
+          {
+            id: 'cost',
+            question: 'Is the Cue 27 cost-effective?',
+            answer: 'Yes. By reducing filming and post-production time, Cue 27 offers high cost efficiency, especially for long-term professional use.',
+            phrases: ['is cue 27 cost effective', 'is the cue 27 cost effective', 'does cue 27 save cost', 'can cue 27 reduce post production time'],
+            keywords: ['cost', 'effective', 'efficiency', 'filming', 'post', 'production', 'long', 'term']
+          },
+          {
+            id: 'specs',
+            question: 'What are the key specifications?',
+            answer: 'The key specifications are a 27-inch screen, 1920 x 1080 Full HD resolution, 16:9 aspect ratio, 1000 cd/m2 brightness, HDMI, DVI, and DP input, and a 14.04 kg weight.',
+            phrases: ['what are the key specifications', 'cue 27 specifications', 'cue 27 specs', 'technical specifications of cue 27'],
+            keywords: ['spec', 'specs', 'specification', 'technical', 'screen', 'resolution', 'weight', 'hdmi', 'dvi', 'dp']
+          }
+        ]
+      }
     },
     {
       key: 'cue32',
@@ -1022,7 +1689,98 @@
       summary: 'Cue 32 is the largest Cue Series option for demanding prompting setups that need a broad reading area and dependable production stability.',
       summaryHtml: `Cue 32 is designed for high-visibility prompting where a larger reading area and stable studio workflow are essential.`,
       specification: 'Cue 32 emphasizes maximum readability, stable framing, and a robust prompting workflow for professional production environments.',
-      installation: 'Assemble the Cue 32 frame on the support, align the display and camera system, then connect the script source and finalize the prompting angle.'
+      installation: 'Assemble the Cue 32 frame on the support, align the display and camera system, then connect the script source and finalize the prompting angle.',
+      faq: {
+        title: 'Cue 32 FAQs',
+        intro: 'Quick answers covering Cue 32 use cases, supported content, display brightness, compatible cameras, software, control options, and key specifications.',
+        badges: ['32-inch Panel', '1000 cd/m2', 'HDMI / DVI / DP', '2.4 GHz Remote'],
+        items: [
+          {
+            id: 'overview',
+            question: 'What is the Cue 32 Crystal Prompter used for?',
+            answer: 'Cue 32 is a professional teleprompter designed for high-end broadcasting, online lectures, and video production. It helps users deliver content smoothly while maintaining eye contact with the camera.',
+            phrases: ['what is cue 32 used for', 'what is the cue 32 crystal prompter used for', 'cue 32 overview', 'tell me about cue 32'],
+            keywords: ['overview', 'broadcasting', 'lectures', 'video', 'production', 'prompter']
+          },
+          {
+            id: 'content',
+            question: 'What types of content can it display?',
+            answer: 'Cue 32 supports text scripts, PowerPoint presentations, PDF files, and video playback, allowing flexible use across different production needs.',
+            phrases: ['what can cue 32 display', 'what types of content can it display', 'does cue 32 support powerpoint', 'does cue 32 support pdf', 'can cue 32 play video'],
+            keywords: ['content', 'text', 'scripts', 'powerpoint', 'ppt', 'pdf', 'video', 'display']
+          },
+          {
+            id: 'setup',
+            question: 'Is the Cue 32 easy to set up and transport?',
+            answer: 'Yes. Cue 32 is designed for easy installation and quick disassembly, making it convenient to use in different locations and setups.',
+            phrases: ['is cue 32 easy to set up', 'is cue 32 easy to transport', 'is cue 32 portable', 'does cue 32 disassemble quickly'],
+            keywords: ['easy', 'setup', 'transport', 'installation', 'disassembly', 'portable', 'locations']
+          },
+          {
+            id: 'brightness',
+            question: 'How bright is the display?',
+            answer: 'Cue 32 features 1000 cd/m2 brightness, which is much brighter than standard monitors and supports excellent visibility even in bright environments.',
+            phrases: ['how bright is cue 32', 'cue 32 brightness', 'how bright is the display', 'what is the brightness of cue 32'],
+            keywords: ['bright', 'brightness', 'display', 'monitor', '1000']
+          },
+          {
+            id: 'camera',
+            question: 'What cameras are compatible with this prompter?',
+            answer: 'Cue 32 supports DSLR cameras and medium-sized ENG cameras. Its adjustable system helps keep the setup stable and balanced.',
+            phrases: ['what cameras work with cue 32', 'what cameras are compatible with cue 32', 'does cue 32 support dslr', 'does cue 32 support eng cameras'],
+            keywords: ['camera', 'cameras', 'compatible', 'dslr', 'eng', 'stable', 'balanced']
+          },
+          {
+            id: 'remote',
+            question: 'Does it include remote control operation?',
+            answer: 'Yes. Cue 32 includes a 2.4 GHz wireless remote control with a range of up to 10 meters for easy and convenient control.',
+            phrases: ['does cue 32 include remote control', 'does it include remote control operation', 'cue 32 remote control', 'wireless remote'],
+            keywords: ['remote', 'wireless', 'control', '10', 'meters', '2.4ghz']
+          },
+          {
+            id: 'software',
+            question: 'Is there software included?',
+            answer: 'Yes. Cue 32 includes dedicated prompter software for Windows 10 with easy text editing, adjustable scrolling speed, and wired and wireless control.',
+            phrases: ['does cue 32 include software', 'is there software included', 'cue 32 software', 'is cue 32 windows 10 compatible'],
+            keywords: ['software', 'windows', 'editing', 'scrolling', 'speed', 'wired', 'wireless']
+          },
+          {
+            id: 'orientation',
+            question: 'Can the screen be flipped or adjusted?',
+            answer: 'Yes. Cue 32 supports up, down, left, and right screen inversion, making it easy to use PowerPoint files and videos without complex adjustments.',
+            phrases: ['can cue 32 flip the screen', 'can the screen be flipped or adjusted', 'does cue 32 support screen inversion', 'can cue 32 invert the display'],
+            keywords: ['screen', 'flip', 'flipped', 'adjusted', 'inversion', 'invert', 'orientation']
+          },
+          {
+            id: 'userfriendly',
+            question: 'Is the Cue 32 user-friendly?',
+            answer: 'Yes. Cue 32 is designed for easy operation, with adjustable height and quick alignment to help users set proper camera positioning without difficulty.',
+            phrases: ['is cue 32 user friendly', 'is the cue 32 user friendly', 'is cue 32 easy to use', 'is cue 32 easy to operate'],
+            keywords: ['user', 'friendly', 'easy', 'operation', 'height', 'alignment', 'camera', 'positioning']
+          },
+          {
+            id: 'users',
+            question: 'Who typically uses the Cue 32?',
+            answer: 'Cue 32 is widely used by broadcasting stations, schools and universities, government organizations, churches and religious institutions, and content creators including YouTubers.',
+            phrases: ['who uses cue 32', 'who typically uses the cue 32', 'who is cue 32 for', 'where is cue 32 commonly used'],
+            keywords: ['users', 'broadcasting', 'schools', 'universities', 'government', 'churches', 'religious', 'creators', 'youtubers']
+          },
+          {
+            id: 'cost',
+            question: 'Is the Cue 32 cost-effective?',
+            answer: 'Yes. By reducing filming and post-production time, Cue 32 offers high cost efficiency, especially for long-term and frequent use.',
+            phrases: ['is cue 32 cost effective', 'is the cue 32 cost effective', 'does cue 32 save cost', 'can cue 32 reduce post production time'],
+            keywords: ['cost', 'effective', 'efficiency', 'filming', 'post', 'production', 'long', 'term', 'frequent']
+          },
+          {
+            id: 'specs',
+            question: 'What are the key specifications?',
+            answer: 'The key specifications are a 32-inch screen, 1920 x 1080 Full HD resolution, 16:9 aspect ratio, 1000 cd/m2 brightness, HDMI, DVI, and DP input, and a 17.87 kg weight.',
+            phrases: ['what are the key specifications', 'cue 32 specifications', 'cue 32 specs', 'technical specifications of cue 32'],
+            keywords: ['spec', 'specs', 'specification', 'technical', 'screen', 'resolution', 'weight', 'hdmi', 'dvi', 'dp']
+          }
+        ]
+      }
     },
     {
       key: 'adamas19',
@@ -1281,6 +2039,16 @@
   let aboutUsTypingTimer = null;
   let aboutUsDisappearTimer = null;
   let aboutUsRestartTimer = null;
+  const PRODUCT_KEY_API_SLUG_OVERRIDES = {
+    lessonQ24: 'lessonq24',
+    lessonQ27: 'lessonq27',
+    electricPedestal: 'electricpedestal'
+  };
+  const apiState = {
+    enabled: true,
+    startupHydrationPromise: null,
+    productHydrationPromises: new Map()
+  };
 
   const INTRO_INFO_CARD_SLIDES = [
     'https://static.wixstatic.com/media/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png/v1/fit/w_754,h_250,q_90,enc_avif,quality_auto/d0630a_b3967fcd9d96450693cdb31d09cf6fcd~mv2.png',
@@ -1800,6 +2568,41 @@
     `;
   }
 
+  function getProductFaqInfoHtml(product, highlightedFaqId = '') {
+    const faq = product?.faq;
+    const items = faq?.items || [];
+    const badges = faq?.badges || [];
+    const intro = faq?.intro || `Frequently asked questions for ${product.name}.`;
+
+    return `
+      <section class="product-faq-card" aria-label="${escapeHtml(product.name)} frequently asked questions">
+        <header class="product-faq-card-header">
+          <div class="product-faq-card-copy">
+            <p class="product-faq-card-eyebrow">${escapeHtml(faq?.title || `${product.name} FAQs`)}</p>
+            <h3 class="product-faq-card-title">Frequently Asked Questions</h3>
+            <p class="product-faq-card-intro">${escapeHtml(intro)}</p>
+          </div>
+          ${badges.length ? `
+            <div class="product-faq-card-badges" aria-label="${escapeHtml(product.name)} FAQ highlights">
+              ${badges.map((badge) => `<span>${escapeHtml(badge)}</span>`).join('')}
+            </div>
+          ` : ''}
+        </header>
+        <div class="product-faq-list" aria-label="${escapeHtml(product.name)} FAQ list">
+          ${items.map((item, index) => `
+            <article class="product-faq-item${highlightedFaqId === item.id ? ' is-active' : ''}" data-faq-id="${escapeHtml(item.id)}">
+              <span class="product-faq-item-number">${String(index + 1).padStart(2, '0')}</span>
+              <div class="product-faq-item-copy">
+                <h4>${escapeHtml(item.question)}</h4>
+                <p>${escapeHtml(item.answer)}</p>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
   function getCue27SpecificationImageInfoHtml() {
     return `
       <section class="clone16-spec-image-card" aria-label="Cue 27 specifications">
@@ -1975,12 +2778,203 @@
     `;
   }
 
+  function getLessonQ32InfographicIconHtml(iconKey = '') {
+    if (iconKey === 'display') {
+      return `
+        <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+          <rect x="8" y="11" width="32" height="20" rx="3"></rect>
+          <path d="M19 37h10"></path>
+          <path d="M24 31v6"></path>
+          <path d="M14 17h20"></path>
+        </svg>
+      `;
+    }
+    if (iconKey === 'devices') {
+      return `
+        <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+          <rect x="7" y="13" width="22" height="14" rx="2.5"></rect>
+          <rect x="31" y="10" width="10" height="20" rx="2.5"></rect>
+          <path d="M18 33h12"></path>
+          <path d="M12 18h12"></path>
+        </svg>
+      `;
+    }
+    if (iconKey === 'speed') {
+      return `
+        <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+          <circle cx="24" cy="24" r="13"></circle>
+          <path d="M24 24l7-6"></path>
+          <path d="M18 17l-8 2"></path>
+          <path d="M30 31l8-2"></path>
+        </svg>
+      `;
+    }
+    if (iconKey === 'cost') {
+      return `
+        <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+          <circle cx="17" cy="18" r="6"></circle>
+          <circle cx="31" cy="18" r="6"></circle>
+          <path d="M12 33c2.6-4 6.7-6 12-6s9.4 2 12 6"></path>
+          <path d="M24 14l3 4 5 .7-3.6 3.4.9 5.3-4.3-2.3-4.3 2.3.9-5.3L18 18.7l5-.7z"></path>
+        </svg>
+      `;
+    }
+    if (iconKey === 'onsite') {
+      return `
+        <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+          <path d="M24 38s10-8.8 10-16.2A10 10 0 0 0 14 21.8C14 29.2 24 38 24 38z"></path>
+          <circle cx="24" cy="21" r="4.2"></circle>
+        </svg>
+      `;
+    }
+    return `
+      <svg viewBox="0 0 48 48" role="presentation" aria-hidden="true">
+        <rect x="11" y="11" width="26" height="26" rx="4"></rect>
+        <path d="M17 24h14"></path>
+        <path d="M24 17v14"></path>
+      </svg>
+    `;
+  }
+
+  function getLessonQ32SpecificationInfoHtml() {
+    const featureItems = [
+      {
+        title: 'Compact & Lecture-Optimized',
+        body: 'LessonQ 32 supports online teaching and educational broadcasting for professors, teachers, and training centers that need a polished lecture workflow.',
+        icon: 'display',
+        area: 'is-top-left',
+        tag: 'Education'
+      },
+      {
+        title: 'Laptop & Tablet Ready',
+        body: 'Supports Crystal Prompt software on Windows 10 with simple remote operation and versatile media format compatibility.',
+        icon: 'devices',
+        area: 'is-top-right',
+        tag: 'Compatibility'
+      },
+      {
+        title: 'Quick & Intuitive Setup',
+        body: 'Motorized pedestal support, HDMI input, and straightforward control for PowerPoint, PDFs, and video playback.',
+        icon: 'speed',
+        area: 'is-mid-left',
+        tag: 'Workflow'
+      },
+      {
+        title: 'Professional Look, Cost-Efficient',
+        body: 'Reduces filming and editing time while giving educators a more polished instructional recording setup.',
+        icon: 'cost',
+        area: 'is-mid-right',
+        tag: 'Efficiency'
+      },
+      {
+        title: 'Modern Widescreen 16:9 Display',
+        body: 'A 32-inch Full HD panel with 250 cd/m2 brightness helps deliver clear visuals for classrooms and online environments.',
+        icon: 'display',
+        area: 'is-bottom-left',
+        tag: 'Display'
+      },
+      {
+        title: 'Built for On-Site Use',
+        body: 'The wide-side hood blocks distractions and backlight so lecturers get a clear self-view while recording on location.',
+        icon: 'onsite',
+        area: 'is-bottom-right',
+        tag: 'On-Site'
+      }
+    ];
+
+    return `
+      <section class="lessonq32-infographic" aria-label="LessonQ 32 infographic specifications">
+        <div class="lessonq32-infographic-grid" aria-hidden="true"></div>
+        <div class="lessonq32-infographic-header">
+          <div class="lessonq32-infographic-heading">
+            <p class="lessonq32-infographic-eyebrow">LessonQ 32 Specification</p>
+            <h3 class="lessonq32-infographic-title">Educational Full-HD Teleprompter</h3>
+            <p class="lessonq32-infographic-intro">Infographic highlights for education, lecture capture, classroom broadcasting, and polished presenter-led recordings.</p>
+            <div class="lessonq32-infographic-metrics" aria-label="LessonQ 32 key metrics">
+              <article class="lessonq32-infographic-metric">
+                <strong>32"</strong>
+                <span>Full HD panel</span>
+              </article>
+              <article class="lessonq32-infographic-metric">
+                <strong>16:9</strong>
+                <span>Widescreen view</span>
+              </article>
+              <article class="lessonq32-infographic-metric">
+                <strong>HDMI</strong>
+                <span>Presentation ready</span>
+              </article>
+            </div>
+          </div>
+          <div class="lessonq32-infographic-badges" aria-label="LessonQ 32 quick highlights">
+            <span>32-inch Full HD</span>
+            <span>16:9 Display</span>
+            <span>Laptop + Tablet</span>
+          </div>
+        </div>
+        <div class="lessonq32-infographic-layout">
+          ${featureItems.map((item, index) => `
+            <article class="lessonq32-callout ${item.area} ${item.area.includes('right') ? 'is-right' : 'is-left'}" style="--enter-order:${index};">
+              <span class="lessonq32-callout-connector" aria-hidden="true"></span>
+              <span class="lessonq32-callout-badge" aria-hidden="true">
+                <span class="lessonq32-callout-index">${String(index + 1).padStart(2, '0')}</span>
+                ${getLessonQ32InfographicIconHtml(item.icon)}
+              </span>
+              <div class="lessonq32-callout-panel">
+                <p class="lessonq32-callout-tag">${escapeHtml(item.tag)}</p>
+                <h4>${escapeHtml(item.title)}</h4>
+                <p>${escapeHtml(item.body)}</p>
+              </div>
+            </article>
+          `).join('')}
+          <div class="lessonq32-infographic-stage" aria-hidden="true">
+            <span class="lessonq32-stage-chip">LessonQ 32</span>
+            <div class="lessonq32-stage-shell">
+              <svg class="lessonq32-stage-rig" viewBox="0 0 320 430" role="presentation">
+                <defs>
+                  <linearGradient id="lessonq32FrameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#30383d"></stop>
+                    <stop offset="100%" stop-color="#121719"></stop>
+                  </linearGradient>
+                  <linearGradient id="lessonq32GlassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="rgba(218,236,238,0.9)"></stop>
+                    <stop offset="100%" stop-color="rgba(92,128,135,0.16)"></stop>
+                  </linearGradient>
+                  <linearGradient id="lessonq32ScreenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#111719"></stop>
+                    <stop offset="100%" stop-color="#070a0b"></stop>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="160" cy="394" rx="90" ry="18" fill="rgba(17,37,41,0.15)"></ellipse>
+                <path d="M108 105h104l14 62H94z" fill="url(#lessonq32FrameGradient)"></path>
+                <path d="M126 92h68l38 77H88z" fill="#0d1214"></path>
+                <path d="M136 104h48l24 48h-96z" fill="url(#lessonq32GlassGradient)" stroke="rgba(226,240,242,0.65)" stroke-width="3"></path>
+                <rect x="112" y="171" width="96" height="17" rx="4" fill="#40484d"></rect>
+                <rect x="92" y="190" width="136" height="122" rx="8" fill="url(#lessonq32FrameGradient)"></rect>
+                <rect x="104" y="202" width="112" height="86" rx="4" fill="url(#lessonq32ScreenGradient)"></rect>
+                <rect x="145" y="312" width="30" height="38" rx="6" fill="#20282c"></rect>
+                <path d="M124 350h72l20 40H104z" fill="#333b40"></path>
+                <rect x="96" y="390" width="128" height="12" rx="6" fill="#242c2f"></rect>
+                <circle cx="110" cy="406" r="12" fill="#f5f7f8" stroke="#454d52" stroke-width="5"></circle>
+                <circle cx="210" cy="406" r="12" fill="#f5f7f8" stroke="#454d52" stroke-width="5"></circle>
+              </svg>
+              <span class="lessonq32-stage-pulse lessonq32-stage-pulse-a"></span>
+              <span class="lessonq32-stage-pulse lessonq32-stage-pulse-b"></span>
+              <span class="lessonq32-stage-float lessonq32-stage-float-a">Teaching Mode</span>
+              <span class="lessonq32-stage-float lessonq32-stage-float-b">Studio Ready</span>
+            </div>
+            <p class="lessonq32-stage-note">Built for lecture rooms, online classes, and training studios that need a larger prompter view with a clean educator-facing setup.</p>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
   function renderClone16SpecificationInfoCard() {
     if (!infoCard) return;
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-spec-image-state');
     infoCard.classList.toggle('info-card-show-scrollbar', true);
     infoCard.innerHTML = getClone16SpecificationImageInfoHtml();
@@ -1994,7 +2988,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-spec-image-state');
     infoCard.classList.toggle('info-card-show-scrollbar', true);
     infoCard.innerHTML = getCue24SpecificationImageInfoHtml();
@@ -2071,6 +3065,66 @@
     updateClone16BrochureButtonState();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderLessonQ32SpecificationInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getLessonQ32SpecificationInfoHtml();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderProductFaqInfoCard(product = getCurrentProduct(), highlightedFaqId = '') {
+    if (!product || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state'
+    );
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+
+    if (!product.faq || !product.faq.items.length) {
+      infoCard.innerHTML = `
+        <section class="product-faq-card" aria-label="${escapeHtml(product.name)} frequently asked questions">
+          <header class="product-faq-card-header">
+            <div class="product-faq-card-copy">
+              <p class="product-faq-card-eyebrow">${escapeHtml(product.name)} FAQs</p>
+              <h3 class="product-faq-card-title">Frequently Asked Questions</h3>
+              <p class="product-faq-card-intro">No dedicated FAQ content is configured for this product yet.</p>
+            </div>
+          </header>
+        </section>
+      `;
+      resetInfoCardAutoScroll();
+      scheduleCueSeriesAvatarHeightSync();
+      return;
+    }
+
+    infoCard.innerHTML = getProductFaqInfoHtml(product, highlightedFaqId);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+
+    if (highlightedFaqId) {
+      const highlightedFaq = infoCard.querySelector(`.product-faq-item[data-faq-id="${highlightedFaqId}"]`);
+      if (highlightedFaq && typeof highlightedFaq.scrollIntoView === 'function') {
+        window.requestAnimationFrame(() => {
+          highlightedFaq.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        });
+      }
+    }
   }
 
   function renderProductInstallationInfoCard(product = getCurrentProduct()) {
@@ -2789,6 +3843,20 @@
       keywords: ['spec', 'specs', 'spc', 'specification', 'specifications', 'specfication', 'specfications', 'spefication', 'spefications', 'spesification', 'spesifications', 'detail', 'details', 'technical', 'tech']
     },
     {
+      id: 'faqs',
+      label: 'FAQs',
+      phrases: [
+        'faq',
+        'faqs',
+        'frequently asked questions',
+        'common questions',
+        'show faq',
+        'show faqs',
+        'show frequently asked questions'
+      ],
+      keywords: ['faq', 'faqs', 'frequently', 'asked']
+    },
+    {
       id: 'installation',
       label: 'Installation',
       phrases: [
@@ -2833,6 +3901,273 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  function buildApiUrl(path, params = {}) {
+    const baseOrigin = window.location.origin && window.location.origin !== 'null'
+      ? window.location.origin
+      : 'http://127.0.0.1:8000';
+    const url = new URL(path, baseOrigin);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      url.searchParams.set(key, String(value));
+    });
+    return url.toString();
+  }
+
+  async function fetchJson(path, params = {}) {
+    if (!apiState.enabled) return null;
+    const response = await fetch(buildApiUrl(path, params), {
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  async function postJson(path, payload = {}) {
+    if (!apiState.enabled) return null;
+    const response = await fetch(buildApiUrl(path), {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const responsePayload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const errorMessage = responsePayload?.error || `API request failed: ${response.status}`;
+      throw new Error(errorMessage);
+    }
+
+    return responsePayload;
+  }
+
+  function isUsableMediaUrl(value) {
+    if (!value) return false;
+    return !String(value).includes('example.com');
+  }
+
+  function formatUsdPrice(value) {
+    const numericValue = Number(value);
+    if (!Number.isFinite(numericValue) || numericValue <= 0) return '';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2
+    }).format(numericValue);
+  }
+
+  function getApiProductSlug(productKey = '') {
+    if (!productKey) return '';
+    if (PRODUCT_KEY_API_SLUG_OVERRIDES[productKey]) {
+      return PRODUCT_KEY_API_SLUG_OVERRIDES[productKey];
+    }
+    return String(productKey).replace(/[^a-z0-9]+/gi, '').toLowerCase();
+  }
+
+  function resolveProductKeyFromApiSlug(slug = '', fallbackName = '') {
+    const compactSlug = compactNormalizedText(slug);
+    const compactName = compactNormalizedText(fallbackName);
+    if (!compactSlug && !compactName) return '';
+
+    for (const [productKey, product] of Object.entries(PRODUCTS)) {
+      const candidates = [
+        productKey,
+        getApiProductSlug(productKey),
+        product?.name || '',
+        ...(product?.aliases || [])
+      ];
+
+      const matched = candidates.some((candidate) => {
+        const compactCandidate = compactNormalizedText(candidate);
+        return compactCandidate && (
+          compactCandidate === compactSlug ||
+          compactCandidate === compactName
+        );
+      });
+
+      if (matched) return productKey;
+    }
+
+    return '';
+  }
+
+  function buildSpecificationBodyFromApiProduct(product, apiProduct = {}) {
+    const specLines = Array.isArray(apiProduct.specs)
+      ? apiProduct.specs
+          .map((item) => {
+            const label = String(item?.spec_label || '').trim();
+            const value = String(item?.spec_value || '').trim();
+            if (!label || !value) return '';
+            return `${label}: ${value}`;
+          })
+          .filter(Boolean)
+      : [];
+
+    if (specLines.length) {
+      return specLines.join(' ');
+    }
+
+    const summaryParts = [
+      apiProduct.screen_size_inches ? `${apiProduct.screen_size_inches}-inch screen` : '',
+      apiProduct.resolution ? `${apiProduct.resolution} resolution` : '',
+      apiProduct.aspect_ratio ? `${apiProduct.aspect_ratio} aspect ratio` : '',
+      apiProduct.brightness_cd_m2 ? `${apiProduct.brightness_cd_m2} cd/m2 brightness` : '',
+      apiProduct.weight_kg ? `${apiProduct.weight_kg} kg weight` : '',
+      apiProduct.inputs ? `${apiProduct.inputs} input` : ''
+    ].filter(Boolean);
+
+    if (summaryParts.length) {
+      return `${product.name} specifications include ${summaryParts.join(', ')}.`;
+    }
+
+    return product.specification.body;
+  }
+
+  function buildBuyNowBodyFromApiProduct(product, apiProduct = {}, priceItem = null) {
+    const parts = [];
+    const globalPrice = formatUsdPrice(
+      priceItem?.global_online_price_usd ?? apiProduct.global_online_price_usd
+    );
+    const dealerPrice = formatUsdPrice(
+      priceItem?.abroad_dealer_price_usd ?? apiProduct.abroad_dealer_price_usd
+    );
+
+    if (globalPrice) parts.push(`Global online price: ${globalPrice}.`);
+    if (dealerPrice) parts.push(`Abroad dealer price: ${dealerPrice}.`);
+    if (apiProduct.buy_now_notes) parts.push(String(apiProduct.buy_now_notes).trim());
+
+    return parts.length
+      ? parts.join(' ')
+      : product.buyNow.body;
+  }
+
+  function buildFaqBadgesFromApiProduct(product, apiProduct = {}) {
+    const badges = [
+      apiProduct.screen_size_inches ? `${apiProduct.screen_size_inches}-inch Panel` : '',
+      apiProduct.brightness_cd_m2 ? `${apiProduct.brightness_cd_m2} cd/m2` : '',
+      apiProduct.inputs ? String(apiProduct.inputs).split(',').map((part) => part.trim()).filter(Boolean).join(' / ') : ''
+    ].filter(Boolean);
+
+    return badges.length ? badges : product.faq.badges;
+  }
+
+  function mapApiFaqItemToFrontendItem(item, index) {
+    const faqKey = String(item?.faq_key || item?.item_code || `db-faq-${index + 1}`).trim();
+    const question = String(item?.question || '').trim();
+    const answer = String(item?.answer || '').trim();
+    const keywordValues = Array.isArray(item?.keywords)
+      ? item.keywords
+      : String(item?.category_name || '')
+          .split(/[,\s/]+/)
+          .filter(Boolean);
+
+    return {
+      id: faqKey || `db-faq-${index + 1}`,
+      question,
+      answer,
+      phrases: question ? [question] : [],
+      keywords: keywordValues
+    };
+  }
+
+  function mergeApiProductData(productKey, payload = {}) {
+    const product = PRODUCTS[productKey];
+    if (!product) return;
+
+    const apiProduct = payload.product || null;
+    const faqs = Array.isArray(payload.faqs) ? payload.faqs : [];
+    const priceItem = Array.isArray(payload.prices) && payload.prices.length ? payload.prices[0] : null;
+
+    if (apiProduct) {
+      if (apiProduct.name) product.name = String(apiProduct.name).trim();
+      if (apiProduct.summary) product.summary.body = String(apiProduct.summary).trim();
+      if (!product.summary.bodyHtml && apiProduct.description) {
+        product.summary.bodyHtml = escapeHtml(String(apiProduct.description).trim()).replace(/\n+/g, '<br><br>');
+      }
+      if (isUsableMediaUrl(apiProduct.hero_image_url)) {
+        product.images[0] = apiProduct.hero_image_url;
+      }
+      if (isUsableMediaUrl(apiProduct.thumbnail_url)) {
+        product.images[1] = apiProduct.thumbnail_url;
+      }
+      product.specification.body = buildSpecificationBodyFromApiProduct(product, apiProduct);
+      product.buyNow.body = buildBuyNowBodyFromApiProduct(product, apiProduct, priceItem);
+      product.faq.badges = buildFaqBadgesFromApiProduct(product, apiProduct);
+    } else if (priceItem) {
+      product.buyNow.body = buildBuyNowBodyFromApiProduct(product, {}, priceItem);
+    }
+
+    if (faqs.length) {
+      product.faq.items = faqs
+        .map((item, index) => mapApiFaqItemToFrontendItem(item, index))
+        .filter((item) => item.question && item.answer);
+      if (!product.faq.intro || product.faq.intro.includes('No dedicated FAQ')) {
+        product.faq.intro = `Loaded ${product.faq.items.length} answers from the Crystal Prompter knowledge database.`;
+      }
+    }
+  }
+
+  async function hydrateProductFromApi(productKey) {
+    if (!apiState.enabled || !PRODUCTS[productKey]) return PRODUCTS[productKey] || null;
+    if (apiState.productHydrationPromises.has(productKey)) {
+      return apiState.productHydrationPromises.get(productKey);
+    }
+
+    const productSlug = getApiProductSlug(productKey);
+    const hydrationPromise = (async () => {
+      const [productResult, faqResult, priceResult] = await Promise.allSettled([
+        fetchJson(`/api/products/${encodeURIComponent(productSlug)}`),
+        fetchJson(`/api/products/${encodeURIComponent(productSlug)}/faqs`),
+        fetchJson('/api/prices', { product_slug: productSlug, limit: 3 })
+      ]);
+
+      const payload = {
+        product: productResult.status === 'fulfilled' ? productResult.value : null,
+        faqs: faqResult.status === 'fulfilled' ? faqResult.value?.items || [] : [],
+        prices: priceResult.status === 'fulfilled' ? priceResult.value?.items || [] : []
+      };
+
+      mergeApiProductData(productKey, payload);
+      return PRODUCTS[productKey];
+    })().catch((error) => {
+      console.warn('Crystal Prompter API hydration failed:', error);
+      return PRODUCTS[productKey];
+    }).finally(() => {
+      apiState.productHydrationPromises.delete(productKey);
+    });
+
+    apiState.productHydrationPromises.set(productKey, hydrationPromise);
+    return hydrationPromise;
+  }
+
+  async function hydrateKnownProductsFromApi() {
+    if (!apiState.enabled) return;
+    if (apiState.startupHydrationPromise) return apiState.startupHydrationPromise;
+
+    apiState.startupHydrationPromise = (async () => {
+      try {
+        const payload = await fetchJson('/api/products', { limit: 100 });
+        const items = Array.isArray(payload?.items) ? payload.items : [];
+        items.forEach((item) => {
+          const productKey = resolveProductKeyFromApiSlug(item?.slug, item?.name);
+          if (!productKey) return;
+          mergeApiProductData(productKey, { product: item });
+        });
+      } catch (error) {
+        console.warn('Crystal Prompter API startup hydration failed:', error);
+      }
+    })();
+
+    return apiState.startupHydrationPromise;
   }
 
   function getSocialLinksHtml() {
@@ -3008,7 +4343,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.innerHTML = '';
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -3020,7 +4355,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
     resetInfoCardAutoScroll();
@@ -3109,7 +4444,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-intro-info-state');
     infoCard.innerHTML = getClone16IntroInfoCardHtml(product);
     resetInfoCardAutoScroll();
@@ -3165,7 +4500,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     clone16ImagesFeatureSlideIndex = 0;
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-images-info-state');
     infoCard.innerHTML = getClone16ImagesFeatureInfoCardHtml();
     updateClone16ImagesFeatureSlides();
@@ -3210,7 +4545,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-images-info-state');
     infoCard.innerHTML = getClone16ApplicationsInfoCardHtml();
     bindClone16ApplicationsGallery();
@@ -3239,7 +4574,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-images-info-state');
     infoCard.innerHTML = getClone16ApplicationsPreviewInfoCardHtml(imageSrc, imageAlt);
     resetInfoCardAutoScroll();
@@ -3703,7 +5038,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     clone16ComponentsImageIndex = 0;
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-images-info-state');
     infoCard.innerHTML = getClone16ComponentsInfoCardHtml();
     updateClone16ComponentsImages();
@@ -3852,7 +5187,7 @@
     stopClone16ComponentsAutoplay();
     clone16ReadMoreSlideIndex = 0;
     clone16ReadMoreImageIndex = 0;
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('clone16-readmore-info-state');
     infoCard.innerHTML = getClone16ReadMoreInfoCardHtml();
     updateClone16ReadMoreSlides();
@@ -4018,7 +5353,7 @@
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('no-match-info-state');
     infoCard.innerHTML = getNoMatchInfoCardHtml();
     bindProductSelectionButtons(infoCard);
@@ -4203,7 +5538,7 @@
   }
 
   function requiresExplicitProductSelection(action) {
-    return ['images', 'videos', 'specification', 'installation'].includes(action);
+    return ['images', 'videos', 'specification', 'faqs', 'installation'].includes(action);
   }
 
   function canUseProductDependentAction(action) {
@@ -4216,6 +5551,7 @@
     const allowedActions = isLimitedMode
       ? new Set(['about_us', 'product_list', 'buy_now'])
       : null;
+    const hiddenActions = new Set(['faqs']);
 
     if (bottomArea) {
       bottomArea.classList.toggle('nomatch-actions-layout', isLimitedMode);
@@ -4223,7 +5559,7 @@
 
     quickActionButtons.forEach((button) => {
       const action = button.dataset.action || '';
-      const shouldShow = !allowedActions || allowedActions.has(action);
+      const shouldShow = (!allowedActions || allowedActions.has(action)) && !hiddenActions.has(action);
       button.style.display = shouldShow ? '' : 'none';
       button.disabled = shouldShow ? !canUseProductDependentAction(action) : false;
       button.setAttribute('aria-disabled', button.disabled ? 'true' : 'false');
@@ -4331,6 +5667,8 @@
       setQuickActionsMode('all');
       setQuickActionsHidden(false);
     }
+
+    void hydrateProductFromApi(productKey);
   }
 
   function showCurrentProductImages() {
@@ -4381,6 +5719,15 @@
         renderLessonQ27SpecificationInfoCard();
         return;
       }
+      if (product.key === 'lessonQ32') {
+        renderLessonQ32SpecificationInfoCard();
+        return;
+      }
+      return;
+    }
+    if (section === 'faqs') {
+      applyAboutStyleLayout(getProductSummaryStripText(product));
+      renderProductFaqInfoCard(product);
       return;
     }
     if (section === 'installation') {
@@ -4405,11 +5752,11 @@
     if (!match) return;
 
     if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
-      applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, or Installation.');
+      applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, FAQs, or Installation.');
       renderNoMatchPicker();
       setPlaceholderMode('nomatch');
       renderNoMatchInfoCard();
-      speakAssistantText('Please select a product first before opening images, videos, specification, or installation.');
+      speakAssistantText('Please select a product first before opening images, videos, specification, frequently asked questions, or installation.');
       return;
     }
 
@@ -4423,7 +5770,21 @@
     setQuickActionsMode('all');
     setCardsPanelHidden(false);
 
-    if (match.id.startsWith('product_')) {
+    if (match.isProductFaqItem && match.faqItem) {
+      const product = match.productKey && PRODUCTS[match.productKey]
+        ? PRODUCTS[match.productKey]
+        : getCurrentProduct();
+      if (match.productKey) {
+        selectProduct(match.productKey, { showQuickActions: true });
+      }
+      applyAboutStyleLayout(getProductSummaryStripText(product));
+      renderProductFaqInfoCard(product, match.faqItem.id);
+      const spokenFaqResponse = buildSpokenResponse(match);
+      if (spokenFaqResponse) speakAssistantText(spokenFaqResponse);
+      return;
+    }
+
+    if (match.id.startsWith('product_') && match.productKey) {
       stopAvatarVideo();
       setInitialVideoPanelHidden(true);
       selectProduct(match.productKey || 'clone16', { showQuickActions: true });
@@ -4443,6 +5804,7 @@
     if (match.id === 'images') showCurrentProductImages();
     if (match.id === 'videos') showCurrentProductVideo();
     if (match.id === 'specification') showCurrentProductText('specification');
+    if (match.id === 'faqs') showCurrentProductText('faqs');
     if (match.id === 'installation') showCurrentProductText('installation');
     if (match.id === 'buy_now') {
       setQuickActionsMode('all');
@@ -4539,8 +5901,241 @@
     return bestScore >= 3 ? bestKey : '';
   }
 
+  function getDisplayProductNameFromSlug(productSlug = '', fallbackName = '') {
+    const productKey = resolveProductKeyFromApiSlug(productSlug, fallbackName);
+    if (productKey && PRODUCTS[productKey]) {
+      return PRODUCTS[productKey].name;
+    }
+    return fallbackName || productSlug || 'Crystal Prompter';
+  }
+
+  function getKnowledgeSearchInfoHtml(result, relatedItems = []) {
+    const productName = getDisplayProductNameFromSlug(result?.product_slug, '');
+    const metaParts = [
+      productName ? `Product: ${productName}` : '',
+      result?.category_name ? `Category: ${result.category_name}` : '',
+      result?.source_sheet ? `Source: ${result.source_sheet}` : ''
+    ].filter(Boolean);
+    const answer = String(result?.answer || '').trim();
+
+    return `
+      <section class="product-faq-card" aria-label="Knowledge search result">
+        <header class="product-faq-card-header">
+          <div class="product-faq-card-copy">
+            <p class="product-faq-card-eyebrow">Knowledge Base Result</p>
+            <h3 class="product-faq-card-title">${escapeHtml(String(result?.question || 'Search Result'))}</h3>
+            <p class="product-faq-card-intro">${escapeHtml(metaParts.join(' · ') || 'Answer loaded from the Crystal Prompter database.')}</p>
+          </div>
+        </header>
+        <div class="product-faq-list" aria-label="Knowledge answer">
+          <article class="product-faq-item is-active" data-faq-id="knowledge-primary">
+            <span class="product-faq-item-number">01</span>
+            <div class="product-faq-item-copy">
+              <h4>${escapeHtml(String(result?.question || 'Answer'))}</h4>
+              <p>${escapeHtml(answer)}</p>
+            </div>
+          </article>
+          ${relatedItems.map((item, index) => `
+            <article class="product-faq-item" data-faq-id="knowledge-related-${index + 2}">
+              <span class="product-faq-item-number">${String(index + 2).padStart(2, '0')}</span>
+              <div class="product-faq-item-copy">
+                <h4>${escapeHtml(String(item?.question || 'Related answer'))}</h4>
+                <p>${escapeHtml(String(item?.answer || '').trim())}</p>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  function getAiChatInfoHtml(response = {}) {
+    const answer = String(response?.answer || '').trim();
+    const knowledgeItems = Array.isArray(response?.knowledgeItems) ? response.knowledgeItems.slice(0, 4) : [];
+    const priceItems = Array.isArray(response?.priceItems) ? response.priceItems.slice(0, 3) : [];
+    const productName = getDisplayProductNameFromSlug(response?.productSlug, '');
+    const metaParts = [
+      productName ? `Product: ${productName}` : '',
+      response?.model ? `Model: ${response.model}` : '',
+      typeof response?.sources?.knowledgeCount === 'number' ? `Knowledge matches: ${response.sources.knowledgeCount}` : ''
+    ].filter(Boolean);
+
+    return `
+      <section class="product-faq-card" aria-label="AI chat answer">
+        <header class="product-faq-card-header">
+          <div class="product-faq-card-copy">
+            <p class="product-faq-card-eyebrow">AI Assistant Answer</p>
+            <h3 class="product-faq-card-title">Crystal Prompter Assistant</h3>
+            <p class="product-faq-card-intro">${escapeHtml(metaParts.join(' · ') || 'Answer generated from the Crystal Prompter database.')}</p>
+          </div>
+        </header>
+        <div class="product-faq-list" aria-label="AI answer details">
+          <article class="product-faq-item is-active" data-faq-id="ai-answer-primary">
+            <span class="product-faq-item-number">01</span>
+            <div class="product-faq-item-copy">
+              <h4>Answer</h4>
+              <p>${escapeHtml(answer)}</p>
+            </div>
+          </article>
+          ${knowledgeItems.map((item, index) => `
+            <article class="product-faq-item" data-faq-id="ai-answer-knowledge-${index + 2}">
+              <span class="product-faq-item-number">${String(index + 2).padStart(2, '0')}</span>
+              <div class="product-faq-item-copy">
+                <h4>${escapeHtml(String(item?.question || 'Supporting knowledge'))}</h4>
+                <p>${escapeHtml(String(item?.answer || '').trim())}</p>
+              </div>
+            </article>
+          `).join('')}
+          ${priceItems.map((item, index) => `
+            <article class="product-faq-item" data-faq-id="ai-answer-price-${knowledgeItems.length + index + 2}">
+              <span class="product-faq-item-number">${String(knowledgeItems.length + index + 2).padStart(2, '0')}</span>
+              <div class="product-faq-item-copy">
+                <h4>${escapeHtml(String(item?.model_name || item?.product_slug || 'Price match'))}</h4>
+                <p>${escapeHtml([
+                  item?.global_online_price_usd ? `Global online price: $${Number(item.global_online_price_usd).toFixed(2)}` : '',
+                  item?.abroad_dealer_price_usd ? `Abroad dealer price: $${Number(item.abroad_dealer_price_usd).toFixed(2)}` : '',
+                  item?.property_text ? String(item.property_text).trim() : ''
+                ].filter(Boolean).join(' · '))}</p>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderKnowledgeSearchInfoCard(result, relatedItems = []) {
+    if (!result || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state'
+    );
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getKnowledgeSearchInfoHtml(result, relatedItems);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderAiChatInfoCard(response = {}) {
+    if (!response || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state'
+    );
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getAiChatInfoHtml(response);
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  async function chatWithAssistantApi(rawText, preferredProductKey = '') {
+    if (!apiState.enabled) return null;
+    try {
+      return await postJson('/api/chat', {
+        message: rawText,
+        product_slug: preferredProductKey ? getApiProductSlug(preferredProductKey) : '',
+        language: getLocalTtsLanguageCode(),
+        voice: getLocalTtsVoiceName()
+      });
+    } catch (error) {
+      console.warn('Crystal Prompter AI chat failed:', error);
+      return null;
+    }
+  }
+
+  async function searchApiKnowledge(rawText, preferredProductKey = '') {
+    if (!apiState.enabled) return [];
+
+    const preferredSlug = preferredProductKey ? getApiProductSlug(preferredProductKey) : '';
+    try {
+      let payload = await fetchJson('/api/knowledge/search', {
+        q: rawText,
+        product_slug: preferredSlug,
+        limit: 5
+      });
+      let items = Array.isArray(payload?.items) ? payload.items : [];
+
+      if (!items.length && preferredSlug) {
+        payload = await fetchJson('/api/knowledge/search', {
+          q: rawText,
+          limit: 5
+        });
+        items = Array.isArray(payload?.items) ? payload.items : [];
+      }
+
+      return items;
+    } catch (error) {
+      console.warn('Crystal Prompter knowledge search failed:', error);
+      return [];
+    }
+  }
+
   function getActionFaqItems() {
-    return scriptedFaq.filter((item) => ['images', 'videos', 'specification', 'installation', 'buy_now'].includes(item.id));
+    return scriptedFaq.filter((item) => ['images', 'videos', 'specification', 'faqs', 'installation', 'buy_now'].includes(item.id));
+  }
+
+  function matchProductFaqQuestion(rawText, preferredProductKey = '') {
+    const normalized = normalizeQuestion(rawText);
+    const compact = compactNormalizedText(rawText);
+    const tokens = normalized.split(' ').filter(Boolean);
+    const candidateKeys = [];
+
+    if (preferredProductKey && PRODUCTS[preferredProductKey]) {
+      candidateKeys.push(preferredProductKey);
+    }
+
+    if (hasExplicitProductSelection && PRODUCTS[currentProductKey] && !candidateKeys.includes(currentProductKey)) {
+      candidateKeys.push(currentProductKey);
+    }
+
+    let bestMatch = null;
+    let bestScore = -1;
+
+    for (const productKey of candidateKeys) {
+      const product = PRODUCTS[productKey];
+      const items = product?.faq?.items || [];
+
+      for (const item of items) {
+        let score = 0;
+        for (const phrase of item.phrases || []) {
+          score = Math.max(score, scorePhraseAgainstText(normalized, compact, tokens, phrase));
+        }
+        for (const keyword of item.keywords || []) {
+          if (tokens.some((token) => tokenMatches(token, normalizeQuestion(keyword)))) score += 1;
+        }
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = {
+            id: `faq_item_${productKey}_${item.id}`,
+            label: item.question,
+            productKey,
+            isProductFaqItem: true,
+            faqItem: item
+          };
+        }
+      }
+    }
+
+    if (bestScore < 3) return null;
+    return bestMatch;
   }
 
   function buildSpokenResponse(match) {
@@ -4550,7 +6145,11 @@
       ? PRODUCTS[match.productKey]
       : getCurrentProduct();
 
-    if (match.id.startsWith('product_')) {
+    if (match.isProductFaqItem && match.faqItem) {
+      return `${product.name}. ${match.faqItem.answer}`;
+    }
+
+    if (match.id.startsWith('product_') && match.productKey) {
       return `Now showing ${product.name}. ${getProductSummaryStripText(product) || product.summary.body}`;
     }
 
@@ -4572,6 +6171,12 @@
 
     if (match.id === 'specification') {
       return `${product.name}. ${product.specification.body}`;
+    }
+
+    if (match.id === 'faqs') {
+      return product.faq?.intro
+        ? `${product.name}. ${product.faq.intro}`
+        : `${product.name}. Frequently asked questions are now ready.`;
     }
 
     if (match.id === 'installation') {
@@ -4615,18 +6220,30 @@
     const tokens = normalized.split(' ').filter(Boolean);
     if (!tokens.length) return null;
 
-    if (new Set(['images', 'videos', 'specification', 'installation', 'buy now']).has(normalized)) {
+    const actionOnlyRequests = new Set(['images', 'videos', 'specification', 'faq', 'faqs', 'installation', 'buy now', 'frequently asked questions']);
+    const detectedProductKey = detectProductKeyFromText(rawQuestion);
+    const detectedAction = detectActionFromText(rawQuestion);
+
+    if (actionOnlyRequests.has(normalized) && !detectedProductKey && !hasExplicitProductSelection) {
       return null;
     }
 
-    const detectedProductKey = detectProductKeyFromText(rawQuestion);
-    const detectedAction = detectActionFromText(rawQuestion);
     if (detectedProductKey && detectedAction) {
       return {
         ...detectedAction,
         productKey: detectedProductKey
       };
     }
+
+    if (detectedAction && actionOnlyRequests.has(normalized) && hasExplicitProductSelection) {
+      return {
+        ...detectedAction,
+        productKey: currentProductKey
+      };
+    }
+
+    const matchedProductFaq = matchProductFaqQuestion(rawQuestion, detectedProductKey);
+    if (matchedProductFaq) return matchedProductFaq;
 
     let best = null;
     let bestScore = -1;
@@ -4661,6 +6278,32 @@
     if (idlePlay && typeof idlePlay.catch === 'function') idlePlay.catch(() => {});
   }
 
+  function playAvatarResponseVideo(src = AVATAR_RESPONSE_VIDEO, options = {}) {
+    if (!avatarVideo || !avatarVideoSource) return;
+    const nextSrc = src || AVATAR_RESPONSE_VIDEO || AVATAR_IDLE_VIDEO;
+    const muted = options.muted ?? true;
+    const loop = options.loop ?? false;
+    const restoreOnEnd = options.restoreOnEnd ?? true;
+
+    avatarVideo.pause();
+    avatarVideo.loop = loop;
+    avatarVideo.muted = muted;
+    avatarVideo.onended = restoreOnEnd
+      ? () => {
+          restoreAvatarIdleVideo();
+        }
+      : null;
+
+    if (avatarVideoSource.getAttribute('src') !== nextSrc) {
+      avatarVideoSource.src = nextSrc;
+      avatarVideo.load();
+    }
+
+    avatarVideo.currentTime = 0;
+    const responsePlay = avatarVideo.play();
+    if (responsePlay && typeof responsePlay.catch === 'function') responsePlay.catch(() => {});
+  }
+
   function stopAvatarVideo() {
     if (!avatarVideo || !avatarVideoSource) return;
     avatarVideo.pause();
@@ -4672,7 +6315,7 @@
     avatarVideo.onended = null;
   }
 
-  function sendMessage(text) {
+  async function sendMessage(text) {
     const input = document.getElementById('userInput');
     const msg = text || input.value.trim();
     if (!msg) return;
@@ -4687,12 +6330,55 @@
       updatePlaceholderProductSelection();
       showDefaultBottomCards(PRODUCTS[detectedProductKey].images, PRODUCTS[detectedProductKey].name);
     }
+
+    const hydrationTargets = new Set();
+    if (detectedProductKey && PRODUCTS[detectedProductKey]) {
+      hydrationTargets.add(detectedProductKey);
+    }
+    if (hasExplicitProductSelection && PRODUCTS[currentProductKey]) {
+      hydrationTargets.add(currentProductKey);
+    }
+    if (hydrationTargets.size) {
+      await Promise.allSettled(Array.from(hydrationTargets).map((productKey) => hydrateProductFromApi(productKey)));
+    }
+
     setInitialVideoPanelHidden(false);
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
 
     const match = matchScriptedQuestion(msg);
     if (!match) {
+      const aiResponse = await chatWithAssistantApi(msg, detectedProductKey || (hasExplicitProductSelection ? currentProductKey : ''));
+      if (aiResponse?.answer) {
+        const resultProductKey = resolveProductKeyFromApiSlug(aiResponse?.productSlug, '');
+        if (resultProductKey && PRODUCTS[resultProductKey]) {
+          await hydrateProductFromApi(resultProductKey);
+          selectProduct(resultProductKey, { showQuickActions: true });
+          applyAboutStyleLayout(getProductSummaryStripText(PRODUCTS[resultProductKey]));
+        } else {
+          applyAboutStyleLayout('Answer generated by the Crystal Prompter assistant.', { showEmptyCard: false });
+        }
+        renderAiChatInfoCard(aiResponse);
+        startChunkedAssistantPlayback(aiResponse);
+        return;
+      }
+
+      const knowledgeItems = await searchApiKnowledge(msg, detectedProductKey || (hasExplicitProductSelection ? currentProductKey : ''));
+      if (knowledgeItems.length) {
+        const primaryItem = knowledgeItems[0];
+        const resultProductKey = resolveProductKeyFromApiSlug(primaryItem?.product_slug, '');
+        if (resultProductKey && PRODUCTS[resultProductKey]) {
+          await hydrateProductFromApi(resultProductKey);
+          selectProduct(resultProductKey, { showQuickActions: true });
+          applyAboutStyleLayout(getProductSummaryStripText(PRODUCTS[resultProductKey]));
+        } else {
+          applyAboutStyleLayout('Answer loaded from the Crystal Prompter knowledge database.', { showEmptyCard: false });
+        }
+        renderKnowledgeSearchInfoCard(primaryItem, knowledgeItems.slice(1, 5));
+        speakAssistantText(String(primaryItem?.answer || '').trim() || 'I found an answer in the Crystal Prompter knowledge database.');
+        return;
+      }
+
       applyAboutStyleLayout('Please select a product to continue.');
       renderNoMatchPicker();
       setPlaceholderMode('nomatch');
@@ -4723,8 +6409,56 @@
   }
 
   /* ── SETTINGS ── */
-  function openSettings() { document.getElementById('settingsModal').classList.add('active'); }
-  function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
+  function readLocalPreference(key, fallbackValue = '') {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value === null ? fallbackValue : value;
+    } catch (error) {
+      return fallbackValue;
+    }
+  }
+
+  function writeLocalPreference(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      // Ignore storage failures and continue without persistence.
+    }
+  }
+
+  function setLauncherHintDismissed(dismissed) {
+    document.body.classList.toggle('launcher-hint-dismissed', dismissed);
+    if (launcherMessage) {
+      launcherMessage.setAttribute('aria-hidden', dismissed ? 'true' : 'false');
+    }
+    writeLocalPreference(ASSISTANT_HINT_DISMISSED_KEY, dismissed ? '1' : '0');
+  }
+
+  function setAssistantShellState(isOpen, options = {}) {
+    const shouldPersist = options.persist !== false;
+    document.body.classList.toggle('assistant-open', isOpen);
+    document.body.classList.toggle('assistant-closed', !isOpen);
+
+    if (assistantLauncher) {
+      assistantLauncher.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    }
+
+    if (shouldPersist) {
+      writeLocalPreference(ASSISTANT_SHELL_STATE_KEY, isOpen ? 'open' : 'closed');
+    }
+  }
+
+  function openSettings() {
+    if (!settingsModal) return;
+    settingsModal.classList.add('active');
+    settingsModal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeSettings() {
+    if (!settingsModal) return;
+    settingsModal.classList.remove('active');
+    settingsModal.setAttribute('aria-hidden', 'true');
+  }
 
   function applySettings() {
     const name = document.getElementById('settingName').value || 'Assistant';
@@ -4756,8 +6490,8 @@
   }
 
   function openAssistant() {
-    document.body.classList.remove('assistant-closed');
-    document.body.classList.add('assistant-open');
+    setAssistantShellState(true);
+    setLauncherHintDismissed(true);
     window.requestAnimationFrame(function () {
       syncCueSeriesAvatarHeight();
       window.dispatchEvent(new Event('resize'));
@@ -4767,23 +6501,47 @@
   }
 
   function minimizeAssistant() {
-    document.body.classList.remove('assistant-open');
-    document.body.classList.add('assistant-closed');
+    setAssistantShellState(false);
+    closeSettings();
   }
 
-  const assistantLauncher = document.getElementById('assistantLauncher');
   if (assistantLauncher) {
     assistantLauncher.addEventListener('click', openAssistant);
   }
 
-  const assistantMinimizeBtn = document.getElementById('assistantMinimizeBtn');
   if (assistantMinimizeBtn) {
     assistantMinimizeBtn.addEventListener('click', minimizeAssistant);
   }
+
+  if (assistantSettingsBtn) {
+    assistantSettingsBtn.addEventListener('click', openSettings);
+  }
+
+  if (settingsModal) {
+    settingsModal.addEventListener('click', (event) => {
+      if (event.target === settingsModal) closeSettings();
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (settingsModal && settingsModal.classList.contains('active')) {
+      closeSettings();
+      return;
+    }
+    if (document.body.classList.contains('assistant-open')) {
+      minimizeAssistant();
+    }
+  });
+
+  setAssistantShellState(readLocalPreference(ASSISTANT_SHELL_STATE_KEY, 'closed') === 'open', { persist: false });
+  setLauncherHintDismissed(readLocalPreference(ASSISTANT_HINT_DISMISSED_KEY, '0') === '1');
 
   resetInfoCardAutoScroll();
   renderNoMatchPicker();
   if (appContainer) {
     restoreDefaultExperience();
   }
+  void hydrateKnownProductsFromApi();
+  void hydrateProductFromApi(currentProductKey);
   window.addEventListener('resize', syncCueSeriesAvatarHeight);

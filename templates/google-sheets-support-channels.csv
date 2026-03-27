@@ -1,0 +1,4 @@
+tenant_slug,channel_type,label,value,region_code,is_sales,is_support,display_order
+crystal-prompter,email,Sales Email,sales@example.com,GLOBAL,true,false,1
+crystal-prompter,email,Support Email,support@example.com,GLOBAL,false,true,2
+crystal-prompter,phone,Main Office,+63-000-000-0000,PH,true,true,3

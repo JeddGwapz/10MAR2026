@@ -14,10 +14,10 @@
 <div class="app-container layout-locked" id="appContainer">
 
   <!-- SETTINGS MODAL -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal">
+  <div class="modal-overlay" id="settingsModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <button class="modal-close" onclick="closeSettings()">&#x2715;</button>
-      <h2>Settings</h2>
+      <h2 id="settingsTitle">Settings</h2>
       <label>Assistant Name</label>
       <input type="text" id="settingName" value="AI Assistant Online" />
       <label>Language</label>
@@ -47,6 +47,7 @@
           <span class="assistant-status-label" id="assistantName">AI Assistant Online</span>
         </div>
       </div>
+      <button class="assistant-settings-btn" id="assistantSettingsBtn" type="button" aria-label="Open settings">⚙</button>
       <button class="assistant-minimize-btn" id="assistantMinimizeBtn" type="button" aria-label="Minimize assistant">-</button>
     </div>
   </div>
@@ -137,6 +138,7 @@
       </div>
       <div class="action-row">
         <button class="action-chip" data-action="specification" onclick="quickAction('Specification')" style="display: none;">📋 Specification</button>
+        <button class="action-chip" data-action="faqs" onclick="quickAction('FAQs')" style="display: none;">💬 FAQs</button>
         <button class="action-chip" data-action="installation" onclick="quickAction('Installation')" style="display: none;">🛠 Installation</button>
         <button class="action-chip" data-action="buy_now" onclick="quickAction('Buy Now')">🛒 Buy Now</button>
       </div>
@@ -160,7 +162,6 @@
             aria-label="Turn voice output off"
             title="Voice output"
             onclick="toggleSpeechOutput()"
-            hidden
           >🔊</button>
         </div>
         <button class="send-btn mic-mode" id="composerActionBtn" type="button" onclick="handleComposerAction()">🎙</button>
@@ -171,7 +172,7 @@
 </div>
 
 <button class="assistant-launcher" id="assistantLauncher" type="button" aria-label="Open assistant">
-  <span class="launcher-message">need assistant click me</span>
+  <span class="launcher-message" id="launcherMessage">Need help? Open assistant</span>
   <span class="launcher-bubble">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 3C6.477 3 2 6.94 2 11.8c0 2.335 1.041 4.46 2.748 6.04L4 21l3.602-1.89A11.47 11.47 0 0 0 12 20.6c5.523 0 10-3.94 10-8.8S17.523 3 12 3Zm-4 7.9a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm4 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm4 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"></path>

@@ -1,0 +1,11 @@
+product_slug,spec_group,spec_label,spec_value,display_order
+cue24,display,Screen Size,23.8 inches,1
+cue24,display,Resolution,1920 x 1080,2
+cue24,display,Aspect Ratio,16:9,3
+cue24,display,Brightness,1000 cd/m2,4
+cue24,io,Input,HDMI / DVI / DP,5
+clone16,display,Screen Size,15.6 inches,1
+clone16,display,Resolution,1920 x 1080,2
+clone16,display,Aspect Ratio,16:9,3
+clone16,display,Brightness,500 cd/m2,4
+clone16,io,Input,HDMI,5
