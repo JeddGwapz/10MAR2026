@@ -53,6 +53,8 @@ OPENAI_TTS_VOICE_MAP = {
 }
 MAX_SENTENCE_CHUNKS = 3
 CHUNK_SESSION_TTL_SECONDS = 300
+TARGET_CHUNK_WORDS = 18
+MIN_CHUNK_WORDS = 8
 chunk_sessions = {}
 chunk_sessions_lock = threading.Lock()
 
@@ -315,25 +317,82 @@ def cleanup_expired_chunk_sessions():
 
 
 def split_into_sentence_chunks(text, max_chunks=MAX_SENTENCE_CHUNKS):
-    # Phase 1 chunking keeps reply handling simple: full LLM text first, then short sentence chunks.
+    # Keep chunking low-risk: split by sentence first, then split any overly long sentence by word budget.
     cleaned_text = clean_query_value(text)
     if not cleaned_text:
         return []
 
-    parts = re.split(r"(?<=[.!?])\s+", cleaned_text)
-    chunks = []
-    for part in parts:
-        normalized = clean_query_value(part)
-        if not normalized:
-            continue
-        chunks.append(normalized[:MAX_TEXT_LENGTH].rstrip())
-        if len(chunks) >= max_chunks:
+    def normalize_chunk(value):
+        return clean_query_value(value)[:MAX_TEXT_LENGTH].rstrip()
+
+    def count_words(value):
+        return len([word for word in value.split() if word])
+
+    def split_long_chunk_by_words(value, parts=2):
+        words = [word for word in value.split() if word]
+        if len(words) <= TARGET_CHUNK_WORDS or parts <= 1:
+            return [normalize_chunk(value)]
+
+        result = []
+        start_index = 0
+        total_words = len(words)
+
+        for part_index in range(parts):
+            remaining_slots = parts - part_index
+            remaining_words = total_words - start_index
+            if remaining_words <= 0:
+                break
+
+            if remaining_slots == 1:
+                result.append(normalize_chunk(" ".join(words[start_index:])))
+                break
+
+            min_reserved_words = max(0, (remaining_slots - 1) * MIN_CHUNK_WORDS)
+            take_words = min(
+                TARGET_CHUNK_WORDS,
+                max(MIN_CHUNK_WORDS, remaining_words - min_reserved_words),
+            )
+            result.append(normalize_chunk(" ".join(words[start_index:start_index + take_words])))
+            start_index += take_words
+
+        return [chunk for chunk in result if chunk]
+
+    sentence_chunks = [
+        normalize_chunk(part)
+        for part in re.split(r"(?<=[.!?])\s+", cleaned_text)
+        if normalize_chunk(part)
+    ]
+
+    if not sentence_chunks:
+        return [normalize_chunk(cleaned_text)]
+
+    # If the reply only has one long sentence, split it so chunk 1 can start much earlier.
+    while len(sentence_chunks) < max_chunks:
+        longest_index = -1
+        longest_word_count = 0
+        for index, chunk in enumerate(sentence_chunks):
+            word_count = count_words(chunk)
+            if word_count > TARGET_CHUNK_WORDS * 2 and word_count > longest_word_count:
+                longest_index = index
+                longest_word_count = word_count
+
+        if longest_index < 0:
             break
 
-    if chunks:
-        return chunks
+        chunk_to_split = sentence_chunks.pop(longest_index)
+        split_parts = split_long_chunk_by_words(chunk_to_split, parts=2)
+        for offset, split_part in enumerate(split_parts):
+            sentence_chunks.insert(longest_index + offset, split_part)
 
-    return [cleaned_text[:MAX_TEXT_LENGTH].rstrip()]
+    if len(sentence_chunks) <= max_chunks:
+        return sentence_chunks
+
+    # Preserve order and cap at max_chunks by merging any overflow into the final chunk.
+    merged_chunks = list(sentence_chunks[:max_chunks - 1])
+    merged_chunks.append(
+        normalize_chunk(" ".join(sentence_chunks[max_chunks - 1:]))
+    )
+    return [chunk for chunk in merged_chunks if chunk]
 
 
 def create_chunk_session(*, answer, chunks, voice, language, product_slug=None):
