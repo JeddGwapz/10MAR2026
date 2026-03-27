@@ -75,6 +75,8 @@
   const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
+  const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
+  const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
   const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
   const CLONE16_VIDEO_AVATAR_VIDEO = 'assets/clone 16 - video.mp4';
   const CLONE16_SPEC_AVATAR_VIDEO = 'assets/clone 16 - specification.mp4';
@@ -5905,7 +5907,9 @@
       selectProduct(match.productKey || 'clone16', { showQuickActions: true });
       const speechOptions = match.productKey === 'clone16'
         ? { videoSrc: CLONE16_AVATAR_VIDEO, useEmbeddedAudio: true }
-        : {};
+        : match.productKey === 'tab12'
+          ? { videoSrc: TAB12_AVATAR_VIDEO, useEmbeddedAudio: true }
+          : {};
       speakAssistantText(buildSpokenResponse(match), speechOptions);
       return;
     }
@@ -5944,6 +5948,8 @@
         speechOptions = { videoSrc: CLONE16_SPEC_AVATAR_VIDEO, useEmbeddedAudio: true };
       } else if (match.id === 'installation' && activeProductKey === 'clone16') {
         speechOptions = { videoSrc: CLONE16_INSTALLATION_AVATAR_VIDEO, useEmbeddedAudio: true };
+      } else if (match.id === 'installation' && activeProductKey === 'cue24') {
+        speechOptions = { videoSrc: CUE24_INSTALLATION_AVATAR_VIDEO, useEmbeddedAudio: true };
       }
       speakAssistantText(spokenResponse, speechOptions);
     }
