@@ -7,6 +7,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -30,6 +31,7 @@ DEFAULT_OPENAI_TTS_MODEL = os.environ.get("OPENAI_TTS_MODEL", "").strip() or "gp
 DEFAULT_OPENAI_TTS_VOICE = os.environ.get("OPENAI_TTS_VOICE", "").strip() or "coral"
 DEFAULT_XTTS_LANGUAGE = os.environ.get("XTTS_LANGUAGE", "").strip() or "en"
 DEFAULT_XTTS_PYTHON = os.environ.get("XTTS_PYTHON", "").strip() or "/venv/xtts/bin/python"
+DEFAULT_XTTS_DEVICE = os.environ.get("XTTS_DEVICE", "").strip() or "auto"
 MAX_TEXT_LENGTH = 700
 VOICE_MAP = {
     "EN": "Daniel",
@@ -243,6 +245,7 @@ class AppHandler(SimpleHTTPRequestHandler):
                 "language": language,
                 "videoUrl": avatar_package["video_url"],
                 "jobId": avatar_package["job_id"],
+                "ttsDebug": avatar_package.get("tts_debug", speech_package.get("tts_debug")),
             })
 
         if self.path == "/api/speak":
@@ -253,7 +256,8 @@ class AppHandler(SimpleHTTPRequestHandler):
                 "mouthCues": speech_package["mouth_cues"],
                 "lipsyncSource": speech_package["lipsync_source"],
                 "voice": speech_package.get("voice_used", voice),
-                "language": language
+                "language": language,
+                "ttsDebug": speech_package.get("tts_debug"),
             })
 
         self.send_response(HTTPStatus.OK)
@@ -573,6 +577,10 @@ def get_xtts_language():
 
 def get_xtts_python():
     return os.environ.get("XTTS_PYTHON", "").strip() or DEFAULT_XTTS_PYTHON
+
+
+def get_xtts_device():
+    return os.environ.get("XTTS_DEVICE", "").strip() or DEFAULT_XTTS_DEVICE
 
 
 def get_avatar_source_image():
@@ -1181,6 +1189,8 @@ def build_speech_package(text, voice, language):
         wav_path = os.path.join(tmpdir, "speech.wav")
         dialog_path = os.path.join(tmpdir, "dialog.txt")
         voice_used = voice
+        tts_backend = ""
+        use_local_macos_voice = sys.platform == "darwin" and shutil.which("say") and shutil.which("afconvert")
 
         # XTTS is optional and runs in its own env so we can clone a custom reference voice without
         # forcing the main app env to import the heavy TTS stack.
@@ -1188,14 +1198,14 @@ def build_speech_package(text, voice, language):
         if is_xtts_enabled():
             try:
                 voice_used = synthesize_speech_with_xtts(text=text, language=language, wav_path=wav_path)
+                tts_backend = "xtts"
             except Exception as error:
                 xtts_error = str(error)
                 log_timing("xtts_fallback", error=xtts_error, textChars=len(text))
 
-        # Prefer neural XTTS/OpenAI TTS for more natural speech, then fall back to macOS voices locally.
-        if not os.path.exists(wav_path) and get_openai_api_key():
-            voice_used = synthesize_speech_with_openai(text=text, voice=voice, language=language, wav_path=wav_path)
-        elif not os.path.exists(wav_path) and shutil.which("say") and shutil.which("afconvert"):
+        # On local macOS, prefer the built-in Daniel/Eddy voices so quick actions sound consistent
+        # with the desktop setup. Cloud/Linux still falls through to OpenAI TTS.
+        if not os.path.exists(wav_path) and use_local_macos_voice:
             aiff_path = os.path.join(tmpdir, "speech.aiff")
             subprocess.run(
                 ["say", "-v", voice, "-r", "180", "-o", aiff_path, text],
@@ -1209,8 +1219,25 @@ def build_speech_package(text, voice, language):
                 capture_output=True,
                 text=True,
             )
+            tts_backend = "macos-say"
+        elif not os.path.exists(wav_path) and get_openai_api_key():
+            voice_used = synthesize_speech_with_openai(text=text, voice=voice, language=language, wav_path=wav_path)
+            tts_backend = "openai"
         elif not os.path.exists(wav_path):
             raise RuntimeError("No TTS backend is available. Configure OPENAI_API_KEY or use macOS say.")
+
+        log_timing(
+            "tts_backend_selected",
+            backend=tts_backend or "unknown",
+            requestedVoice=voice,
+            voiceUsed=voice_used,
+            language=language,
+            xttsEnabled=is_xtts_enabled(),
+            xttsDevice=get_xtts_device(),
+            xttsSpeaker=os.path.basename(get_xtts_speaker_wav() or ""),
+            useLocalMacosVoice=bool(use_local_macos_voice),
+            hasOpenAIKey=bool(get_openai_api_key()),
+        )
 
         with open(dialog_path, "w", encoding="utf-8") as dialog_file:
             dialog_file.write(text)
@@ -1244,7 +1271,20 @@ def build_speech_package(text, voice, language):
             "mouth_cues": mouth_cues,
             "lipsync_source": lipsync_source,
             "voice_used": voice_used,
+            "tts_backend": tts_backend or "unknown",
             "xttsError": xtts_error,
+            "tts_debug": {
+                "backend": tts_backend or "unknown",
+                "requestedVoice": voice,
+                "voiceUsed": voice_used,
+                "language": language,
+                "xttsEnabled": is_xtts_enabled(),
+                "xttsDevice": get_xtts_device(),
+                "xttsSpeakerWav": get_xtts_speaker_wav(),
+                "xttsError": xtts_error,
+                "useLocalMacosVoice": bool(use_local_macos_voice),
+                "hasOpenAIKey": bool(get_openai_api_key()),
+            },
         }
 
 
@@ -1297,6 +1337,7 @@ def synthesize_speech_with_openai(*, text, voice, language, wav_path):
 def synthesize_speech_with_xtts(*, text, language, wav_path):
     speaker_wav = get_xtts_speaker_wav()
     xtts_python = get_xtts_python()
+    xtts_device = get_xtts_device()
     if not speaker_wav:
         raise RuntimeError("XTTS_SPEAKER_WAV is not configured")
     if not os.path.exists(speaker_wav):
@@ -1306,9 +1347,21 @@ def synthesize_speech_with_xtts(*, text, language, wav_path):
 
     xtts_language = get_xtts_language()
     script = """
+import torch
 from TTS.api import TTS
 
-tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to("cuda")
+requested_device = {device!r}
+if requested_device == "auto":
+    if torch.cuda.is_available():
+        resolved_device = "cuda"
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        resolved_device = "mps"
+    else:
+        resolved_device = "cpu"
+else:
+    resolved_device = requested_device
+
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(resolved_device)
 tts.tts_to_file(
     text={text!r},
     file_path={wav_path!r},
@@ -1322,6 +1375,7 @@ tts.tts_to_file(
             wav_path=wav_path,
             speaker_wav=speaker_wav,
             language=xtts_language if xtts_language else language.lower(),
+            device=xtts_device,
         )],
         check=True,
         capture_output=True,
@@ -1487,6 +1541,13 @@ def build_avatar_speech_package(*, text, voice, language, speech_package=None):
 
     if not os.path.exists(output_path):
         raise RuntimeError("Avatar generator did not produce an output video")
+
+    temp_output_path = f"{output_path}.tmp.mp4"
+    if os.path.exists(temp_output_path):
+        try:
+            os.remove(temp_output_path)
+        except OSError:
+            pass
 
     return {
         "audio_bytes": package["audio_bytes"],

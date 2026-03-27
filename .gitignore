@@ -9,5 +9,6 @@ voices/
 *.log
 __pycache__/
 *.pyc
+.venv-xtts/
 assets/crystal-prompter-introduction.mp4
 assets/clone16-video.mp4

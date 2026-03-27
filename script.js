@@ -986,6 +986,7 @@
 
       const speechPackage = await response.json();
       if (requestToken !== localTtsRequestToken) return true;
+      console.log('[Crystal TTS Debug] /api/speak response', speechPackage?.ttsDebug || null);
 
       cleanupLocalTtsAudio();
 
@@ -1055,6 +1056,7 @@
 
       const avatarPackage = await response.json();
       if (requestToken !== localTtsRequestToken) return true;
+      console.log('[Crystal TTS Debug] /api/avatar-speak response', avatarPackage?.ttsDebug || null);
 
       cleanupLocalTtsAudio();
 
