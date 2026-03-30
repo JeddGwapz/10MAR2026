@@ -471,12 +471,33 @@
     updateComposerActionButton();
   }
 
+  function getComposerActionIconMarkup(mode) {
+    if (mode === 'send') {
+      return `
+        <svg class="composer-action-icon composer-action-icon-send" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path class="icon-stroke" d="M4 12h11.5"></path>
+          <path class="icon-stroke" d="M11.5 7.5 16 12l-4.5 4.5"></path>
+        </svg>
+      `;
+    }
+
+    return `
+      <svg class="composer-action-icon composer-action-icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect class="icon-fill" x="8" y="3.5" width="8" height="12" rx="4"></rect>
+        <path class="icon-accent" d="M9.7 6.3a3.8 3.8 0 0 1 4.6 0"></path>
+        <path class="icon-stroke" d="M6.5 10.5v1a5.5 5.5 0 0 0 11 0v-1"></path>
+        <path class="icon-stroke" d="M12 17v2.5"></path>
+        <path class="icon-stroke" d="M9.3 20.5h5.4"></path>
+        </svg>
+    `;
+  }
+
   function updateComposerActionButton() {
     if (!micBtn || !userInputField) return;
     const hasText = Boolean(userInputField.value.trim());
     const isListening = micActive && !hasText;
 
-    micBtn.textContent = hasText ? '➤' : '🎙';
+    micBtn.innerHTML = getComposerActionIconMarkup(hasText ? 'send' : 'mic');
     micBtn.classList.toggle('mic-mode', !hasText);
     micBtn.classList.toggle('is-listening', isListening);
     micBtn.setAttribute('aria-label', hasText ? 'Send message' : (isListening ? 'Stop voice input' : 'Start voice input'));
@@ -1290,9 +1311,8 @@
   const assistantMinimizeBtn = document.getElementById('assistantMinimizeBtn');
   const assistantSettingsBtn = document.getElementById('assistantSettingsBtn');
   const launcherMessage = document.getElementById('launcherMessage');
-  const ASSISTANT_SHELL_STATE_KEY = 'cpAssistantShellState';
-  const ASSISTANT_HINT_DISMISSED_KEY = 'cpAssistantLauncherHintDismissed';
-
+  let launcherHintCycleTimer = null;
+  let launcherHintDismissed = false;
   function isLayoutLocked() {
     return Boolean(appContainer && appContainer.classList.contains('layout-locked'));
   }
@@ -1475,7 +1495,8 @@
       summary: 'A portable teleprompter that connects to a laptop via HDMI for faster, more stable production. Ideal for interviews and product shoots, it allows instant script editing and smooth control. Its 16:9 widescreen display offers a wider view, replacing traditional 17-inch 4:3 models.',
       summaryHtml: `Portable interview teleprompter equipped with<br><br>a 16-inch, 500 cd/m², 16:9 monitor<br><br><strong>Portable and Precise Performance</strong><br><br>Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.<br><br><strong>Effortless Script Control and Wider View</strong><br><br>Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.`,
       images: [
-        'https://static.wixstatic.com/media/d0630a_acccc6e0ffa84500bef7d1952b5e3ee6~mv2.png/v1/crop/x_7,y_80,w_587,h_462/fill/w_329,h_259,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/website%20(10).png'
+        'assets/clone16-image-shell.png',
+        'assets/clone16-image-shell.png'
       ],
       videoSrc: 'https://www.youtube.com/shorts/IJlVE8LUHZ0',
       videoTitle: 'Clone 16 - Introduction',
@@ -1580,8 +1601,8 @@
         The 1000 cd/m2 monitor helps keep scripts readable, while the hardware supports cameras from DSLR systems up to medium-sized ENG cameras.
       `,
       images: [
-        'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png',
-        'https://static.wixstatic.com/media/d0630a_a36e5bf9e50449b294ec877e9525391c~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/c%2024.png'
+        'assets/cue24-image-shell.png',
+        'assets/cue24-image-shell.png'
       ],
       specification: 'Cue 24 uses a 23.8-inch 1920 x 1080 panel with a 16:9 aspect ratio, 1000 cd/m2 brightness, 12V/5A power input, and an 11.31 kg anodized aluminum body. It supports HDMI input/output plus DVI and DP input, and includes a 2.4 GHz wireless remote with about 10 meters of operating range.',
       installation: 'Cue 24 is designed for simple installation and easy disassembly. Set the frame on the support, mount the glass and hood, align the camera with the adjustable balance hardware, connect the script source, and fine-tune the viewing angle.',
@@ -1705,6 +1726,10 @@
       aliases: ['cue27', 'cue 27'],
       summary: 'Cue 27 is a Cue Series teleprompter designed for larger and more readable prompting in professional presentation and studio environments.',
       summaryHtml: `Cue 27 is built for smooth larger-format prompting with dependable readability and stable production framing.`,
+      images: [
+        'assets/cue27-image-shell.png',
+        'assets/cue27-image-shell.png'
+      ],
       specification: 'Cue 27 prioritizes large-format readability, stable support, and a prompting workflow suitable for professional presentation and studio use.',
       installation: 'Mount the Cue 27 frame on the support, align the monitor and camera, then connect the script source and adjust the viewing angle.',
       faq: {
@@ -1805,6 +1830,10 @@
       aliases: ['cue32', 'cue 32'],
       summary: 'Cue 32 is the largest Cue Series option for demanding prompting setups that need a broad reading area and dependable production stability.',
       summaryHtml: `Cue 32 is designed for high-visibility prompting where a larger reading area and stable studio workflow are essential.`,
+      images: [
+        'assets/cue32-image-shell.png',
+        'assets/cue32-image-shell.png'
+      ],
       specification: 'Cue 32 emphasizes maximum readability, stable framing, and a robust prompting workflow for professional production environments.',
       installation: 'Assemble the Cue 32 frame on the support, align the display and camera system, then connect the script source and finalize the prompting angle.',
       faq: {
@@ -1904,6 +1933,10 @@
       name: 'Adamas 19',
       aliases: ['adamas 19', 'adamas19'],
       summary: 'Adamas 19 is a compact professional teleprompter designed for readable prompting, stable support, and efficient production use in a 19-inch class format.',
+      images: [
+        'assets/adamas19-image-shell.png',
+        'assets/adamas19-image-shell.png'
+      ],
       specification: 'Adamas 19 emphasizes compact professional prompting, stable framing, and dependable readability for controlled production setups.',
       installation: 'Mount Adamas 19 on the support, align the camera and display, then connect the script source and adjust the reading angle.'
     },
@@ -1912,6 +1945,10 @@
       name: 'Adamas 22',
       aliases: ['adamas 22', 'adamas22'],
       summary: 'Adamas 22 is a mid-size teleprompter option built for balanced readability, stable operation, and practical integration into studio and presentation workflows.',
+      images: [
+        'assets/adamas22-image-shell.png',
+        'assets/adamas22-image-shell.png'
+      ],
       specification: 'Adamas 22 focuses on mid-size readability, stable prompting support, and efficient use across presenter and studio environments.',
       installation: 'Attach Adamas 22 to the support system, align the monitor and camera, then connect the prompt source and fine-tune the viewing position.'
     },
@@ -1920,8 +1957,60 @@
       name: 'Adamas 24',
       aliases: ['adamas 24', 'adamas24'],
       summary: 'Adamas 24 is a larger Adamas teleprompter model designed for broad script visibility, dependable support, and professional presentation workflows.',
+      images: [
+        'assets/adamas24-image-shell.png',
+        'assets/adamas24-image-shell.png'
+      ],
       specification: 'Adamas 24 prioritizes larger-format readability, stable support hardware, and a prompting workflow suited to professional use.',
       installation: 'Secure Adamas 24 on the support frame, align the camera and display system, then connect the script source and finalize the prompting angle.'
+    },
+    {
+      key: 'cubic15',
+      name: 'Cubic 15',
+      aliases: ['cubic 15', 'cubic15', 'cubic'],
+      summary: 'Cubic 15 is a portable broadcast teleprompter designed for compact transport, fast setup, and dependable professional prompting in studio or on-location use.',
+      images: [
+        'assets/cubic15-image-shell.png',
+        'assets/cubic15-image-shell.png'
+      ],
+      specification: 'Cubic 15 focuses on portable broadcast prompting, clear 15-inch readability, and reliable field-ready operation.',
+      installation: 'Set up Cubic 15 on the support, align the glass and camera, then connect the script source and adjust the viewing angle before use.'
+    },
+    {
+      key: 'cubic19',
+      name: 'Cubic 19',
+      aliases: ['cubic 19', 'cubic19'],
+      summary: 'Cubic 19 is a professional-grade teleprompter designed for bright broadcast-ready reading, stable operation, and dependable use in studio, classroom, and production environments.',
+      images: [
+        'assets/cubic19-image-shell.png',
+        'assets/cubic19-image-shell.png'
+      ],
+      specification: 'Cubic 19 focuses on bright professional prompting, stable support, and reliable 19-inch-class broadcast use.',
+      installation: 'Set up Cubic 19 on the support frame, align the display glass and camera, then connect the script source and adjust the final prompting angle.'
+    },
+    {
+      key: 'cue10',
+      name: 'Cue 10',
+      aliases: ['cue 10', 'cue10'],
+      summary: 'Cue 10 is a versatile portable teleprompter designed for compact shooting setups, quick operation, and dependable prompting across professional video workflows.',
+      images: [
+        'assets/cue10-image-shell.png',
+        'assets/cue10-image-shell.png'
+      ],
+      specification: 'Cue 10 focuses on portable prompting, adaptable camera support, and efficient, user-friendly operation for flexible production use.',
+      installation: 'Set up Cue 10 on the support, align the display glass and camera, then connect the prompt source and adjust the viewing position before use.'
+    },
+    {
+      key: 'emperor22',
+      name: 'Emperor 22',
+      aliases: ['emperor 22', 'emperor22', 'emperor'],
+      summary: 'Emperor 22 is an elite broadcast teleprompter designed for bright high-profile presentation, confident delivery, and reliable professional use across broadcasting and live presentation environments.',
+      images: [
+        'assets/emperor22-image-shell.png',
+        'assets/emperor22-image-shell.png'
+      ],
+      specification: 'Emperor 22 focuses on high-brightness broadcast prompting, confidence-oriented presentation, and durable professional deployment.',
+      installation: 'Set up Emperor 22 on the stand, align the display glass and camera, then connect the script source and adjust the height and viewing angle before use.'
     },
     {
       key: 'framer24',
@@ -1929,8 +2018,8 @@
       aliases: ['framer 24', 'framer24'],
       summary: 'Framer 24 is a practical teleprompter built for modern camera framing, balanced readability, and steady prompting performance in a 24-inch class setup.',
       images: [
-        'https://static.wixstatic.com/media/d0630a_6b6a273d89914d5b937926477ea10668~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/Fr%2032.png',
-        'https://static.wixstatic.com/media/d0630a_6b6a273d89914d5b937926477ea10668~mv2.png/v1/fill/w_500,h_500,al_c,q_85,enc_avif,quality_auto/Fr%2032.png'
+        'assets/framer24-image-shell.png',
+        'assets/framer24-image-shell.png'
       ],
       specification: 'Framer 24 is designed for framing flexibility, practical production setups, and clear presenter-to-camera eye contact.',
       installation: 'Attach Framer 24 to the support system, align the monitor and camera, then connect the script source before use.'
@@ -1940,6 +2029,10 @@
       name: 'Framer 27',
       aliases: ['framer 27', 'framer27'],
       summary: 'Framer 27 expands the Framer line with a larger viewing area while preserving stable support, framing control, and smooth prompting performance.',
+      images: [
+        'assets/framer27-image-shell.png',
+        'assets/framer27-image-shell.png'
+      ],
       specification: 'Framer 27 focuses on larger-format framing flexibility, stable prompting support, and reliable presenter eye-line control.',
       installation: 'Mount Framer 27 on the support, align the display and camera, then connect the script source and adjust the final viewing angle.'
     },
@@ -1948,6 +2041,10 @@
       name: 'Framer 32',
       aliases: ['framer 32', 'framer32', 'framer series'],
       summary: 'Framer 32 is the largest Framer model, built for spacious script visibility, practical framing control, and dependable professional prompting workflows.',
+      images: [
+        'assets/framer32-image-shell.png',
+        'assets/framer32-image-shell.png'
+      ],
       specification: 'Framer 32 prioritizes large-format framing, readable prompting, and stable presenter-to-camera eye contact in production setups.',
       installation: 'Assemble Framer 32 on the support frame, align the monitor and camera system, then connect the script source and finalize the prompting position.'
     },
@@ -1956,6 +2053,10 @@
       name: 'Folder 22N',
       aliases: ['folder 22n', 'folder22n'],
       summary: 'Folder 22N is a folding teleprompter solution designed for fast deployment, compact transport, and dependable script delivery.',
+      images: [
+        'assets/folder22n-image-shell.png',
+        'assets/folder22n-image-shell.png'
+      ],
       specification: 'Folder 22N prioritizes foldable transport, quick assembly, and a stable prompting frame suited for field production.',
       installation: 'Unfold the frame, secure the monitor and camera position, then connect the script source and adjust the viewing angle.'
     },
@@ -1964,6 +2065,10 @@
       name: 'LessonQ 24',
       aliases: ['lesson q 24', 'lessonq24', 'lessonq 24'],
       summary: 'LessonQ 24 is designed for teaching, lecture capture, and presenter-led educational content where clear eye contact matters in a 24-inch class setup.',
+      images: [
+        'assets/lessonq24-image-shell.png',
+        'assets/lessonq24-image-shell.png'
+      ],
       specification: 'LessonQ 24 focuses on lecture use, steady prompting readability, and a workflow optimized for teaching environments.',
       installation: 'Position LessonQ 24 with your teaching monitor or camera setup, connect the script source, and adjust the prompting height for the presenter.'
     },
@@ -1972,6 +2077,10 @@
       name: 'LessonQ 27',
       aliases: ['lesson q 27', 'lessonq27', 'lessonq 27'],
       summary: 'LessonQ 27 is built for lecture capture and presenter-led educational content that benefits from a larger and more readable prompting area.',
+      images: [
+        'assets/lessonq27-image-shell.png',
+        'assets/lessonq27-image-shell.png'
+      ],
       specification: 'LessonQ 27 prioritizes larger-format lecture readability, stable support, and dependable prompting for teaching environments.',
       installation: 'Mount LessonQ 27 on the support system, align the display and camera, then connect the script source and adjust the presenter eyeline.'
     },
@@ -1980,6 +2089,10 @@
       name: 'LessonQ 32',
       aliases: ['lesson q 32', 'lessonq32', 'lessonq 32'],
       summary: 'LessonQ 32 is a larger teaching teleprompter option designed for lecture delivery where maximum script visibility is important.',
+      images: [
+        'assets/lessonq32-image-shell.png',
+        'assets/lessonq32-image-shell.png'
+      ],
       specification: 'LessonQ 32 emphasizes broad reading visibility, stable classroom or studio support, and a workflow suited to educational production.',
       installation: 'Assemble LessonQ 32 on the support, align the monitor and camera system, then connect the script source and finalize the viewing angle.'
     },
@@ -1988,6 +2101,10 @@
       name: 'LessonQ 43',
       aliases: ['lesson q 43', 'lessonq43', 'lessonq 43'],
       summary: 'LessonQ 43 is the largest LessonQ option for large-scale lecture, training, and presentation workflows that require maximum readability.',
+      images: [
+        'assets/lessonq43-image-shell.png',
+        'assets/lessonq43-image-shell.png'
+      ],
       specification: 'LessonQ 43 is designed around large-format educational prompting, robust support, and dependable readability in demanding teaching environments.',
       installation: 'Secure LessonQ 43 on the support frame, align the display and camera system, then connect the script source and adjust the final reading position.'
     },
@@ -1996,6 +2113,10 @@
       name: 'Mime 24',
       aliases: ['mime 24', 'mime24'],
       summary: 'Mime 24 is a monitor-oriented prompting solution designed for clean display workflows, stable viewing, and practical use in controlled production spaces.',
+      images: [
+        'assets/mime24-image-shell.png',
+        'assets/mime24-image-shell.png'
+      ],
       specification: 'Mime 24 emphasizes clear monitor integration, stable reading visibility, and dependable use in structured production environments.',
       installation: 'Position Mime 24 on the support, route the display feed, secure the hardware, and align the viewing position before use.'
     },
@@ -2004,6 +2125,10 @@
       name: 'Mime 27',
       aliases: ['mime 27', 'mime27'],
       summary: 'Mime 27 provides a larger monitor-based prompting experience while maintaining clean display routing and steady prompting support.',
+      images: [
+        'assets/mime27-image-shell.png',
+        'assets/mime27-image-shell.png'
+      ],
       specification: 'Mime 27 focuses on larger-format monitor prompting, stable support hardware, and clear viewing in controlled production setups.',
       installation: 'Mount Mime 27 on the support system, connect the display feed, then secure and align the viewing position.'
     },
@@ -2012,8 +2137,108 @@
       name: 'Mime 32',
       aliases: ['mime 32', 'mime32', 'mime series'],
       summary: 'Mime 32 is the largest Mime model, built for wide reading visibility, stable display integration, and dependable prompting in professional spaces.',
+      images: [
+        'assets/mime32-image-shell.png',
+        'assets/mime32-image-shell.png'
+      ],
       specification: 'Mime 32 prioritizes broad monitor readability, stable viewing support, and reliable prompting for larger production environments.',
       installation: 'Assemble Mime 32 on the support, route the display connection, secure the hardware, and finalize the reading position.'
+    },
+    {
+      key: 'momo12',
+      name: 'Momo 12',
+      aliases: ['momo 12', 'momo12', 'momo'],
+      summary: 'Momo 12 is a portable professional teleprompter designed for medium-size workflows, flexible device compatibility, and reliable on-location or studio prompting.',
+      images: [
+        'assets/momo12-image-shell.png',
+        'assets/momo12-image-shell.png'
+      ],
+      specification: 'Momo 12 focuses on portable medium-size prompting, flexible tablet and laptop compatibility, and dependable professional use.',
+      installation: 'Set up Momo 12 on the support, align the display glass and camera, then place the script device and adjust the viewing angle before use.'
+    },
+    {
+      key: 'plain14',
+      name: 'Plain 14',
+      aliases: ['plain 14', 'plain14', 'plain'],
+      summary: 'Plain 14 is a portable professional teleprompter designed for medium-size production workflows, cordless operation, and dependable use in studio or field environments.',
+      images: [
+        'assets/plain14-image-shell.png',
+        'assets/plain14-image-shell.png'
+      ],
+      specification: 'Plain 14 focuses on portable professional prompting, cordless flexibility, and clear tempered-glass readability for field and studio use.',
+      installation: 'Set up Plain 14 on the support, align the glass and camera, then secure the system for cordless or portable prompting use.'
+    },
+    {
+      key: 'pop24',
+      name: 'Pop 24',
+      aliases: ['pop 24', 'pop24', 'pop'],
+      summary: 'Pop 24 is a modern Full HD teleprompter designed for creator-ready production, clear script delivery, and durable professional use across varied filming setups.',
+      images: [
+        'assets/pop24-image-shell.png',
+        'assets/pop24-image-shell.png'
+      ],
+      specification: 'Pop 24 focuses on modern Full HD prompting, multi-format support, and durable stable operation for creator and institutional workflows.',
+      installation: 'Set up Pop 24 on the support, align the display glass and camera, then connect the script source and finalize the working position before use.'
+    },
+    {
+      key: 'pop27',
+      name: 'Pop 27',
+      aliases: ['pop 27', 'pop27'],
+      summary: 'Pop 27 is a professional 27-inch teleprompter designed for high-definition prompting, reliable portability, and streamlined production workflows across studio and presentation environments.',
+      images: [
+        'assets/pop27-image-shell.png',
+        'assets/pop27-image-shell.png'
+      ],
+      specification: 'Pop 27 focuses on high-definition prompting, multi-format support, motorized height adjustment, and dependable professional operation.',
+      installation: 'Set up Pop 27 on the support, align the display glass and camera, then connect the script source and finalize the working position before use.'
+    },
+    {
+      key: 'pop32',
+      name: 'Pop 32',
+      aliases: ['pop 32', 'pop32'],
+      summary: 'Pop 32 is a professional 32-inch teleprompter designed for high-definition widescreen prompting, flexible camera support, and dependable production use in broadcast, education, and presentation setups.',
+      images: [
+        'assets/pop32-image-shell.png',
+        'assets/pop32-image-shell.png'
+      ],
+      specification: 'Pop 32 focuses on 32-inch widescreen prompting, user-friendly software support, motorized remote operation, and durable professional workflow performance.',
+      installation: 'Set up Pop 32 on the support, align the display glass and camera, then connect the script source and finalize the working position before use.'
+    },
+    {
+      key: 'ptz24',
+      name: 'PTZ 24',
+      aliases: ['ptz 24', 'ptz24', 'ptz'],
+      summary: 'PTZ 24 is a dedicated PTZ broadcast teleprompter designed for pan-tilt-zoom camera workflows, clear high-visibility prompting, and dependable professional studio use.',
+      images: [
+        'assets/ptz24-image-shell.png',
+        'assets/ptz24-image-shell.png'
+      ],
+      specification: 'PTZ 24 focuses on PTZ camera optimization, large readable prompting, natural eye contact, and durable studio-ready performance.',
+      installation: 'Set up PTZ 24 on the support, align the display glass and PTZ camera, then secure the movement range and finalize the operating position before use.'
+    },
+    {
+      key: 'ptz27',
+      name: 'PTZ 27',
+      aliases: ['ptz 27', 'ptz27'],
+      summary: 'PTZ 27 is a large-screen PTZ broadcast teleprompter designed for pan-tilt-zoom camera setups, bigger readable prompting, and dependable professional use in studios, live events, and corporate production.',
+      images: [
+        'assets/ptz27-image-shell.png',
+        'assets/ptz27-image-shell.png'
+      ],
+      specification: 'PTZ 27 focuses on PTZ system optimization, bigger clear prompting, natural presenter delivery, and durable broadcast-ready performance.',
+      installation: 'Set up PTZ 27 on the support, align the display glass and PTZ camera, then secure the movement range and finalize the operating position before use.'
+    },
+    {
+      key: 'ptz32',
+      name: 'PTZ 32',
+      aliases: ['ptz 32', 'ptz32'],
+      summary: 'PTZ 32 is a flagship PTZ broadcast teleprompter designed for large-scale pan-tilt-zoom productions, maximum readability, and premium studio-ready performance.',
+      images: [
+        'assets/ptz32-image-shell.png',
+        'assets/ptz32-image-shell.png'
+      ],
+      specification: 'PTZ 32 focuses on large-format PTZ prompting, premium camera integration, confident presenter delivery, and heavy-duty studio construction.',
+      installation: 'Set up PTZ 32 on the support, align the display glass and PTZ camera, then secure the movement range and finalize the operating position before use.'
     },
     {
       key: 'speech19',
@@ -2044,6 +2269,10 @@
       name: 'Tab 12',
       aliases: ['tab 12', 'tab12'],
       summary: 'Tab 12 is a compact teleprompter designed around tablet-based prompting for portable and fast-moving content production.',
+      images: [
+        'assets/tab12-image-shell.png',
+        'assets/tab12-image-shell.png'
+      ],
       specification: 'Tab 12 is optimized for tablet prompting, compact transport, and quick deployment in small-space productions.',
       installation: 'Mount the tablet holder, align the camera and reflective glass, then load the script app and adjust the reading angle.'
     },
@@ -2052,6 +2281,10 @@
       name: 'Ultra 43',
       aliases: ['ultra 43', 'ultra43'],
       summary: 'Ultra 43 is a large-format professional teleprompter designed for demanding workflows that need broad readability and robust support.',
+      images: [
+        'assets/ultra43-image-shell.png',
+        'assets/ultra43-image-shell.png'
+      ],
       specification: 'Ultra 43 prioritizes large-screen readability, strong support hardware, and dependable prompting for professional production teams.',
       installation: 'Assemble Ultra 43 on the support frame, secure the display and camera system, then balance the unit and connect the script feed.'
     },
@@ -2060,6 +2293,10 @@
       name: 'Ultra 55',
       aliases: ['ultra 55', 'ultra55', 'ultra series'],
       summary: 'Ultra 55 is the largest Ultra model, built for maximum script visibility, robust support, and high-end studio prompting environments.',
+      images: [
+        'assets/ultra55-image-shell.png',
+        'assets/ultra55-image-shell.png'
+      ],
       specification: 'Ultra 55 emphasizes maximum readability, heavy-duty support, and production reliability in large-format professional setups.',
       installation: 'Secure Ultra 55 on the support structure, align the display and camera system, then connect the prompt feed and finalize the balance.'
     },
@@ -2068,6 +2305,10 @@
       name: 'Flex 15',
       aliases: ['flex 15', 'flex15'],
       summary: 'Flex 15 is a flexible mid-size prompting solution designed for adaptable camera setups and efficient production use.',
+      images: [
+        'assets/flex15-image-shell.png',
+        'assets/flex15-image-shell.png'
+      ],
       specification: 'Flex 15 is centered on flexible mounting, mid-size readability, and efficient integration with standard video workflows.',
       installation: 'Attach Flex 15 to the support, align the display and camera, then connect the script source and fine-tune the framing.'
     },
@@ -2076,6 +2317,10 @@
       name: 'Rotunda 15',
       aliases: ['rotunda 15', 'rotunda15'],
       summary: 'Rotunda 15 is a compact professional teleprompter designed for smooth operation and neat integration into creator setups.',
+      images: [
+        'assets/rotunda15-image-shell.png',
+        'assets/rotunda15-image-shell.png'
+      ],
       specification: 'Rotunda 15 focuses on compact professional prompting, balanced readability, and simple integration into content rigs.',
       installation: 'Set the Rotunda 15 frame on the support, align the camera, then connect the display or script source and adjust the eyeline.'
     },
@@ -2084,8 +2329,96 @@
       name: 'Ollesson 18',
       aliases: ['olleson 18', 'olleson18', 'ollesson 18', 'ollesson18'],
       summary: 'Ollesson 18 is an 18-inch class prompting solution made for presenters who need a larger script view with dependable setup.',
+      images: [
+        'assets/ollesson18-image-shell.png',
+        'assets/ollesson18-image-shell.png'
+      ],
       specification: 'Ollesson 18 is designed around a larger reading area, stable support, and reliable prompting for presentation environments.',
       installation: 'Assemble the Ollesson 18 frame, secure the monitor and camera, then connect the prompt source and finalize the viewing angle.'
+    },
+    {
+      key: 'spot18',
+      name: 'Spot 18',
+      aliases: ['spot 18', 'spot18', 'spot'],
+      summary: 'Spot 18 is a large-view portable teleprompter designed for foldable field use, smooth setup, and dependable prompting across studio and on-location workflows.',
+      images: [
+        'assets/spot18-image-shell.png',
+        'assets/spot18-image-shell.png'
+      ],
+      specification: 'Spot 18 focuses on foldable portability, widescreen prompting, laptop and tablet compatibility, and reliable professional use.',
+      installation: 'Set up Spot 18 on the support, align the display glass and camera, then connect the prompt source and finalize the viewing position before use.'
+    },
+    {
+      key: 'theGreat22',
+      name: 'The Great 22',
+      aliases: ['the great 22', 'thegreat22', 'great 22', 'great22'],
+      summary: 'The Great 22 is a premium professional teleprompter designed for bright broadcast-grade prompting, confident presenter delivery, and dependable travel-ready performance.',
+      images: [
+        'assets/the-great22-image-shell.png',
+        'assets/the-great22-image-shell.png'
+      ],
+      specification: 'The Great 22 focuses on broadcast-grade readability, remote height control, durable transport readiness, and smooth professional operation.',
+      installation: 'Set up The Great 22 on the support, align the display glass and camera, then connect the control system and finalize the working height before use.'
+    },
+    {
+      key: 'theGreat24',
+      name: 'The Great 24',
+      aliases: ['the great 24', 'thegreat24', 'great 24', 'great24'],
+      summary: 'The Great 24 is a premium event teleprompter designed for bright event-ready prompting, versatile connectivity, and dependable travel-ready performance in live presentation setups.',
+      images: [
+        'assets/the-great24-image-shell.png',
+        'assets/the-great24-image-shell.png'
+      ],
+      specification: 'The Great 24 focuses on high-brightness event prompting, wireless height control, durable transport readiness, and smooth professional operation.',
+      installation: 'Set up The Great 24 on the support, align the display glass and camera, then connect the control system and finalize the working height before use.'
+    },
+    {
+      key: 'wide22',
+      name: 'Wide 22',
+      aliases: ['wide 22', 'wide22'],
+      summary: 'Wide 22 is a professional HD teleprompter designed for slim broadcast-ready workflows, reliable field use, and clear prompting across studio and institutional production setups.',
+      images: [
+        'assets/wide22-image-shell.png',
+        'assets/wide22-image-shell.png'
+      ],
+      specification: 'Wide 22 focuses on slim broadcast-ready prompting, seamless software workflow, travel-ready durability, and dependable professional production use.',
+      installation: 'Set up Wide 22 on the support, align the display glass and camera, then connect the prompt source and finalize the viewing position before use.'
+    },
+    {
+      key: 'wide24',
+      name: 'Wide 24',
+      aliases: ['wide 24', 'wide24'],
+      summary: 'Wide 24 is a professional broadcast teleprompter designed for bright broadcast-ready prompting, modular field portability, and dependable use across studio and network production setups.',
+      images: [
+        'assets/wide24-image-shell.png',
+        'assets/wide24-image-shell.png'
+      ],
+      specification: 'Wide 24 focuses on broadcast-ready visibility, seamless software workflow, modular portability, and stable professional camera support.',
+      installation: 'Set up Wide 24 on the support, align the display glass and camera, then connect the prompt source and finalize the viewing position before use.'
+    },
+    {
+      key: 'wide27',
+      name: 'Wide 27',
+      aliases: ['wide 27', 'wide27'],
+      summary: 'Wide 27 is a high-performance professional teleprompter designed for large high-brightness prompting, reliable long-term use, and streamlined workflows across professional environments.',
+      images: [
+        'assets/wide27-image-shell.png',
+        'assets/wide27-image-shell.png'
+      ],
+      specification: 'Wide 27 focuses on high-brightness visibility, seamless software workflow, user-friendly control, and dependable professional production use.',
+      installation: 'Set up Wide 27 on the support, align the display glass and camera, then connect the prompt source and finalize the viewing position before use.'
+    },
+    {
+      key: 'wide32',
+      name: 'Wide 32',
+      aliases: ['wide 32', 'wide32'],
+      summary: 'Wide 32 is a high-performance professional teleprompter designed for large high-brightness prompting, dependable long-term use, and efficient workflows across demanding professional environments.',
+      images: [
+        'assets/wide32-image-shell.png',
+        'assets/wide32-image-shell.png'
+      ],
+      specification: 'Wide 32 focuses on high-brightness visibility, seamless software workflow, user-friendly control, and dependable professional production use.',
+      installation: 'Set up Wide 32 on the support, align the display glass and camera, then connect the prompt source and finalize the viewing position before use.'
     },
     {
       key: 'plate',
@@ -2108,6 +2441,10 @@
       name: 'EP 30K',
       aliases: ['ep 30k', 'ep30k'],
       summary: 'EP 30K is an electric pedestal model designed for smooth height control, steady operation, and reliable support in studio production workflows.',
+      images: [
+        'assets/ep30k-image-shell.png',
+        'assets/ep30k-image-shell.png'
+      ],
       specification: 'EP 30K emphasizes controlled motorized lift movement, stable equipment support, and dependable day-to-day studio operation.',
       installation: 'Set EP 30K in position, mount the compatible equipment, connect power, and test the lift range before production use.'
     },
@@ -2116,6 +2453,10 @@
       name: 'EP 40K',
       aliases: ['ep 40k', 'ep40k'],
       summary: 'EP 40K is a motorized pedestal solution built for controlled height adjustment and stable studio support across professional workflows.',
+      images: [
+        'assets/ep40k-image-shell.png',
+        'assets/ep40k-image-shell.png'
+      ],
       specification: 'EP 40K focuses on smooth pedestal movement, stable mounted support, and practical use in demanding studio environments.',
       installation: 'Place EP 40K on the studio floor, secure the mounted system, connect power, and verify balanced lift movement.'
     },
@@ -2124,6 +2465,10 @@
       name: 'EP 50K',
       aliases: ['ep 50k', 'ep50k'],
       summary: 'EP 50K is an electric pedestal model intended for steady vertical movement, reliable support, and professional studio equipment handling.',
+      images: [
+        'assets/ep50k-image-shell.png',
+        'assets/ep50k-image-shell.png'
+      ],
       specification: 'EP 50K prioritizes controlled elevation, stable support hardware, and dependable operation for professional studio setups.',
       installation: 'Position EP 50K, attach the compatible mounted equipment, power the system, and confirm smooth lift performance.'
     },
@@ -2132,8 +2477,24 @@
       name: 'EP 60K',
       aliases: ['ep 60k', 'ep60k'],
       summary: 'EP 60K is a high-capability electric pedestal designed for smooth lift adjustment, stable support, and reliable studio production performance.',
+      images: [
+        'assets/ep60k-image-shell.png',
+        'assets/ep60k-image-shell.png'
+      ],
       specification: 'EP 60K emphasizes strong motorized support, steady vertical control, and dependable use in heavier-duty studio workflows.',
       installation: 'Install EP 60K in the intended studio position, secure the mounted system, connect power, and test the full movement range before operation.'
+    },
+    {
+      key: 'ep80k',
+      name: 'EP 80K',
+      aliases: ['ep 80k', 'ep80k'],
+      summary: 'EP 80K is a flagship heavy-duty broadcast pedestal designed for maximum stability, strong load support, and dependable performance in large-scale studio environments.',
+      images: [
+        'assets/ep80k-image-shell.png',
+        'assets/ep80k-image-shell.png'
+      ],
+      specification: 'EP 80K focuses on flagship heavy-duty support, broadcast-grade stability, and reliable large-scale studio deployment.',
+      installation: 'Install EP 80K on the studio floor, secure the mounted system, connect power, and test movement and locking behavior before production.'
     }
   ];
 
@@ -3206,6 +3567,7 @@
       'image-card',
       'info-card-empty-state',
       'no-match-info-state',
+      'cue-series-intro-card',
       'clone16-intro-info-state',
       'clone16-readmore-info-state',
       'clone16-images-info-state'
@@ -3769,12 +4131,24 @@
 
   const PRODUCT_SHOWCASE_META = {
     clone16: 'Clone 16 | Portable HDMI Teleprompter',
+    cue10: 'Cue 10 | Portable Cue Series Prompt Line',
     cue24: 'Cue 24 | Cue Series Teleprompter',
     cue27: 'Cue 27 | Cue Series Teleprompter',
     cue32: 'Cue 32 | Cue Series Teleprompter',
+    emperor22: 'Emperor 22 | Broadcast Prompt Line',
     adamas19: 'Adamas 19 | Adamas Prompt Line',
     adamas22: 'Adamas 22 | Adamas Prompt Line',
     adamas24: 'Adamas 24 | Adamas Prompt Line',
+    cubic15: 'Cubic 15 | Broadcast Prompt Line',
+    cubic19: 'Cubic 19 | Broadcast Prompt Line',
+    momo12: 'Momo 12 | Portable Prompt Line',
+    plain14: 'Plain 14 | Portable Prompt Line',
+    pop24: 'Pop 24 | Modern Prompt Line',
+    pop27: 'Pop 27 | Modern Prompt Line',
+    pop32: 'Pop 32 | Modern Prompt Line',
+    ptz24: 'PTZ 24 | PTZ Prompt Line',
+    ptz27: 'PTZ 27 | PTZ Prompt Line',
+    ptz32: 'PTZ 32 | PTZ Prompt Line',
     framer24: 'Framer 24 | Framer Prompt Line',
     framer27: 'Framer 27 | Framer Prompt Line',
     framer32: 'Framer 32 | Framer Prompt Line',
@@ -3795,12 +4169,20 @@
     flex15: 'Flexible Mid-size Prompt System',
     rotunda15: 'Compact Creator Prompt System',
     olleson18: '18-inch Presentation Prompt System',
+    spot18: 'Spot 18 | Portable Prompt Line',
+    theGreat22: 'The Great 22 | Premium Prompt Line',
+    theGreat24: 'The Great 24 | Premium Prompt Line',
+    wide22: 'Wide 22 | Professional Prompt Line',
+    wide24: 'Wide 24 | Professional Prompt Line',
+    wide27: 'Wide 27 | Professional Prompt Line',
+    wide32: 'Wide 32 | Professional Prompt Line',
     plate: 'Mounting and Support Component',
     electricPedestal: 'Electric Pedestal | Motorized Studio Support',
     ep30k: 'EP 30K | Electric Pedestal Line',
     ep40k: 'EP 40K | Electric Pedestal Line',
     ep50k: 'EP 50K | Electric Pedestal Line',
-    ep60k: 'EP 60K | Electric Pedestal Line'
+    ep60k: 'EP 60K | Electric Pedestal Line',
+    ep80k: 'EP 80K | Electric Pedestal Line'
   };
 
   const PRODUCT_INTRO_IMAGE_MAP = {
@@ -3808,6 +4190,10 @@
       src: 'assets/Tab 12 - Intro.png',
       alt: 'Tab 12 - Intro'
     }
+  };
+  const CUE_SERIES_OVERVIEW_IMAGE = {
+    src: 'assets/cue series - image.png',
+    alt: 'Cue Series infographic'
   };
 
   function getProductSummaryStripText(product) {
@@ -3826,8 +4212,17 @@
   function getProductShowcaseHtml(product) {
     const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
     const showcaseMeta = PRODUCT_SHOWCASE_META[product.key] || '';
+    const isImageOnlyShowcase = product.key === 'clone16' || product.key === 'cue10' || product.key === 'cue24' || product.key === 'cue27' || product.key === 'tab12' || product.key === 'cue32' || product.key === 'emperor22' || product.key === 'adamas19' || product.key === 'adamas22' || product.key === 'adamas24' || product.key === 'cubic15' || product.key === 'cubic19' || product.key === 'momo12' || product.key === 'plain14' || product.key === 'pop24' || product.key === 'pop27' || product.key === 'pop32' || product.key === 'ptz24' || product.key === 'ptz27' || product.key === 'ptz32' || product.key === 'rotunda15' || product.key === 'spot18' || product.key === 'theGreat22' || product.key === 'theGreat24' || product.key === 'ultra43' || product.key === 'ultra55' || product.key === 'wide22' || product.key === 'wide24' || product.key === 'wide27' || product.key === 'wide32' || product.key === 'ep30k' || product.key === 'ep40k' || product.key === 'ep50k' || product.key === 'ep60k' || product.key === 'ep80k' || product.key === 'flex15' || product.key === 'folder22n' || product.key === 'framer24' || product.key === 'framer27' || product.key === 'framer32' || product.key === 'lessonQ24' || product.key === 'lessonQ27' || product.key === 'lessonQ32' || product.key === 'lessonQ43' || product.key === 'mime24' || product.key === 'mime27' || product.key === 'mime32' || product.key === 'olleson18';
+    const isClone16Showcase = product.key === 'clone16';
+    const isAdamas19Showcase = product.key === 'adamas19';
+    const showcaseClass = isImageOnlyShowcase
+      ? `cue-series-showcase cue-series-showcase-image-only${isClone16Showcase ? ' clone16-showcase-fit' : ''}${isAdamas19Showcase ? ' adamas19-showcase-fit' : ''}`
+      : 'cue-series-showcase';
+    const shellClass = `cue-series-image-shell cue-series-image-shell-hero${isClone16Showcase ? ' clone16-showcase-shell' : ''}${isAdamas19Showcase ? ' adamas19-showcase-shell' : ''}`;
+    const imageClass = `cue-series-image cue-series-image-hero${isClone16Showcase ? ' clone16-showcase-image' : ''}${isAdamas19Showcase ? ' adamas19-showcase-image' : ''}`;
     return `
-      <section class="cue-series-showcase" aria-label="Cue Series showcase">
+      <section class="${showcaseClass}" aria-label="Cue Series showcase">
+        ${isImageOnlyShowcase ? '' : `
         <div class="cue-series-showcase-copy">
           <p class="cue-series-kicker">Our Top Picks For You</p>
           <p class="cue-series-subtitle">Explore Our Latest Recommended Products</p>
@@ -3835,14 +4230,38 @@
           <h4 class="cue-series-title">${escapeHtml(product.name)}</h4>
           ${showcaseMeta ? `<p class="cue-series-models">${escapeHtml(showcaseMeta)}</p>` : ''}
           <div class="cue-series-summary">${summaryHtml}</div>
-        </div>
+        </div>`}
         <div class="cue-series-showcase-visual">
-          <div class="cue-series-image-shell cue-series-image-shell-hero">
-            <img src="${product.images[0]}" alt="${escapeHtml(product.name)} product image" class="cue-series-image cue-series-image-hero" />
+          <div class="${shellClass}">
+            <img src="${product.images[0]}" alt="${escapeHtml(product.name)} product image" class="${imageClass}" />
           </div>
         </div>
       </section>
     `;
+  }
+
+  function renderProductShowcaseInfoCard(product) {
+    if (!product || !infoCard || !product.images?.[0]) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-show-scrollbar',
+      'info-card-slide-enter',
+      'cue-series-intro-card',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state',
+      'clone16-spec-image-state'
+    );
+    infoCard.innerHTML = getProductShowcaseHtml(product);
+    playInfoCardAnimation('slide');
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
   }
 
   const scriptedFaq = [
@@ -3869,6 +4288,18 @@
         'about crystal prompter'
       ],
       keywords: ['about', 'company', 'us', 'crystal', 'prompter']
+    },
+    {
+      id: 'cue_series',
+      label: 'Cue Series',
+      phrases: [
+        'cue series',
+        'show cue series',
+        'show me cue series',
+        'what is cue series',
+        'tell me about cue series'
+      ],
+      keywords: ['cue', 'series']
     },
     {
       id: 'product_list',
@@ -4430,7 +4861,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'cue-series-intro-card', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
     const includeSocial = Boolean(options.includeSocial);
     const animation = options.animation || '';
     const contentClass = animation === 'slide' ? ' info-card-content-slide-enter' : '';
@@ -4475,6 +4906,95 @@
     infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function showCueSeriesIntroInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    const cueSeriesIntroItems = [
+      {
+        key: 'cue24',
+        badge: '24',
+        name: 'Cue 24',
+        subtitle: 'Mid-Size High-Brightness Teleprompter',
+        image: PRODUCTS.cue24?.images?.[0] || 'assets/Cue Series - Intro.png'
+      },
+      {
+        key: 'cue27',
+        badge: '27',
+        name: 'Cue 27',
+        subtitle: 'High-Brightness Mid-Size Teleprompter',
+        image: 'https://static.wixstatic.com/media/6e449d_b3d6449506c24075a1cf7485f48ebe1c~mv2.png/v1/crop/x_330,y_0,w_4251,h_3306/fill/w_781,h_607,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2027_2.png'
+      },
+      {
+        key: 'cue32',
+        badge: '32',
+        name: 'Cue 32',
+        subtitle: 'Large-Format High-Brightness Teleprompter',
+        image: 'https://static.wixstatic.com/media/6e449d_94b7561e1451492983fdf0eba0de63f6~mv2.png/v1/crop/x_0,y_402,w_2402,h_1818/fill/w_856,h_648,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032_58.png'
+      }
+    ];
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.add('info-card-empty-state');
+    infoCard.innerHTML = `
+      <div class="info-card-empty-shell cue-series-empty-shell">
+        <div class="cue-series-intro-top-row">
+          <div class="cue-series-intro-popup cue-series-intro-popup-primary" role="presentation" aria-label="Cue Series intro">
+            <strong class="cue-series-intro-popup-title">Crystal Prompter</strong>
+            <span class="cue-series-intro-popup-subtitle">Built for Every Level of Production</span>
+          </div>
+          <div class="cue-series-icon-popup" role="presentation" aria-label="Cue Series idea icon">
+            <svg class="cue-series-icon-popup-art" viewBox="0 0 84 84" aria-hidden="true" focusable="false">
+              <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path class="cue-series-icon-ray" d="M42 8v10" />
+                <path class="cue-series-icon-ray" d="M19 18l6.5 6.5" />
+                <path class="cue-series-icon-ray" d="M65 18l-6.5 6.5" />
+                <path class="cue-series-icon-ray" d="M10 42h10" />
+                <path class="cue-series-icon-ray" d="M64 42h10" />
+                <path class="cue-series-icon-ray" d="M19 66l6.5-6.5" />
+                <path class="cue-series-icon-ray" d="M65 66l-6.5-6.5" />
+                <path class="cue-series-icon-bulb" d="M42 18c-11.046 0-20 8.954-20 20 0 8.073 4.786 15.017 11.676 18.16 1.601.73 2.824 2.225 2.824 3.985V62h10.999v-1.855c0-1.76 1.223-3.255 2.824-3.985C57.214 53.017 62 46.073 62 38c0-11.046-8.954-20-20-20Z" />
+                <path class="cue-series-icon-base" d="M35.5 66h13M36.8 71h10.4" />
+                <path class="cue-series-icon-filament" d="M37.5 40.5c1.55 2.333 3.05 3.5 4.5 3.5s2.95-1.167 4.5-3.5" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="cue-series-intro-pill" role="presentation" aria-label="Cue Series message">
+          <span class="cue-series-intro-pill-label">Teleprompters for All Production Needs</span>
+        </div>
+        <div class="cue-series-model-popup" role="presentation" aria-label="Cue Series product lineup">
+          ${cueSeriesIntroItems.map((item, index) => `
+            <article
+              class="cue-series-model-card"
+              data-product="${escapeHtml(item.key)}"
+              tabindex="0"
+              role="button"
+              aria-label="Open ${escapeHtml(item.name)} details"
+              style="--cue-series-model-delay:${1.52 + (index * 0.12)}s;"
+            >
+              <span class="cue-series-model-badge">${escapeHtml(item.badge)}</span>
+              <div class="cue-series-model-media">
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)} preview" />
+              </div>
+              <div class="cue-series-model-copy">
+                <strong>${escapeHtml(item.name)}</strong>
+                <span>${escapeHtml(item.subtitle)}</span>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+        <div class="cue-series-bottom-infographic" role="presentation" aria-label="Cue Series production infographic">
+          <img src="assets/cue series infographic 4.png" alt="Cue Series production workflow infographic" />
+        </div>
+      </div>
+    `;
+    bindCueSeriesModelCards(infoCard);
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
   }
@@ -5360,15 +5880,50 @@
     });
   }
 
+  function getCueSeriesModelCards(root = document) {
+    return Array.from(root.querySelectorAll('.cue-series-model-card[data-product]'));
+  }
+
+  function bindCueSeriesModelCards(root = document) {
+    const cards = getCueSeriesModelCards(root);
+    cards.forEach((card) => {
+      if (card.dataset.bound === 'true') return;
+      card.dataset.bound = 'true';
+      const activateCard = () => {
+        const productKey = card.dataset.product || '';
+        if (!productKey) return;
+        selectProduct(productKey, { showQuickActions: true });
+      };
+      card.addEventListener('click', activateCard);
+      card.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        activateCard();
+      });
+    });
+  }
+
   function getProductSelectionBadge(productKey, productName) {
     const badgeMap = {
       clone16: 'C16',
+      cue10: 'C10',
       cue24: 'C24',
       cue27: 'C27',
       cue32: 'C32',
+      emperor22: 'E22',
       adamas19: 'A19',
       adamas22: 'A22',
       adamas24: 'A24',
+      cubic15: 'CB',
+      cubic19: 'C19',
+      momo12: 'M12',
+      plain14: 'P14',
+      pop24: 'P24',
+      pop27: 'P27',
+      pop32: 'P32',
+      ptz24: 'PTZ',
+      ptz27: 'PTZ',
+      ptz32: 'PTZ',
       framer24: 'F24',
       framer27: 'F27',
       framer32: 'F32',
@@ -5389,12 +5944,20 @@
       flex15: 'F15',
       rotunda15: 'R15',
       olleson18: 'O18',
+      spot18: 'S18',
+      theGreat22: 'G22',
+      theGreat24: 'G24',
+      wide22: 'W22',
+      wide24: 'W24',
+      wide27: 'W27',
+      wide32: 'W32',
       plate: 'PL',
       electricPedestal: 'EP',
       ep30k: 'E30',
       ep40k: 'E40',
       ep50k: 'E50',
-      ep60k: 'E60'
+      ep60k: 'E60',
+      ep80k: 'E80'
     };
     return badgeMap[productKey] || productName.slice(0, 2).toUpperCase();
   }
@@ -5594,6 +6157,74 @@
     return PRODUCTS[currentProductKey] || PRODUCTS.clone16;
   }
 
+  function getCueSeriesOverviewHtml() {
+    const cueSeriesItems = [
+      {
+        name: 'Cue 24',
+        subtitle: '23.8-inch class prompt solution',
+        image: PRODUCTS.cue24?.images?.[0] || CUE_SERIES_OVERVIEW_IMAGE.src
+      },
+      {
+        name: 'Cue 27',
+        subtitle: 'Larger-format prompting for studios',
+        image: 'assets/Cue Series - Intro.png'
+      },
+      {
+        name: 'Cue 32',
+        subtitle: 'Wide reading area for demanding setups',
+        image: CUE_SERIES_OVERVIEW_IMAGE.src
+      }
+    ];
+
+    return `
+      <section class="cue-series-overview-card cue-series-overview-animated" aria-label="Cue Series overview">
+        <div class="cue-series-overview-copy">
+          <span class="cue-series-overview-kicker">Crystal Prompter Lineup</span>
+          <h3 class="cue-series-overview-title">Cue Series</h3>
+          <p class="cue-series-overview-lead">Professional teleprompter options built for clear prompting, studio-ready stability, and flexible production workflows.</p>
+        </div>
+        <div class="cue-series-overview-stage">
+          <article class="cue-series-overview-hero">
+            <div class="cue-series-overview-hero-media">
+              <img src="${escapeHtml(CUE_SERIES_OVERVIEW_IMAGE.src)}" alt="${escapeHtml(CUE_SERIES_OVERVIEW_IMAGE.alt)}" />
+            </div>
+            <div class="cue-series-overview-hero-copy">
+              <span class="cue-series-overview-hero-label">Series Overview</span>
+              <p>Explore the Cue family with model options sized for presentation rooms, online teaching, and broadcast-focused setups.</p>
+            </div>
+          </article>
+          <div class="cue-series-overview-grid">
+            ${cueSeriesItems.map((item, index) => `
+              <article class="cue-series-overview-tile" style="--cue-series-delay:${index + 1};">
+                <div class="cue-series-overview-tile-media">
+                  <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)} preview" />
+                </div>
+                <div class="cue-series-overview-tile-copy">
+                  <strong>${escapeHtml(item.name)}</strong>
+                  <span>${escapeHtml(item.subtitle)}</span>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderCueSeriesOverviewInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.add('cue-series-intro-card');
+    infoCard.innerHTML = getCueSeriesOverviewHtml();
+    playInfoCardAnimation('slide');
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
   function renderImageCard(card, src, alt) {
     if (!card) return;
     card.className = 'info-card image-card';
@@ -5775,7 +6406,9 @@
     showMergedEmptyBottomCard();
     setSubtitleStripText(getProductSummaryStripText(product));
     if (productKey === 'clone16') {
-      renderClone16IntroInfoCard();
+      renderProductShowcaseInfoCard(product);
+    } else if (product.images?.[0]) {
+      renderProductShowcaseInfoCard(product);
     } else {
       clearInfoCard();
     }
@@ -5912,6 +6545,19 @@
           : {};
       speakAssistantText(buildSpokenResponse(match), speechOptions);
       return;
+    }
+    if (match.id === 'cue_series') {
+      setCueSeriesMode(true);
+      setClone16ActionLayout(false);
+      setCardsPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      clearCustomCenterPanel();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      showMergedEmptyBottomCard();
+      setSubtitleStripText('Cue Series infographic overview');
+      showCueSeriesIntroInfoCard();
     }
     if (match.id === 'about_us') {
       applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false });
@@ -6153,6 +6799,7 @@
       'image-card',
       'info-card-empty-state',
       'no-match-info-state',
+      'cue-series-intro-card',
       'clone16-intro-info-state',
       'clone16-readmore-info-state',
       'clone16-images-info-state'
@@ -6174,6 +6821,7 @@
       'image-card',
       'info-card-empty-state',
       'no-match-info-state',
+      'cue-series-intro-card',
       'clone16-intro-info-state',
       'clone16-readmore-info-state',
       'clone16-images-info-state'
@@ -6298,6 +6946,10 @@
 
     if (match.id === 'product_list') {
       return 'Please choose one of the products to continue.';
+    }
+
+    if (match.id === 'cue_series') {
+      return 'Cue Series infographic is now on screen.';
     }
 
     if (match.id === 'images') {
@@ -6485,6 +7137,16 @@
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
 
+    const cueSeriesShortcutMatch = matchScriptedQuestion(msg);
+    if (cueSeriesShortcutMatch?.id === 'cue_series') {
+      logChunkDebug('scripted-shortcut-selected', {
+        matchId: cueSeriesShortcutMatch.id,
+        message: msg
+      });
+      applyMatchedResponse(cueSeriesShortcutMatch);
+      return;
+    }
+
     const productSlugForApi = detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '');
 
     // Typed chat input should prefer the API chat route so the chunked avatar flow can start as soon as chunk 1 is ready.
@@ -6575,24 +7237,39 @@
   }
 
   function setLauncherHintDismissed(dismissed) {
+    launcherHintDismissed = dismissed;
     document.body.classList.toggle('launcher-hint-dismissed', dismissed);
     if (launcherMessage) {
       launcherMessage.setAttribute('aria-hidden', dismissed ? 'true' : 'false');
     }
-    writeLocalPreference(ASSISTANT_HINT_DISMISSED_KEY, dismissed ? '1' : '0');
   }
 
-  function setAssistantShellState(isOpen, options = {}) {
-    const shouldPersist = options.persist !== false;
+  function stopLauncherHintCycle() {
+    if (!launcherHintCycleTimer) return;
+    window.clearInterval(launcherHintCycleTimer);
+    launcherHintCycleTimer = null;
+  }
+
+  function startLauncherHintCycle() {
+    stopLauncherHintCycle();
+    if (!launcherMessage || document.body.classList.contains('assistant-open')) return;
+
+    setLauncherHintDismissed(false);
+    launcherHintCycleTimer = window.setInterval(() => {
+      if (document.body.classList.contains('assistant-open')) {
+        stopLauncherHintCycle();
+        return;
+      }
+      setLauncherHintDismissed(!launcherHintDismissed);
+    }, 3000);
+  }
+
+  function setAssistantShellState(isOpen) {
     document.body.classList.toggle('assistant-open', isOpen);
     document.body.classList.toggle('assistant-closed', !isOpen);
 
     if (assistantLauncher) {
       assistantLauncher.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
-    }
-
-    if (shouldPersist) {
-      writeLocalPreference(ASSISTANT_SHELL_STATE_KEY, isOpen ? 'open' : 'closed');
     }
   }
 
@@ -6638,6 +7315,7 @@
   }
 
   function openAssistant() {
+    stopLauncherHintCycle();
     setAssistantShellState(true);
     setLauncherHintDismissed(true);
     window.requestAnimationFrame(function () {
@@ -6650,6 +7328,7 @@
 
   function minimizeAssistant() {
     setAssistantShellState(false);
+    startLauncherHintCycle();
     closeSettings();
   }
 
@@ -6682,8 +7361,8 @@
     }
   });
 
-  setAssistantShellState(readLocalPreference(ASSISTANT_SHELL_STATE_KEY, 'closed') === 'open', { persist: false });
-  setLauncherHintDismissed(readLocalPreference(ASSISTANT_HINT_DISMISSED_KEY, '0') === '1');
+  setAssistantShellState(false);
+  startLauncherHintCycle();
 
   resetInfoCardAutoScroll();
   renderNoMatchPicker();

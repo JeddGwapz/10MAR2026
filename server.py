@@ -26,6 +26,7 @@ DEFAULT_PORT = 8000
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 GENERATED_AVATAR_DIR = os.path.join(ROOT_DIR, "generated", "avatar")
 DEFAULT_DATABASE_URL = f"postgresql://{getpass.getuser()}@localhost:5432/crystal_prompter"
+DEFAULT_DID_BASE_URL = os.environ.get("D_ID_BASE_URL", "").strip() or "https://api.d-id.com"
 DEFAULT_OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "").strip() or "gpt-5-mini"
 DEFAULT_OPENAI_TTS_MODEL = os.environ.get("OPENAI_TTS_MODEL", "").strip() or "gpt-4o-mini-tts"
 DEFAULT_OPENAI_TTS_VOICE = os.environ.get("OPENAI_TTS_VOICE", "").strip() or "coral"
@@ -150,6 +151,12 @@ class AppHandler(SimpleHTTPRequestHandler):
                     "productSlug": product_slug or None,
                 })
 
+            if path == "/api/did/talks/status":
+                talk_id = clean_query_value(query.get("talk_id", [""])[0])
+                if not talk_id:
+                    return self._send_json_error(HTTPStatus.BAD_REQUEST, "talk_id is required")
+                return self._send_json(get_did_talk_status(talk_id))
+
             product_route = parse_product_route(path)
             if product_route:
                 product_slug, product_subresource = product_route
@@ -172,7 +179,7 @@ class AppHandler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        if self.path not in {"/api/tts", "/api/speak", "/api/chat", "/api/avatar-speak"}:
+        if self.path not in {"/api/tts", "/api/speak", "/api/chat", "/api/avatar-speak", "/api/did/talks/create"}:
             self.send_error(HTTPStatus.NOT_FOUND, "Not found")
             return
 
@@ -205,6 +212,31 @@ class AppHandler(SimpleHTTPRequestHandler):
                         history=history,
                         language=language,
                         voice=voice,
+                    )
+                )
+            except Exception as error:
+                return self._send_json_error(HTTPStatus.SERVICE_UNAVAILABLE, str(error))
+
+        if self.path == "/api/did/talks/create":
+            try:
+                source_url = clean_query_value(payload.get("source_url", ""))
+                text = clean_query_value(payload.get("text", ""))
+                voice_id = clean_query_value(payload.get("voice_id", "")) or "en-US-JennyNeural"
+                provider_type = clean_query_value(payload.get("provider_type", "")) or "microsoft"
+                config = payload.get("config")
+                if not source_url:
+                    return self._send_json_error(HTTPStatus.BAD_REQUEST, "source_url is required")
+                if not text:
+                    return self._send_json_error(HTTPStatus.BAD_REQUEST, "text is required")
+                if config is not None and not isinstance(config, dict):
+                    return self._send_json_error(HTTPStatus.BAD_REQUEST, "config must be an object")
+                return self._send_json(
+                    create_did_talk(
+                        source_url=source_url,
+                        text=text,
+                        voice_id=voice_id,
+                        provider_type=provider_type,
+                        config=config or None,
                     )
                 )
             except Exception as error:
@@ -552,6 +584,14 @@ def get_openai_api_key():
     return os.environ.get("OPENAI_API_KEY", "").strip()
 
 
+def get_did_api_key():
+    return os.environ.get("D_ID_API_KEY", "").strip()
+
+
+def get_did_base_url():
+    return os.environ.get("D_ID_BASE_URL", "").strip() or DEFAULT_DID_BASE_URL
+
+
 def get_openai_model():
     return os.environ.get("OPENAI_MODEL", "").strip() or DEFAULT_OPENAI_MODEL
 
@@ -633,6 +673,8 @@ def get_health_payload():
         "status": "ok",
         "rhubarbAvailable": bool(find_rhubarb_binary()),
         "databaseConfigured": bool(get_database_url()),
+        "didConfigured": bool(get_did_api_key()),
+        "didBaseUrl": get_did_base_url(),
         "openaiConfigured": bool(get_openai_api_key()),
         "openaiModel": get_openai_model(),
         "avatarConfigured": is_avatar_generation_configured(),
@@ -663,6 +705,79 @@ def parse_product_route(path):
     if len(parts) == 4 and parts[:2] == ["api", "products"] and parts[3] == "faqs":
         return parts[2], "faqs"
     return None
+
+
+def did_api_request(method, path, *, payload=None, timeout=90):
+    api_key = get_did_api_key()
+    if not api_key:
+        raise RuntimeError("D_ID_API_KEY is required")
+
+    base_url = get_did_base_url().rstrip("/")
+    request_url = f"{base_url}{path}"
+    encoded_body = None if payload is None else json.dumps(payload).encode("utf-8")
+    headers = {
+        "Authorization": f"Basic {api_key}",
+        "Accept": "application/json",
+    }
+    if encoded_body is not None:
+        headers["Content-Type"] = "application/json"
+
+    request = urllib_request.Request(
+        request_url,
+        data=encoded_body,
+        headers=headers,
+        method=method,
+    )
+
+    try:
+        with urllib_request.urlopen(request, timeout=timeout) as response:
+            raw_body = response.read().decode("utf-8")
+    except urllib_error.HTTPError as error:
+        error_body = error.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"D-ID API error {error.code}: {error_body}") from error
+    except urllib_error.URLError as error:
+        raise RuntimeError(f"D-ID API request failed: {error.reason}") from error
+
+    if not raw_body.strip():
+        return {}
+    try:
+        return json.loads(raw_body)
+    except json.JSONDecodeError as error:
+        raise RuntimeError("D-ID API returned invalid JSON") from error
+
+
+def create_did_talk(*, source_url, text, voice_id, provider_type, config=None):
+    request_body = {
+        "source_url": source_url,
+        "script": {
+            "type": "text",
+            "input": text,
+            "provider": {
+                "type": provider_type,
+                "voice_id": voice_id,
+            },
+        },
+    }
+    if config:
+        request_body["config"] = config
+
+    payload = did_api_request("POST", "/talks", payload=request_body)
+    return {
+        "talkId": payload.get("id"),
+        "status": payload.get("status"),
+        "resultUrl": payload.get("result_url"),
+        "raw": payload,
+    }
+
+
+def get_did_talk_status(talk_id):
+    payload = did_api_request("GET", f"/talks/{talk_id}")
+    return {
+        "talkId": payload.get("id") or talk_id,
+        "status": payload.get("status"),
+        "resultUrl": payload.get("result_url"),
+        "raw": payload,
+    }
 
 
 def list_products(*, limit):

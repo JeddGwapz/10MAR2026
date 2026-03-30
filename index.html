@@ -47,7 +47,6 @@
           <span class="assistant-status-label" id="assistantName">AI Assistant Online</span>
         </div>
       </div>
-      <button class="assistant-settings-btn" id="assistantSettingsBtn" type="button" aria-label="Open settings">⚙</button>
       <button class="assistant-minimize-btn" id="assistantMinimizeBtn" type="button" aria-label="Minimize assistant">-</button>
     </div>
   </div>
@@ -164,7 +163,7 @@
             onclick="toggleSpeechOutput()"
           >🔊</button>
         </div>
-        <button class="send-btn mic-mode" id="composerActionBtn" type="button" onclick="handleComposerAction()">🎙</button>
+        <button class="send-btn mic-mode" id="composerActionBtn" type="button" aria-label="Start voice input" title="Voice input" onclick="handleComposerAction()"></button>
       </div>
     </div>
 
