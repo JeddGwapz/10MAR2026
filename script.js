@@ -69,6 +69,8 @@
   const avatarVideoSource = document.getElementById('avatarVideoSource');
   const avatarLipsyncShell = document.getElementById('avatarLipsyncShell');
   const avatarMouth = document.getElementById('avatarMouth');
+  const installationVideoOverlay = document.getElementById('installationVideoOverlay');
+  const installationVideoFrame = document.getElementById('installationVideoFrame');
   const mainContentPanel = document.querySelector('.main-content');
   const videoContent = document.getElementById('videoContent');
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
@@ -587,6 +589,7 @@
   const RHUBARB_MOUTH_SHAPES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'X'];
   let avatarLipSyncTimers = [];
   let assistantSpeechEndingHandlers = [];
+  let pendingInstallationAutoplayTimer = null;
 
   let localTtsAudio = null;
   let localTtsObjectUrl = '';
@@ -697,6 +700,50 @@
       }
     });
     assistantSpeechEndingHandlers = [];
+  }
+
+  function clearPendingInstallationAutoplay() {
+    if (!pendingInstallationAutoplayTimer) return;
+    window.clearTimeout(pendingInstallationAutoplayTimer);
+    pendingInstallationAutoplayTimer = null;
+  }
+
+  function closeInstallationVideoOverlay() {
+    if (installationVideoFrame) installationVideoFrame.src = 'about:blank';
+    if (!installationVideoOverlay) return;
+    installationVideoOverlay.classList.remove('active');
+    installationVideoOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  function openInstallationVideoOverlay(embedUrl) {
+    if (!embedUrl || !installationVideoOverlay || !installationVideoFrame) return;
+    installationVideoFrame.src = 'about:blank';
+    installationVideoOverlay.classList.add('active');
+    installationVideoOverlay.setAttribute('aria-hidden', 'false');
+    window.requestAnimationFrame(() => {
+      installationVideoFrame.src = embedUrl;
+    });
+  }
+
+  function buildClone16InstallationPlaylistUrl() {
+    const params = new URLSearchParams({
+      autoplay: '1',
+      mute: '1',
+      rel: '0',
+      playsinline: '1',
+      controls: '1',
+      playlist: CLONE16_MAC_INSTALLATION_GUIDE_VIDEO_ID
+    });
+    return `https://www.youtube.com/embed/${CLONE16_INSTALLATION_GUIDE_VIDEO_ID}?${params.toString()}`;
+  }
+
+  function runSpeechCompletionCallback(callback) {
+    if (typeof callback !== 'function') return;
+    try {
+      callback();
+    } catch (error) {
+      console.warn('Speech completion callback failed.', error);
+    }
   }
 
   function stopAvatarLipSync() {
@@ -1038,6 +1085,7 @@
         stopAvatarLipSync();
         restoreAvatarIdleVideo();
         setAssistantSpeakingState(false);
+        runSpeechCompletionCallback(options.onComplete);
       };
       localTtsAudio.addEventListener('ended', handleAudioFinished, { once: true });
       localTtsAudio.addEventListener('error', handleAudioFinished, { once: true });
@@ -1062,7 +1110,7 @@
     }
   }
 
-  async function trySpeakWithAvatarVideo(spokenText) {
+  async function trySpeakWithAvatarVideo(spokenText, options = {}) {
     if (!canUseLocalTts()) return false;
 
     const requestToken = ++localTtsRequestToken;
@@ -1109,6 +1157,7 @@
       const handleAudioFinished = () => {
         restoreAvatarIdleVideo();
         setAssistantSpeakingState(false);
+        runSpeechCompletionCallback(options.onComplete);
       };
       localTtsAudio.addEventListener('ended', handleAudioFinished, { once: true });
       localTtsAudio.addEventListener('error', handleAudioFinished, { once: true });
@@ -1140,6 +1189,8 @@
     }
     resetAssistantChunkState();
     clearAssistantSpeechEndingHandlers();
+    clearPendingInstallationAutoplay();
+    closeInstallationVideoOverlay();
     stopAvatarLipSync();
     setAssistantSpeakingState(false);
     cleanupLocalTtsAudio();
@@ -1166,13 +1217,14 @@
         avatarVideo.onended = () => {
           restoreAvatarIdleVideo();
           setAssistantSpeakingState(false);
+          runSpeechCompletionCallback(options.onComplete);
         };
       }
       return;
     }
 
     if (!options.videoSrc) {
-      const usedAvatarVideo = await trySpeakWithAvatarVideo(spokenText);
+      const usedAvatarVideo = await trySpeakWithAvatarVideo(spokenText, options);
       if (usedAvatarVideo) return;
     }
 
@@ -1203,6 +1255,7 @@
       stopAvatarLipSync();
       restoreAvatarIdleVideo();
       setAssistantSpeakingState(false);
+      runSpeechCompletionCallback(options.onComplete);
     };
     utterance.onerror = () => {
       stopAvatarLipSync();
@@ -3608,6 +3661,7 @@
 
   function renderProductInstallationInfoCard(product = getCurrentProduct()) {
     if (!product || !infoCard) return;
+    clearPendingInstallationAutoplay();
     stopClone16ReadMoreAutoplay();
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
@@ -3994,10 +4048,12 @@
   }
 
   const CLONE16_WINDOWS_KOREAN_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-KR-Setup-2.6.2-win.exe?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6sOeMLD-o-eH2JASZnGp9JfTAwxJMq0taUVtlhXb7tmIWRtgne0IqBIld1Fg_aem_kImVGf3YRIpmPaTK92X-cw';
-  const CLONE16_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/qAH4Op5iGHk?si=DF932_xennbuwvz4&autoplay=1&rel=0&playsinline=1';
+  const CLONE16_INSTALLATION_GUIDE_VIDEO_ID = 'qAH4Op5iGHk';
+  const CLONE16_MAC_INSTALLATION_GUIDE_VIDEO_ID = 'hck8hsSO3FQ';
+  const CLONE16_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/qAH4Op5iGHk?si=DF932_xennbuwvz4&autoplay=1&mute=1&rel=0&playsinline=1';
   const CLONE16_MAC_SILICON_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-arm64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6EfZztpL6zGDy2qfjjKoaC6hkQzD0VbpadQuYD8S3LJqFOa84sPfJiT-O2NA_aem_rhEs--noUKMf0Ud1m15R9Q';
   const CLONE16_MAC_INTEL_GLOBAL_DOWNLOAD_URL = 'https://github.com/Soojung-Kang/Crystal-Teleprompter-Releases/releases/download/v2.6.2/CrystalPrompter-Global-2.6.2-mac-x64.dmg?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExcWx3b1hHMlh0UlI3dENZcHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR6DcejeudtCn6t4TWKi0cGmV2C01BJ3RvRCqYdAwV1MK-luD4LwpGIeROF-dw_aem_qkCIguxHtqEdCafs7ToN8w';
-  const CLONE16_MAC_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/hck8hsSO3FQ?si=Foi7e6_3OsfA9qwb&autoplay=1&rel=0&playsinline=1';
+  const CLONE16_MAC_INSTALLATION_GUIDE_EMBED_URL = 'https://www.youtube.com/embed/hck8hsSO3FQ?si=Foi7e6_3OsfA9qwb&autoplay=1&mute=1&rel=0&playsinline=1';
 
   function isClone16MobileOrTabletClient() {
     const userAgent = navigator.userAgent || '';
@@ -4039,25 +4095,25 @@
     });
   }
 
-  function playClone16InstallationEmbed(button) {
-    const shell = button?.closest('.clone16-install-video-shell');
+  function activateClone16InstallationEmbed(shell) {
     if (!shell) return;
     const embedUrl = shell.getAttribute('data-embed-src');
     if (!embedUrl) return;
-    shell.classList.add('is-playing');
-    shell.innerHTML = `
-      <h5 class="clone16-install-video-heading">Installation Guide Video</h5>
-      <iframe
-        class="clone16-install-video-embed"
-        width="560"
-        height="315"
-        src="${escapeHtml(embedUrl)}"
-        title="Installation Guide Video"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
-    `;
+    openInstallationVideoOverlay(embedUrl);
+  }
+
+  function playClone16InstallationEmbed(button) {
+    const shell = button?.closest('.clone16-install-video-shell');
+    activateClone16InstallationEmbed(shell);
+  }
+
+  function scheduleInstallationGuideAutoplay(delayMs = 2000) {
+    clearPendingInstallationAutoplay();
+    pendingInstallationAutoplayTimer = window.setTimeout(() => {
+      pendingInstallationAutoplayTimer = null;
+      if (currentProductKey !== 'clone16') return;
+      openInstallationVideoOverlay(buildClone16InstallationPlaylistUrl());
+    }, Math.max(0, Number(delayMs || 0)));
   }
 
   function getProductInstallationInfoHtml(product) {
@@ -4084,18 +4140,16 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >Windows 64bit Global version</a>
-              <div class="clone16-install-video-shell">
+              <div class="clone16-install-video-shell" data-embed-src="${guideVideoEmbedUrl}">
                 <h5 class="clone16-install-video-heading">Installation Guide Video</h5>
-                <iframe
-                  class="clone16-install-video-embed"
-                  width="560"
-                  height="315"
-                  src="${guideVideoEmbedUrl}"
-                  title="Installation Guide Video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  allowfullscreen
-                ></iframe>
+                <button
+                  type="button"
+                  class="clone16-install-video-launch"
+                  onclick="playClone16InstallationEmbed(this)"
+                  aria-label="Play installation guide video"
+                >
+                  <span class="clone16-install-video-launch-icon" aria-hidden="true"></span>
+                </button>
               </div>
             </div>
             <div class="clone16-install-desktop-stack" data-clone16-mac-desktop-only hidden aria-hidden="true">
@@ -4213,13 +4267,11 @@
     const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
     const showcaseMeta = PRODUCT_SHOWCASE_META[product.key] || '';
     const isImageOnlyShowcase = product.key === 'clone16' || product.key === 'cue10' || product.key === 'cue24' || product.key === 'cue27' || product.key === 'tab12' || product.key === 'cue32' || product.key === 'emperor22' || product.key === 'adamas19' || product.key === 'adamas22' || product.key === 'adamas24' || product.key === 'cubic15' || product.key === 'cubic19' || product.key === 'momo12' || product.key === 'plain14' || product.key === 'pop24' || product.key === 'pop27' || product.key === 'pop32' || product.key === 'ptz24' || product.key === 'ptz27' || product.key === 'ptz32' || product.key === 'rotunda15' || product.key === 'spot18' || product.key === 'theGreat22' || product.key === 'theGreat24' || product.key === 'ultra43' || product.key === 'ultra55' || product.key === 'wide22' || product.key === 'wide24' || product.key === 'wide27' || product.key === 'wide32' || product.key === 'ep30k' || product.key === 'ep40k' || product.key === 'ep50k' || product.key === 'ep60k' || product.key === 'ep80k' || product.key === 'flex15' || product.key === 'folder22n' || product.key === 'framer24' || product.key === 'framer27' || product.key === 'framer32' || product.key === 'lessonQ24' || product.key === 'lessonQ27' || product.key === 'lessonQ32' || product.key === 'lessonQ43' || product.key === 'mime24' || product.key === 'mime27' || product.key === 'mime32' || product.key === 'olleson18';
-    const isClone16Showcase = product.key === 'clone16';
-    const isAdamas19Showcase = product.key === 'adamas19';
     const showcaseClass = isImageOnlyShowcase
-      ? `cue-series-showcase cue-series-showcase-image-only${isClone16Showcase ? ' clone16-showcase-fit' : ''}${isAdamas19Showcase ? ' adamas19-showcase-fit' : ''}`
+      ? 'cue-series-showcase cue-series-showcase-image-only'
       : 'cue-series-showcase';
-    const shellClass = `cue-series-image-shell cue-series-image-shell-hero${isClone16Showcase ? ' clone16-showcase-shell' : ''}${isAdamas19Showcase ? ' adamas19-showcase-shell' : ''}`;
-    const imageClass = `cue-series-image cue-series-image-hero${isClone16Showcase ? ' clone16-showcase-image' : ''}${isAdamas19Showcase ? ' adamas19-showcase-image' : ''}`;
+    const shellClass = 'cue-series-image-shell cue-series-image-shell-hero';
+    const imageClass = 'cue-series-image cue-series-image-hero';
     return `
       <section class="${showcaseClass}" aria-label="Cue Series showcase">
         ${isImageOnlyShowcase ? '' : `
@@ -5871,8 +5923,19 @@
         const productKey = button.dataset.product || 'clone16';
         const selectionMode = button.dataset.selectionMode || 'select';
         if (selectionMode === 'preview') {
-          currentProductKey = productKey;
-          renderNoMatchInfoCard();
+          selectProduct(productKey, { showQuickActions: true });
+          const spokenResponse = buildSpokenResponse({
+            id: `product_${productKey}`,
+            productKey
+          });
+          if (spokenResponse) {
+            const speechOptions = productKey === 'clone16'
+              ? { videoSrc: CLONE16_AVATAR_VIDEO, useEmbeddedAudio: true }
+              : productKey === 'tab12'
+                ? { videoSrc: TAB12_AVATAR_VIDEO, useEmbeddedAudio: true }
+                : {};
+            speakAssistantText(spokenResponse, speechOptions);
+          }
           return;
         }
         selectProduct(productKey, { showQuickActions: true });
@@ -6593,7 +6656,13 @@
       } else if (match.id === 'specification' && activeProductKey === 'clone16') {
         speechOptions = { videoSrc: CLONE16_SPEC_AVATAR_VIDEO, useEmbeddedAudio: true };
       } else if (match.id === 'installation' && activeProductKey === 'clone16') {
-        speechOptions = { videoSrc: CLONE16_INSTALLATION_AVATAR_VIDEO, useEmbeddedAudio: true };
+        speechOptions = {
+          videoSrc: CLONE16_INSTALLATION_AVATAR_VIDEO,
+          useEmbeddedAudio: true,
+          onComplete: () => {
+            scheduleInstallationGuideAutoplay(2000);
+          }
+        };
       } else if (match.id === 'installation' && activeProductKey === 'cue24') {
         speechOptions = { videoSrc: CUE24_INSTALLATION_AVATAR_VIDEO, useEmbeddedAudio: true };
       }
@@ -7330,6 +7399,7 @@
     setAssistantShellState(false);
     startLauncherHintCycle();
     closeSettings();
+    closeInstallationVideoOverlay();
   }
 
   if (assistantLauncher) {
@@ -7350,8 +7420,18 @@
     });
   }
 
+  if (installationVideoOverlay) {
+    installationVideoOverlay.addEventListener('click', (event) => {
+      if (event.target === installationVideoOverlay) closeInstallationVideoOverlay();
+    });
+  }
+
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
+    if (installationVideoOverlay && installationVideoOverlay.classList.contains('active')) {
+      closeInstallationVideoOverlay();
+      return;
+    }
     if (settingsModal && settingsModal.classList.contains('active')) {
       closeSettings();
       return;
@@ -7363,6 +7443,7 @@
 
   setAssistantShellState(false);
   startLauncherHintCycle();
+  window.closeInstallationVideoOverlay = closeInstallationVideoOverlay;
 
   resetInfoCardAutoScroll();
   renderNoMatchPicker();

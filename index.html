@@ -34,6 +34,27 @@
     </div>
   </div>
 
+  <div class="modal-overlay installation-video-overlay" id="installationVideoOverlay" aria-hidden="true">
+    <div class="modal installation-video-modal" role="dialog" aria-modal="true" aria-labelledby="installationVideoTitle">
+      <button class="modal-close installation-video-close" type="button" onclick="closeInstallationVideoOverlay()">&#x2715;</button>
+      <div class="installation-video-modal-header">
+        <h2 id="installationVideoTitle">Installation Videos</h2>
+        <p>The guide will start automatically after the avatar finishes speaking.</p>
+      </div>
+      <div class="installation-video-frame-shell">
+        <iframe
+          id="installationVideoFrame"
+          class="installation-video-frame"
+          src="about:blank"
+          title="Installation videos"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <div class="header">
     <div class="app-title">

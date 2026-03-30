@@ -1921,16 +1921,6 @@
     .info-card.main-card:has(.initial-info-card) {
       background: var(--theme-info-card-bg);
     }
-    .info-card.main-card:has(.clone16-showcase-fit) {
-      padding: 0;
-      padding-right: 0;
-      overflow: hidden;
-    }
-    .info-card.main-card:has(.adamas19-showcase-fit) {
-      padding: 0;
-      padding-right: 0;
-      overflow: hidden;
-    }
     .info-card.main-card.no-match-info-state {
       overflow: hidden;
     }
@@ -5420,61 +5410,6 @@
       object-position: center;
       filter: none;
     }
-    .clone16-showcase-fit {
-      min-height: 100%;
-      height: 100%;
-    }
-    .clone16-showcase-fit .cue-series-showcase-visual {
-      min-height: 100%;
-      height: 100%;
-      padding: 0;
-    }
-    .clone16-showcase-shell {
-      width: 100%;
-      height: 100%;
-      padding: 0;
-    }
-    .clone16-showcase-image {
-      width: 100%;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      object-fit: fill;
-      object-position: center;
-      margin: 0;
-      align-self: stretch;
-    }
-    .adamas19-showcase-fit {
-      min-height: 100%;
-      height: 100%;
-    }
-    .adamas19-showcase-fit .cue-series-showcase-visual {
-      width: 100%;
-      min-height: 100%;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      margin: 0;
-      padding: 0;
-    }
-    .adamas19-showcase-shell {
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .adamas19-showcase-image {
-      width: 100%;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      object-fit: fill;
-      object-position: center;
-      margin: 0;
-      align-self: stretch;
-    }
     .cue-series-image-title-graphic {
       width: min(100%, 420px);
       height: auto;
@@ -7308,62 +7243,6 @@
       .cue-series-showcase-image-only .cue-series-image-shell-hero {
         padding: 8px;
       }
-      .info-card.main-card:has(.clone16-showcase-fit) {
-        padding: 0;
-        padding-right: 0;
-        overflow: hidden;
-      }
-      .info-card.main-card:has(.adamas19-showcase-fit) {
-        padding: 0;
-        padding-right: 0;
-        overflow: hidden;
-      }
-      .clone16-showcase-fit {
-        min-height: 100%;
-        height: 100%;
-      }
-      .clone16-showcase-fit .cue-series-showcase-visual {
-        min-height: 100%;
-        height: 100%;
-        padding: 0;
-      }
-      .clone16-showcase-shell {
-        width: 100%;
-        height: 100%;
-        max-height: none;
-        padding: 0;
-      }
-      .adamas19-showcase-fit {
-        min-height: 100%;
-        height: 100%;
-      }
-      .adamas19-showcase-fit .cue-series-showcase-visual {
-        width: 100%;
-        min-height: 100%;
-        height: 100%;
-        max-width: none;
-        max-height: none;
-        margin: 0;
-        padding: 0;
-      }
-      .adamas19-showcase-shell {
-        width: 100%;
-        height: 100%;
-        max-height: none;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .adamas19-showcase-image {
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        max-height: none;
-        object-fit: fill;
-        object-position: center;
-        margin: 0;
-      }
       .cue-series-image {
         max-width: none;
       }
@@ -7980,6 +7859,63 @@
       outline: none;
     }
     .modal select option { background: #1b3e44; }
+    .installation-video-overlay {
+      z-index: 140;
+    }
+    .installation-video-modal {
+      position: relative;
+      width: min(92%, 960px);
+      max-width: 960px;
+      padding: 18px;
+      background:
+        linear-gradient(145deg, rgba(16, 43, 49, 0.98), rgba(26, 72, 82, 0.96)),
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      box-shadow: 0 28px 60px rgba(0,0,0,0.3);
+    }
+    .installation-video-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      float: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+    }
+    .installation-video-modal-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding-right: 40px;
+    }
+    .installation-video-modal-header h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .installation-video-modal-header p {
+      margin: 0;
+      color: rgba(236,244,247,0.78);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .installation-video-frame-shell {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(180deg, rgba(5,13,17,0.94), rgba(10,18,24,0.98));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .installation-video-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
 
     /* ══════════════════════════════════════
        MOBILE — full screen
@@ -7998,6 +7934,23 @@
         min-height: min(640px, calc(100dvh - 24px));
         padding: 14px 16px 0;
         border-radius: 24px;
+      }
+
+      .installation-video-modal {
+        width: min(100%, calc(100vw - 48px));
+        padding: 14px;
+      }
+
+      .installation-video-modal-header h2 {
+        font-size: 18px;
+      }
+
+      .installation-video-modal-header p {
+        font-size: 12px;
+      }
+
+      .installation-video-frame-shell {
+        aspect-ratio: 16 / 10;
       }
     }
 
