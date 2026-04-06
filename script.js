@@ -77,6 +77,8 @@
   const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
+  const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/Clone 16 animation.mp4';
+  const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
   const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
@@ -187,6 +189,8 @@
   let clone16ImagesFeatureAutoplayTimer = null;
   let clone16ComponentsImageIndex = 0;
   let clone16ComponentsAutoplayTimer = null;
+  let noMatchFilterCategory = 'all';
+  let noMatchFilterQuery = '';
 
   function setVideoPanelExpanded(expanded) {
     if (!mainContentPanel) return;
@@ -274,6 +278,75 @@
     videoContent.classList.add('custom-panel-active');
     setInitialVideoPanelHidden(false);
     stopPanelVideo();
+  }
+
+  function shouldShowClone16DefinitionSequence(answerText = '', productKey = '') {
+    const normalizedAnswer = String(answerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    const normalizedTarget = CLONE16_DEFINITION_ANSWER.replace(/\s+/g, ' ').trim().toLowerCase();
+    return productKey === 'clone16' && normalizedAnswer === normalizedTarget;
+  }
+
+  function renderClone16DefinitionSequencePanel() {
+    if (!prepareInfoCardFrame({ stateClass: 'clone16-answer-sequence-state', locked: true, scrollable: false })) return;
+    infoCard.innerHTML = `
+      <section class="clone16-answer-sequence-card" aria-label="Clone 16 answer media">
+        <div class="clone16-answer-sequence" id="clone16AnswerSequence">
+          <video
+            class="clone16-answer-sequence-video"
+            id="clone16AnswerSequenceVideo"
+            muted
+            playsinline
+            preload="auto"
+          >
+            <source src="${CLONE16_DEFINITION_PANEL_VIDEO}" type="video/mp4" />
+          </video>
+        </div>
+      </section>
+    `;
+
+    const sequenceVideo = document.getElementById('clone16AnswerSequenceVideo');
+    if (!sequenceVideo) {
+      resetInfoCardAutoScroll();
+      scheduleCueSeriesAvatarHeightSync();
+      return;
+    }
+    sequenceVideo.currentTime = 0;
+    sequenceVideo.load();
+    const playPromise = sequenceVideo.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  const INFO_CARD_FRAME_CLASSES = [
+    'image-card',
+    'info-card-show-scrollbar',
+    'info-card-slide-enter',
+    'cue-series-intro-card',
+    'info-card-empty-state',
+    'no-match-info-state',
+    'clone16-intro-info-state',
+    'clone16-readmore-info-state',
+    'clone16-images-info-state',
+    'clone16-spec-image-state',
+    'clone16-answer-sequence-state',
+    'info-card-locked-layout'
+  ];
+
+  function prepareInfoCardFrame(options = {}) {
+    if (!infoCard) return false;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(...INFO_CARD_FRAME_CLASSES);
+    if (options.stateClass) infoCard.classList.add(options.stateClass);
+    infoCard.classList.toggle('info-card-locked-layout', Boolean(options.locked));
+    infoCard.classList.toggle('info-card-show-scrollbar', Boolean(options.scrollable));
+    return true;
   }
 
   function renderClone16IntroSlider() {
@@ -399,6 +472,8 @@
 
   /* ── MIC ── */
   let micActive = false;
+  let micStickyMode = false;
+  let micResumeTimer = null;
   let voiceOutputEnabled = true;
   const micBtn = document.getElementById('composerActionBtn');
   const userInputField = document.getElementById('userInput');
@@ -471,6 +546,7 @@
     if (!micBtn) return;
     micBtn.classList.toggle('is-listening', active);
     updateComposerActionButton();
+    syncNoMatchSearchMicState();
   }
 
   function getComposerActionIconMarkup(mode) {
@@ -595,6 +671,7 @@
   let localTtsObjectUrl = '';
   let localTtsAbortController = null;
   let localTtsRequestToken = 0;
+  let assistantSpeaking = false;
   let assistantChunkSessionId = '';
   let assistantChunkQueue = [];
   let assistantChunkRequestedIndexes = new Set();
@@ -613,8 +690,12 @@
   }
 
   function setAssistantSpeakingState(active) {
+    assistantSpeaking = Boolean(active);
     if (avatarBox) avatarBox.classList.toggle('is-speaking', active);
     if (assistantStatus) assistantStatus.classList.toggle('is-speaking', active);
+    if (!assistantSpeaking && micStickyMode && !micActive) {
+      scheduleMicRecognitionStart(220);
+    }
   }
 
   function resetAssistantChunkState() {
@@ -1182,6 +1263,7 @@
   }
 
   function stopAssistantSpeech() {
+    clearSubtitleStripTyping();
     localTtsRequestToken += 1;
     if (localTtsAbortController) {
       localTtsAbortController.abort();
@@ -1204,6 +1286,14 @@
     if ((!spokenText && !options.videoSrc) || !voiceOutputEnabled) return;
 
     stopAssistantSpeech();
+    const subtitleSyncText = sanitizeSpokenText(options.syncSubtitleText || spokenText);
+    const estimatedDurationMs = estimateSpeechDurationMs(subtitleSyncText || spokenText);
+    if (subtitleSyncText) {
+      setSubtitleStripText(subtitleSyncText, {
+        animate: true,
+        durationMs: estimatedDurationMs
+      });
+    }
 
     if (options.videoSrc && options.useEmbeddedAudio) {
       stopAvatarLipSync();
@@ -1236,7 +1326,6 @@
     const utterance = new SpeechSynthesisUtterance(spokenText);
     const langCode = getSpeechLangCode();
     const preferredVoice = getPreferredSpeechVoice(langCode);
-    const estimatedDurationMs = estimateSpeechDurationMs(spokenText);
 
     utterance.lang = langCode;
     utterance.rate = langCode === 'ja-JP' ? 1.03 : 1.08;
@@ -1251,13 +1340,20 @@
       setAssistantSpeakingState(true);
       playAvatarLipSync(generateFallbackAvatarMouthCues(spokenText, estimatedDurationMs), estimatedDurationMs);
     };
+    utterance.onboundary = (event) => {
+      if (!subtitleSyncText) return;
+      const charIndex = Math.max(0, Number(event?.charIndex) || 0);
+      if (charIndex > 0) setSubtitleStripTypingProgress(charIndex + 1);
+    };
     utterance.onend = () => {
+      if (subtitleSyncText) setSubtitleStripTypingProgress(subtitleSyncText.length, { complete: true });
       stopAvatarLipSync();
       restoreAvatarIdleVideo();
       setAssistantSpeakingState(false);
       runSpeechCompletionCallback(options.onComplete);
     };
     utterance.onerror = () => {
+      if (subtitleSyncText) setSubtitleStripTypingProgress(subtitleSyncText.length, { complete: true });
       stopAvatarLipSync();
       restoreAvatarIdleVideo();
       setAssistantSpeakingState(false);
@@ -1279,20 +1375,27 @@
 
   if (speechRec) {
     updateSpeechRecognitionLanguage();
+    speechRec.continuous = false;
     speechRec.interimResults = false;
     speechRec.maxAlternatives = 1;
     speechRec.onresult = (e) => {
       const transcript = (e.results?.[0]?.[0]?.transcript || '').trim();
       if (!transcript) return;
-      document.getElementById('userInput').value = transcript;
-      updateComposerActionButton();
-      sendMessage(transcript);
+      routeVoiceTranscript(transcript);
     };
-    speechRec.onerror = () => {
+    speechRec.onerror = (event) => {
+      const shouldKeepListening = !['not-allowed', 'service-not-allowed', 'audio-capture'].includes(String(event?.error || ''));
       setMicVisualState(false);
+      if (micStickyMode && shouldKeepListening) {
+        scheduleMicRecognitionStart(420);
+        return;
+      }
+      micStickyMode = false;
+      clearMicResumeTimer();
     };
     speechRec.onend = () => {
       setMicVisualState(false);
+      if (micStickyMode) scheduleMicRecognitionStart(220);
     };
   }
 
@@ -1320,16 +1423,110 @@
       }
       return;
     }
-    if (micActive) {
-      speechRec.stop();
+    if (micStickyMode || micActive) {
+      stopStickyMic();
       return;
     }
+    micStickyMode = true;
+    stopAssistantSpeech();
+    if (!startMicRecognition()) {
+      micStickyMode = false;
+      clearMicResumeTimer();
+    }
+  }
+
+  function getVisibleNoMatchSearchInputs() {
+    return Array.from(document.querySelectorAll('[data-nomatch-search-input]')).filter((input) => {
+      if (!(input instanceof HTMLElement)) return false;
+      return input.offsetParent !== null;
+    });
+  }
+
+  function clearMicResumeTimer() {
+    if (!micResumeTimer) return;
+    window.clearTimeout(micResumeTimer);
+    micResumeTimer = null;
+  }
+
+  function startMicRecognition() {
+    if (!speechRec || micActive || assistantSpeaking) return false;
+    clearMicResumeTimer();
     setMicVisualState(true);
     try {
       speechRec.start();
+      return true;
     } catch (error) {
       setMicVisualState(false);
+      return false;
     }
+  }
+
+  function scheduleMicRecognitionStart(delayMs = 180) {
+    if (!micStickyMode) return;
+    clearMicResumeTimer();
+    micResumeTimer = window.setTimeout(() => {
+      if (!micStickyMode || micActive) return;
+      if (assistantSpeaking) {
+        scheduleMicRecognitionStart(220);
+        return;
+      }
+      startMicRecognition();
+    }, delayMs);
+  }
+
+  function stopStickyMic() {
+    micStickyMode = false;
+    clearMicResumeTimer();
+    if (micActive && speechRec) {
+      speechRec.stop();
+      return;
+    }
+    setMicVisualState(false);
+  }
+
+  function shouldRouteMicToNoMatchSearch() {
+    return Boolean(infoCard?.classList.contains('no-match-info-state') && getVisibleNoMatchSearchInputs().length);
+  }
+
+  function applyTranscriptToNoMatchSearch(transcript) {
+    noMatchFilterQuery = transcript;
+    refreshAllNoMatchUi();
+    const visibleInputs = getVisibleNoMatchSearchInputs();
+    visibleInputs.forEach((input) => {
+      input.value = transcript;
+    });
+    const preferredInput = visibleInputs[0];
+    if (preferredInput) preferredInput.focus();
+  }
+
+  function syncNoMatchSearchMicState() {
+    const isReady = Boolean(speechRec);
+    document.querySelectorAll('[data-nomatch-search-mic]').forEach((button) => {
+      button.toggleAttribute('disabled', !isReady);
+      button.dataset.active = micActive ? 'true' : 'false';
+      button.setAttribute('aria-hidden', 'true');
+      button.tabIndex = -1;
+    });
+  }
+
+  function routeVoiceTranscript(transcript) {
+    if (!transcript) return;
+    if (shouldRouteMicToNoMatchSearch()) {
+      applyTranscriptToNoMatchSearch(transcript);
+      if (micStickyMode) scheduleMicRecognitionStart(220);
+      return;
+    }
+
+    if (userInputField) {
+      userInputField.value = transcript;
+      updateComposerActionButton();
+    }
+    void sendMessage(transcript, {
+      source: 'voice',
+      onComplete: () => {
+        if (micStickyMode) scheduleMicRecognitionStart(220);
+      }
+    });
   }
 
   /* ── ATTACH FILE ── */
@@ -1366,13 +1563,148 @@
   const launcherMessage = document.getElementById('launcherMessage');
   let launcherHintCycleTimer = null;
   let launcherHintDismissed = false;
+  let subtitleTypingTimer = null;
+  let subtitleTypingSession = 0;
+  let subtitleTypingText = '';
   function isLayoutLocked() {
     return Boolean(appContainer && appContainer.classList.contains('layout-locked'));
   }
 
-  function setSubtitleStripText(text = '') {
+  function clearSubtitleStripTyping() {
+    subtitleTypingSession += 1;
+    if (subtitleTypingTimer) {
+      window.clearTimeout(subtitleTypingTimer);
+      subtitleTypingTimer = null;
+    }
+    if (subtitleStrip) subtitleStrip.classList.remove('is-typing');
+    subtitleTypingText = '';
+  }
+
+  function getSubtitleStripTrack() {
+    return subtitleStrip ? subtitleStrip.querySelector('.subtitle-strip-track') : null;
+  }
+
+  function updateSubtitleStripTrackOffset() {
     if (!subtitleStrip) return;
-    subtitleStrip.textContent = text;
+    const track = getSubtitleStripTrack();
+    if (!track) return;
+    subtitleStrip.style.removeProperty('--subtitle-track-offset');
+
+    const overflowDistance = Math.ceil(track.scrollWidth - subtitleStrip.clientWidth);
+    if (overflowDistance <= 6) return;
+
+    if (subtitleStrip.classList.contains('is-typing')) {
+      subtitleStrip.style.setProperty('--subtitle-track-offset', `${-overflowDistance}px`);
+    }
+  }
+
+  function updateSubtitleStripMarquee() {
+    if (!subtitleStrip) return;
+    const track = getSubtitleStripTrack();
+    if (!track) return;
+
+    subtitleStrip.classList.remove('is-marquee');
+    if (subtitleStrip.classList.contains('is-typing')) {
+      updateSubtitleStripTrackOffset();
+      return;
+    }
+    subtitleStrip.style.removeProperty('--subtitle-scroll-distance');
+    subtitleStrip.style.removeProperty('--subtitle-scroll-duration');
+    subtitleStrip.style.removeProperty('--subtitle-track-offset');
+
+    if (!track.textContent || !track.textContent.trim()) return;
+
+    const overflowDistance = Math.ceil(track.scrollWidth - subtitleStrip.clientWidth);
+    if (overflowDistance <= 6) return;
+
+    const durationSeconds = Math.max(8, Math.min(24, 6 + (overflowDistance / 24)));
+    subtitleStrip.style.setProperty('--subtitle-scroll-distance', `${overflowDistance}px`);
+    subtitleStrip.style.setProperty('--subtitle-scroll-duration', `${durationSeconds}s`);
+    subtitleStrip.classList.add('is-marquee');
+  }
+
+  function scheduleSubtitleStripMarqueeUpdate() {
+    if (!subtitleStrip) return;
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(updateSubtitleStripMarquee);
+    });
+  }
+
+  function setSubtitleStripTypingProgress(charCount = 0, options = {}) {
+    if (!subtitleStrip) return;
+    const normalizedText = String(subtitleTypingText || '').trim();
+    const safeCharCount = Math.max(0, Math.min(normalizedText.length, Math.floor(Number(charCount) || 0)));
+    const track = getSubtitleStripTrack();
+    if (!track) return;
+
+    track.textContent = normalizedText.slice(0, safeCharCount);
+    subtitleStrip.classList.toggle('is-empty', !track.textContent.trim());
+    if (options.complete || safeCharCount >= normalizedText.length) {
+      track.textContent = normalizedText;
+      subtitleStrip.classList.remove('is-typing');
+      scheduleSubtitleStripMarqueeUpdate();
+      return;
+    }
+    scheduleSubtitleStripMarqueeUpdate();
+  }
+
+  function startSubtitleStripTyping(text = '', options = {}) {
+    if (!subtitleStrip) return;
+    const normalizedText = String(text || '').replace(/\s+/g, ' ').trim();
+    subtitleTypingText = normalizedText;
+
+    if (!normalizedText) {
+      setSubtitleStripText('');
+      return;
+    }
+
+    clearSubtitleStripTyping();
+    subtitleTypingText = normalizedText;
+
+    const track = document.createElement('span');
+    track.className = 'subtitle-strip-track';
+    subtitleStrip.replaceChildren(track);
+    subtitleStrip.classList.add('is-typing');
+    subtitleStrip.classList.remove('is-empty');
+    subtitleStrip.classList.remove('is-marquee');
+
+    const totalChars = normalizedText.length;
+    const targetDurationMs = Math.max(1200, Number(options.durationMs) || estimateSpeechDurationMs(normalizedText));
+    const startedAt = performance.now();
+    const sessionId = subtitleTypingSession;
+
+    const advanceTyping = () => {
+      if (sessionId !== subtitleTypingSession) return;
+      const elapsedMs = performance.now() - startedAt;
+      const progress = Math.min(1, elapsedMs / targetDurationMs);
+      const nextCharCount = Math.max(1, Math.floor(totalChars * progress));
+      setSubtitleStripTypingProgress(nextCharCount);
+      if (progress >= 1) {
+        setSubtitleStripTypingProgress(totalChars, { complete: true });
+        subtitleTypingTimer = null;
+        return;
+      }
+      subtitleTypingTimer = window.setTimeout(advanceTyping, 28);
+    };
+
+    setSubtitleStripTypingProgress(1);
+    subtitleTypingTimer = window.setTimeout(advanceTyping, 36);
+  }
+
+  function setSubtitleStripText(text = '', options = {}) {
+    if (!subtitleStrip) return;
+    const normalizedText = String(text || '').replace(/\s+/g, ' ').trim();
+    if (options.animate) {
+      startSubtitleStripTyping(normalizedText, options);
+      return;
+    }
+    clearSubtitleStripTyping();
+    const track = document.createElement('span');
+    track.className = 'subtitle-strip-track';
+    track.textContent = normalizedText;
+    subtitleStrip.replaceChildren(track);
+    subtitleStrip.classList.toggle('is-empty', !normalizedText);
+    scheduleSubtitleStripMarqueeUpdate();
   }
 
   function syncCueSeriesAvatarHeight() {
@@ -2933,20 +3265,7 @@
   function renderClone16VideoInfoCard() {
     const product = PRODUCTS.clone16;
     if (!product || !infoCard) return;
-    stopClone16ReadMoreAutoplay();
-    stopClone16ImagesFeatureAutoplay();
-    stopClone16ComponentsAutoplay();
-    infoCard.classList.remove(
-      'image-card',
-      'info-card-show-scrollbar',
-      'info-card-slide-enter',
-      'cue-series-intro-card',
-      'info-card-empty-state',
-      'no-match-info-state',
-      'clone16-intro-info-state',
-      'clone16-readmore-info-state',
-      'clone16-images-info-state'
-    );
+    prepareInfoCardFrame({ locked: true, scrollable: false });
     infoCard.innerHTML = getClone16VideoInfoHtml(product);
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -4294,22 +4613,7 @@
 
   function renderProductShowcaseInfoCard(product) {
     if (!product || !infoCard || !product.images?.[0]) return;
-    stopClone16ReadMoreAutoplay();
-    stopClone16ImagesFeatureAutoplay();
-    stopClone16ComponentsAutoplay();
-    stopAboutUsAnimationCycle();
-    infoCard.classList.remove(
-      'image-card',
-      'info-card-show-scrollbar',
-      'info-card-slide-enter',
-      'cue-series-intro-card',
-      'info-card-empty-state',
-      'no-match-info-state',
-      'clone16-intro-info-state',
-      'clone16-readmore-info-state',
-      'clone16-images-info-state',
-      'clone16-spec-image-state'
-    );
+    prepareInfoCardFrame({ locked: true, scrollable: false });
     infoCard.innerHTML = getProductShowcaseHtml(product);
     playInfoCardAnimation('slide');
     resetInfoCardAutoScroll();
@@ -4913,7 +5217,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'cue-series-intro-card', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state');
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'cue-series-intro-card', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-answer-sequence-state');
     const includeSocial = Boolean(options.includeSocial);
     const animation = options.animation || '';
     const contentClass = animation === 'slide' ? ' info-card-content-slide-enter' : '';
@@ -4943,7 +5247,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state', 'clone16-answer-sequence-state');
     infoCard.innerHTML = '';
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -4955,7 +5259,7 @@
     stopClone16ImagesFeatureAutoplay();
     stopClone16ComponentsAutoplay();
     stopAboutUsAnimationCycle();
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state', 'clone16-answer-sequence-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = '<div class="info-card-empty-shell" aria-hidden="true"></div>';
     resetInfoCardAutoScroll();
@@ -4991,7 +5295,7 @@
         image: 'https://static.wixstatic.com/media/6e449d_94b7561e1451492983fdf0eba0de63f6~mv2.png/v1/crop/x_0,y_402,w_2402,h_1818/fill/w_856,h_648,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032_58.png'
       }
     ];
-    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.remove('image-card', 'info-card-show-scrollbar', 'info-card-slide-enter', 'cue-series-intro-card', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state', 'clone16-answer-sequence-state');
     infoCard.classList.add('info-card-empty-state');
     infoCard.innerHTML = `
       <div class="info-card-empty-shell cue-series-empty-shell">
@@ -5922,6 +6226,11 @@
       button.addEventListener('click', () => {
         const productKey = button.dataset.product || 'clone16';
         const selectionMode = button.dataset.selectionMode || 'select';
+        if (selectionMode === 'nomatch-preview') {
+          currentProductKey = productKey;
+          refreshAllNoMatchUi();
+          return;
+        }
         if (selectionMode === 'preview') {
           selectProduct(productKey, { showQuickActions: true });
           const spokenResponse = buildSpokenResponse({
@@ -6025,25 +6334,206 @@
     return badgeMap[productKey] || productName.slice(0, 2).toUpperCase();
   }
 
-  function getNoMatchPickerHeaderHtml() {
+  function getNoMatchProductFamily(definition) {
+    const productName = String(definition?.name || '').toLowerCase();
+    if (productName.startsWith('clone')) return 'clone';
+    if (productName.startsWith('cue')) return 'cue';
+    if (productName.startsWith('adamas')) return 'adamas';
+    return 'other';
+  }
+
+  function getNoMatchSearchTarget(definition) {
+    return [
+      definition.name,
+      getProductSelectionBadge(definition.key, definition.name),
+      ...(Array.isArray(definition.aliases) ? definition.aliases : [])
+    ].join(' ').toLowerCase();
+  }
+
+  function normalizeNoMatchSearchValue(value) {
+    return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+
+  function matchesNoMatchSearchTarget(searchTarget, query) {
+    const normalizedTarget = normalizeNoMatchSearchValue(searchTarget);
+    const normalizedQuery = normalizeNoMatchSearchValue(query);
+    if (!normalizedQuery) return true;
+    if (!normalizedTarget) return false;
+    if (normalizedTarget === normalizedQuery) return true;
+
+    const queryTokens = normalizedQuery.split(' ').filter(Boolean);
+    if (!queryTokens.length) return true;
+    return queryTokens.every((token) => normalizedTarget.includes(token));
+  }
+
+  function getNoMatchSeriesBaseName(definition) {
+    const parts = String(definition?.name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return 'Product';
+    if (parts[0].toLowerCase() === 'the' && parts[1]) return `${parts[0]} ${parts[1]}`;
+    return parts[0];
+  }
+
+  function getNoMatchSeriesFamily(definition) {
+    return normalizeNoMatchSearchValue(getNoMatchSeriesBaseName(definition));
+  }
+
+  function getNoMatchSeriesLabel(definition) {
+    return `${getNoMatchSeriesBaseName(definition)} Series`;
+  }
+
+  function getNoMatchSeriesBadge(definition) {
+    const baseName = getNoMatchSeriesBaseName(definition);
+    const parts = baseName.split(/\s+/).filter(Boolean);
+    if (!parts.length) return getProductSelectionBadge(definition.key, definition.name);
+    if (parts.length === 1) {
+      const token = parts[0].toUpperCase();
+      return token.length <= 3 ? token : token.slice(0, 2);
+    }
+    return parts.slice(0, 2).map((part) => part.charAt(0).toUpperCase()).join('');
+  }
+
+  function getNoMatchSeriesMatchCount(seriesFamily) {
+    return PRODUCT_DEFINITIONS.filter((definition) => getNoMatchSeriesFamily(definition) === seriesFamily).length;
+  }
+
+  function getNoMatchMatchedSeriesFamily(query = noMatchFilterQuery) {
+    const normalizedQuery = normalizeNoMatchSearchValue(query);
+    if (!normalizedQuery) return '';
+
+    const matchedDefinition = PRODUCT_DEFINITIONS.find((definition) => {
+      const seriesFamily = getNoMatchSeriesFamily(definition);
+      const seriesCount = getNoMatchSeriesMatchCount(seriesFamily);
+      if (seriesCount <= 1) return false;
+
+      const normalizedName = normalizeNoMatchSearchValue(definition.name);
+      const aliases = Array.isArray(definition.aliases) ? definition.aliases.map((alias) => normalizeNoMatchSearchValue(alias)) : [];
+      const familyTokens = seriesFamily.split(' ').filter(Boolean);
+      const familyTokenMatch = familyTokens.length ? familyTokens.every((token) => normalizedQuery.includes(token)) : false;
+
+      return (
+        normalizedQuery.includes(seriesFamily) ||
+        familyTokenMatch ||
+        normalizedName === normalizedQuery ||
+        aliases.some((alias) => alias === normalizedQuery)
+      );
+    });
+
+    return matchedDefinition ? getNoMatchSeriesFamily(matchedDefinition) : '';
+  }
+
+  function getNoMatchSeriesDefinition(seriesFamily) {
+    return PRODUCT_DEFINITIONS.find((definition) => getNoMatchSeriesFamily(definition) === seriesFamily) || null;
+  }
+
+  function getNoMatchExactProductMatch(query = noMatchFilterQuery) {
+    const normalizedQuery = normalizeNoMatchSearchValue(query);
+    if (!normalizedQuery) return null;
+
+    return PRODUCT_DEFINITIONS.find((definition) => {
+      const aliases = Array.isArray(definition.aliases) ? definition.aliases : [];
+      return [
+        normalizeNoMatchSearchValue(definition.name),
+        normalizeNoMatchSearchValue(getProductSelectionBadge(definition.key, definition.name)),
+        ...aliases.map((alias) => normalizeNoMatchSearchValue(alias))
+      ].some((value) => value === normalizedQuery);
+    }) || null;
+  }
+
+  function getNoMatchResultLabel(query = noMatchFilterQuery) {
+    const matchedSeriesFamily = getNoMatchMatchedSeriesFamily(query);
+    if (matchedSeriesFamily) {
+      const matchedSeriesDefinition = getNoMatchSeriesDefinition(matchedSeriesFamily);
+      return matchedSeriesDefinition ? getNoMatchSeriesLabel(matchedSeriesDefinition) : '';
+    }
+
+    const exactProductMatch = getNoMatchExactProductMatch(query);
+    return exactProductMatch ? exactProductMatch.name : '';
+  }
+
+  function getNoMatchVisibleProducts() {
+    const matchedSeriesFamily = getNoMatchMatchedSeriesFamily(noMatchFilterQuery);
+    return PRODUCT_DEFINITIONS.filter((definition) => {
+      const family = getNoMatchProductFamily(definition);
+      const searchTarget = getNoMatchSearchTarget(definition);
+      const familyMatch = matchedSeriesFamily
+        ? getNoMatchSeriesFamily(definition) === matchedSeriesFamily
+        : (noMatchFilterCategory === 'all' || family === noMatchFilterCategory);
+      const queryMatch = matchedSeriesFamily ? true : matchesNoMatchSearchTarget(searchTarget, noMatchFilterQuery);
+      return familyMatch && queryMatch;
+    });
+  }
+
+  function getPreferredNoMatchProduct(filteredDefinitions) {
+    if (!filteredDefinitions.length) return null;
+    const normalizedQuery = normalizeNoMatchSearchValue(noMatchFilterQuery);
+    if (!normalizedQuery) {
+      return filteredDefinitions.find((definition) => definition.key === currentProductKey) || filteredDefinitions[0];
+    }
+
+    return filteredDefinitions.find((definition) => {
+      const badge = normalizeNoMatchSearchValue(getProductSelectionBadge(definition.key, definition.name));
+      const aliases = Array.isArray(definition.aliases) ? definition.aliases : [];
+      return [
+        normalizeNoMatchSearchValue(definition.name),
+        badge,
+        ...aliases.map((alias) => normalizeNoMatchSearchValue(alias))
+      ].some((value) => value === normalizedQuery);
+    }) || filteredDefinitions[0];
+  }
+
+  function getNoMatchFilterBarHtml() {
     return `
-      <div class="no-match-picker-header">
-        <h3 class="no-match-picker-title">Select a Product</h3>
-        <p class="no-match-picker-subtitle">Please choose one of the products below to continue.</p>
+      <div class="no-match-filter-bar" aria-label="Product filters">
+        <label class="no-match-search-shell" aria-label="Search products">
+          <span class="no-match-search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3.5-3.5"></path>
+            </svg>
+          </span>
+          <input
+            class="no-match-search-input"
+            type="search"
+            placeholder="Search products..."
+            value="${escapeHtml(noMatchFilterQuery)}"
+            data-nomatch-search-input="true"
+          />
+          <button class="no-match-search-mic" type="button" data-nomatch-search-mic="true" tabindex="-1" aria-hidden="true" hidden></button>
+        </label>
+        <div class="no-match-filter-tabs no-match-filter-tabs-empty" aria-live="polite">
+          <span class="no-match-series-result" data-nomatch-series-result="true"></span>
+        </div>
       </div>
     `;
   }
 
-  function getNoMatchPickerGridHtml() {
+  function getNoMatchPickerHeaderHtml() {
+    return `
+      <div class="no-match-picker-header">
+        <h3 class="no-match-picker-title">Choose a Product</h3>
+        <p class="no-match-picker-subtitle">Select one item to continue</p>
+      </div>
+    `;
+  }
+
+  function getNoMatchPickerGridHtml(selectionMode = 'nomatch-preview') {
     return `
       <div class="placeholder-product-grid no-match-picker-grid">
         ${PRODUCT_DEFINITIONS.map((definition) => `
-          <button class="placeholder-product-item available no-match-picker-item" type="button" data-product="${definition.key}" data-selection-mode="preview">
+          <button
+            class="placeholder-product-item available no-match-picker-item"
+            type="button"
+            data-product="${definition.key}"
+            data-selection-mode="${selectionMode}"
+            data-product-family="${getNoMatchProductFamily(definition)}"
+            data-search-target="${escapeHtml(getNoMatchSearchTarget(definition))}"
+          >
             <span class="no-match-picker-item-badge" aria-hidden="true">${getProductSelectionBadge(definition.key, definition.name)}</span>
             <span class="no-match-picker-item-label">${escapeHtml(definition.name)}</span>
           </button>
         `).join('')}
       </div>
+      <div class="no-match-picker-empty" data-nomatch-empty="true" hidden>No products match your search.</div>
     `;
   }
 
@@ -6051,7 +6541,8 @@
     return `
       <div class="no-match-picker-panel" aria-label="Product selection">
         ${getNoMatchPickerHeaderHtml()}
-        ${getNoMatchPickerGridHtml()}
+        ${getNoMatchFilterBarHtml()}
+        ${getNoMatchPickerGridHtml('nomatch-preview')}
       </div>
     `;
   }
@@ -6060,33 +6551,23 @@
     if (!noMatchPickerShell) return;
     noMatchPickerShell.innerHTML = getNoMatchPickerPanelHtml();
     bindProductSelectionButtons(noMatchPickerShell);
-    updatePlaceholderProductSelection();
+    bindNoMatchFilterControls(noMatchPickerShell);
+    syncNoMatchSearchMicState();
+    refreshAllNoMatchUi();
   }
 
   function getNoMatchInfoCardHtml() {
-    const selectedProduct = PRODUCTS[currentProductKey] || PRODUCTS.clone16;
-    const selectedBadge = getProductSelectionBadge(selectedProduct.key, selectedProduct.name);
     return `
       <section class="no-match-info-card" aria-label="No matching result">
         <div class="no-match-picker-column" aria-label="Product selection">
           ${getNoMatchPickerHeaderHtml()}
-          ${getNoMatchPickerGridHtml()}
-        </div>
-        <aside class="no-match-info-card-sidebar" aria-label="Selected product">
-          <div class="no-match-info-card-toolbar">
-            <button class="no-match-info-card-control" type="button" data-nomatch-action="cancel" aria-label="Go back">&#8592;</button>
-            <button class="no-match-info-card-control" type="button" data-nomatch-action="cancel" aria-label="Close selection">&#10005;</button>
-          </div>
-          <div class="no-match-info-card-selection">
-            <span class="no-match-info-card-selection-badge" aria-hidden="true">${selectedBadge}</span>
-            <span class="no-match-info-card-selection-label">${escapeHtml(selectedProduct.name)}</span>
-          </div>
-          <div class="no-match-info-card-spacer" aria-hidden="true"></div>
-          <div class="no-match-info-card-actions">
+          ${getNoMatchFilterBarHtml()}
+          ${getNoMatchPickerGridHtml('nomatch-preview')}
+          <div class="no-match-info-card-actions no-match-info-card-actions-inline">
             <button class="no-match-action-btn no-match-action-btn-cancel" type="button" data-nomatch-action="cancel">Cancel</button>
             <button class="no-match-action-btn no-match-action-btn-continue" type="button" data-nomatch-action="continue">Continue</button>
           </div>
-        </aside>
+        </div>
       </section>
     `;
   }
@@ -6100,10 +6581,114 @@
     infoCard.classList.add('no-match-info-state');
     infoCard.innerHTML = getNoMatchInfoCardHtml();
     bindProductSelectionButtons(infoCard);
+    bindNoMatchFilterControls(infoCard);
     bindNoMatchActionButtons(infoCard);
-    updatePlaceholderProductSelection();
+    syncNoMatchSearchMicState();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
+    refreshAllNoMatchUi();
+  }
+
+  function getNoMatchRoots() {
+    return [noMatchPickerShell, infoCard].filter(Boolean);
+  }
+
+  function refreshAllNoMatchUi() {
+    const visibleProducts = getNoMatchVisibleProducts();
+    const preferredProduct = getPreferredNoMatchProduct(visibleProducts);
+    const matchedSeriesFamily = getNoMatchMatchedSeriesFamily(noMatchFilterQuery);
+    const matchedSeriesDefinition = matchedSeriesFamily ? getNoMatchSeriesDefinition(matchedSeriesFamily) : null;
+    const matchedSeriesCategory = matchedSeriesDefinition ? getNoMatchProductFamily(matchedSeriesDefinition) : '';
+    const matchedResultLabel = getNoMatchResultLabel(noMatchFilterQuery);
+
+    if (preferredProduct && preferredProduct.key !== currentProductKey) {
+      currentProductKey = preferredProduct.key;
+    }
+
+    getNoMatchRoots().forEach((root) => {
+      root.querySelectorAll('[data-nomatch-search-input]').forEach((input) => {
+        if (input.value !== noMatchFilterQuery) input.value = noMatchFilterQuery;
+      });
+
+      root.querySelectorAll('[data-nomatch-category]').forEach((button) => {
+        const defaultLabel = button.dataset.defaultLabel || button.textContent || '';
+        button.textContent = defaultLabel;
+        const isActive = matchedSeriesCategory
+          ? button.dataset.nomatchCategory === matchedSeriesCategory
+          : button.dataset.nomatchCategory === noMatchFilterCategory;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      root.querySelectorAll('[data-nomatch-series-result]').forEach((node) => {
+        node.textContent = matchedResultLabel;
+      });
+
+      let visibleCount = 0;
+      root.querySelectorAll('.no-match-picker-item').forEach((item) => {
+        const productKey = item.dataset.product || '';
+        const definition = PRODUCTS[productKey];
+        const badgeNode = item.querySelector('.no-match-picker-item-badge');
+        const labelNode = item.querySelector('.no-match-picker-item-label');
+
+        if (badgeNode && definition) {
+          badgeNode.textContent = getProductSelectionBadge(definition.key, definition.name);
+        }
+        if (labelNode && definition) {
+          labelNode.textContent = definition.name;
+        }
+
+        const isVisible = visibleProducts.some((product) => product.key === productKey);
+        item.hidden = !isVisible;
+        if (!isVisible) return;
+        visibleCount += 1;
+      });
+
+      root.querySelectorAll('[data-nomatch-empty]').forEach((emptyState) => {
+        emptyState.hidden = visibleCount > 0;
+      });
+
+    });
+
+    updatePlaceholderProductSelection();
+  }
+
+  function bindNoMatchFilterControls(root = document) {
+    root.querySelectorAll('[data-nomatch-search-input]').forEach((input) => {
+      if (input.dataset.bound === 'true') return;
+      input.dataset.bound = 'true';
+      input.addEventListener('input', () => {
+        noMatchFilterQuery = input.value || '';
+        refreshAllNoMatchUi();
+      });
+    });
+
+    root.querySelectorAll('[data-nomatch-category]').forEach((button) => {
+      if (button.dataset.bound === 'true') return;
+      button.dataset.bound = 'true';
+      button.addEventListener('click', () => {
+        noMatchFilterCategory = button.dataset.nomatchCategory || 'all';
+        refreshAllNoMatchUi();
+      });
+    });
+  }
+
+  function showDatabaseNoMatchResult(
+    subtitleText = 'No matching answer found in the Crystal Prompter database.',
+    spokenText = 'I could not find a matching answer in the database. Please choose a product to continue.',
+    speechOptions = {}
+  ) {
+    noMatchFilterCategory = 'all';
+    noMatchFilterQuery = '';
+    applyAboutStyleLayout(subtitleText);
+    renderNoMatchPicker();
+    setPlaceholderMode('nomatch');
+    renderNoMatchInfoCard();
+    if (!voiceOutputEnabled) {
+      runSpeechCompletionCallback(speechOptions.onComplete);
+      return;
+    }
+    speakAssistantText(spokenText, speechOptions);
   }
 
   function restoreDefaultExperience() {
@@ -6858,23 +7443,21 @@
     `;
   }
 
+  function getAiChatSubtitleText(response = {}) {
+    const knowledgeAnswer = String(response?.knowledgeItems?.[0]?.answer || '').replace(/\s+/g, ' ').trim();
+    if (response?.answerSource === 'knowledge_exact' && knowledgeAnswer) {
+      return knowledgeAnswer;
+    }
+    const answer = String(response?.answer || '').replace(/\s+/g, ' ').trim();
+    if (answer) return answer;
+    if (knowledgeAnswer) return knowledgeAnswer;
+    return 'Answer generated from the Crystal Prompter database.';
+  }
+
   function renderKnowledgeSearchInfoCard(result, relatedItems = []) {
     if (!result || !infoCard) return;
-    stopClone16ReadMoreAutoplay();
-    stopClone16ImagesFeatureAutoplay();
-    stopClone16ComponentsAutoplay();
-    stopAboutUsAnimationCycle();
-    infoCard.classList.remove(
-      'image-card',
-      'info-card-empty-state',
-      'no-match-info-state',
-      'cue-series-intro-card',
-      'clone16-intro-info-state',
-      'clone16-readmore-info-state',
-      'clone16-images-info-state'
-    );
-    infoCard.classList.add('clone16-spec-image-state');
-    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    prepareInfoCardFrame({ stateClass: 'clone16-spec-image-state', locked: true, scrollable: true });
+    setSubtitleStripText(String(result?.answer || '').replace(/\s+/g, ' ').trim() || 'Answer loaded from the Crystal Prompter database.');
     infoCard.innerHTML = getKnowledgeSearchInfoHtml(result, relatedItems);
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -6882,21 +7465,8 @@
 
   function renderAiChatInfoCard(response = {}) {
     if (!response || !infoCard) return;
-    stopClone16ReadMoreAutoplay();
-    stopClone16ImagesFeatureAutoplay();
-    stopClone16ComponentsAutoplay();
-    stopAboutUsAnimationCycle();
-    infoCard.classList.remove(
-      'image-card',
-      'info-card-empty-state',
-      'no-match-info-state',
-      'cue-series-intro-card',
-      'clone16-intro-info-state',
-      'clone16-readmore-info-state',
-      'clone16-images-info-state'
-    );
-    infoCard.classList.add('clone16-spec-image-state');
-    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    prepareInfoCardFrame({ stateClass: 'clone16-spec-image-state', locked: true, scrollable: true });
+    setSubtitleStripText(getAiChatSubtitleText(response));
     infoCard.innerHTML = getAiChatInfoHtml(response);
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -7175,7 +7745,7 @@
     avatarVideo.onended = null;
   }
 
-  async function sendMessage(text) {
+  async function sendMessage(text, options = {}) {
     const input = document.getElementById('userInput');
     const msg = text || input.value.trim();
     if (!msg) return;
@@ -7206,66 +7776,67 @@
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
 
-    const cueSeriesShortcutMatch = matchScriptedQuestion(msg);
-    if (cueSeriesShortcutMatch?.id === 'cue_series') {
-      logChunkDebug('scripted-shortcut-selected', {
-        matchId: cueSeriesShortcutMatch.id,
-        message: msg
-      });
-      applyMatchedResponse(cueSeriesShortcutMatch);
-      return;
-    }
-
     const productSlugForApi = detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '');
 
     // Typed chat input should prefer the API chat route so the chunked avatar flow can start as soon as chunk 1 is ready.
     const aiResponse = await chatWithAssistantApi(msg, productSlugForApi);
+    if (aiResponse?.answerSource === 'no_verified_info') {
+      const spokenText = options.source === 'voice'
+        ? 'I could not find a matching answer in the database. Please choose a product to continue.'
+        : undefined;
+      showDatabaseNoMatchResult(undefined, spokenText, { onComplete: options.onComplete });
+      return;
+    }
+
     if (aiResponse?.answer) {
       const resultProductKey = resolveProductKeyFromApiSlug(aiResponse?.productSlug, '');
+      const subtitleAnswerText = getAiChatSubtitleText(aiResponse);
       if (resultProductKey && PRODUCTS[resultProductKey]) {
         await hydrateProductFromApi(resultProductKey);
         selectProduct(resultProductKey, { showQuickActions: true });
-        applyAboutStyleLayout(getProductSummaryStripText(PRODUCTS[resultProductKey]));
       } else {
         applyAboutStyleLayout('Answer generated by the Crystal Prompter assistant.', { showEmptyCard: false });
       }
-      renderAiChatInfoCard(aiResponse);
+      if (shouldShowClone16DefinitionSequence(subtitleAnswerText, resultProductKey)) {
+        renderClone16DefinitionSequencePanel();
+      }
       // Single-clip playback keeps the response path simple when chunked avatar playback is disabled.
-      speakAssistantText(String(aiResponse.answer || '').trim());
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(subtitleAnswerText);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(String(aiResponse.answer || '').trim(), {
+          onComplete: options.onComplete,
+          syncSubtitleText: subtitleAnswerText
+        });
+      }
       return;
     }
 
     const knowledgeItems = await searchApiKnowledge(msg, productSlugForApi);
     if (knowledgeItems.length) {
       const primaryItem = knowledgeItems[0];
+      const subtitleAnswerText = String(primaryItem?.answer || '').replace(/\s+/g, ' ').trim() || 'Answer loaded from the Crystal Prompter knowledge database.';
       const resultProductKey = resolveProductKeyFromApiSlug(primaryItem?.product_slug, '');
       if (resultProductKey && PRODUCTS[resultProductKey]) {
         await hydrateProductFromApi(resultProductKey);
         selectProduct(resultProductKey, { showQuickActions: true });
-        applyAboutStyleLayout(getProductSummaryStripText(PRODUCTS[resultProductKey]));
       } else {
         applyAboutStyleLayout('Answer loaded from the Crystal Prompter knowledge database.', { showEmptyCard: false });
       }
-      renderKnowledgeSearchInfoCard(primaryItem, knowledgeItems.slice(1, 5));
-      speakAssistantText(String(primaryItem?.answer || '').trim() || 'I found an answer in the Crystal Prompter knowledge database.');
-      return;
-    }
-
-    const match = matchScriptedQuestion(msg);
-    if (match) {
-      logChunkDebug('scripted-fallback-selected', {
-        matchId: match.id,
-        message: msg
+      if (shouldShowClone16DefinitionSequence(subtitleAnswerText, resultProductKey)) {
+        renderClone16DefinitionSequencePanel();
+      }
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(subtitleAnswerText);
+      }
+      speakAssistantText(String(primaryItem?.answer || '').trim() || 'I found an answer in the Crystal Prompter knowledge database.', {
+        syncSubtitleText: subtitleAnswerText
       });
-      applyMatchedResponse(match);
       return;
     }
 
-    applyAboutStyleLayout('Please select a product to continue.');
-    renderNoMatchPicker();
-    setPlaceholderMode('nomatch');
-    renderNoMatchInfoCard();
-    speakAssistantText('I could not match that request. Please choose a product to continue.');
+    showDatabaseNoMatchResult('No matching answer found in the Crystal Prompter database.');
   }
 
   function quickAction(label) {
@@ -7453,3 +8024,4 @@
   void hydrateKnownProductsFromApi();
   void hydrateProductFromApi(currentProductKey);
   window.addEventListener('resize', syncCueSeriesAvatarHeight);
+  window.addEventListener('resize', scheduleSubtitleStripMarqueeUpdate);

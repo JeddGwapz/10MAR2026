@@ -59,6 +59,43 @@ MAX_SENTENCE_CHUNKS = 3
 CHUNK_SESSION_TTL_SECONDS = 300
 TARGET_CHUNK_WORDS = 18
 MIN_CHUNK_WORDS = 8
+SEARCH_STOP_WORDS = {
+    "a", "an", "and", "are", "be", "can", "do", "does", "for", "from", "how",
+    "in", "is", "it", "its", "many", "much", "of", "on", "the", "this", "to",
+    "what", "where", "which", "who", "why", "with",
+}
+IDENTITY_QUERY_COMPACTS = {
+    "",
+    "ano",
+    "anoang",
+    "define",
+    "describe",
+    "tellmeabout",
+    "unsa",
+    "unsaang",
+    "what",
+    "whatis",
+    "whatisthe",
+    "whatsthe",
+}
+CATEGORY_PRIORITY_HINTS = (
+    ("basic overview", 0),
+    ("technical specifications", 1),
+    ("features and controls", 2),
+    ("features and function", 2),
+    ("design and build", 3),
+    ("design and portability", 3),
+    ("optical and build details", 3),
+    ("users and target market", 4),
+    ("users and institutional use cases", 4),
+    ("benefits and communication value", 5),
+    ("benefits and workflow", 5),
+    ("package and service support", 6),
+    ("competitive advantage", 7),
+    ("marketability and business value", 8),
+    ("defense and positioning", 20),
+    ("defense and marketability", 20),
+)
 chunk_sessions = {}
 chunk_sessions_lock = threading.Lock()
 
@@ -92,6 +129,14 @@ load_env_file()
 class AppHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=ROOT_DIR, **kwargs)
+
+    def end_headers(self):
+        path = urlparse(self.path).path
+        if not path.startswith("/api/"):
+            self.send_header("Cache-Control", "no-store, max-age=0")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        super().end_headers()
 
     def do_GET(self):
         parsed_url = urlparse(self.path)
@@ -308,6 +353,7 @@ class AppHandler(SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
@@ -316,6 +362,7 @@ class AppHandler(SimpleHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
@@ -966,49 +1013,15 @@ def list_prices(*, product_slug=None, limit=50):
 
 
 def search_knowledge(text_query, *, product_slug=None, limit=10):
-    like_query = f"%{text_query}%"
-    prefix_query = f"{text_query}%"
-    if product_slug:
-        return run_query(
-            """
-            SELECT
-              source_file,
-              source_sheet,
-              category_name,
-              product_slug,
-              item_code,
-              item_number,
-              question,
-              answer,
-              multimedia_asset,
-              content_type,
-              file_name
-            FROM knowledge_qa_items
-            WHERE product_slug = %s
-              AND (
-                question ILIKE %s
-                OR answer ILIKE %s
-                OR category_name ILIKE %s
-              )
-            ORDER BY
-              CASE
-                WHEN question ILIKE %s THEN 0
-                WHEN question ILIKE %s THEN 1
-                WHEN answer ILIKE %s THEN 2
-                ELSE 3
-              END,
-              source_sheet,
-              source_row_number
-            LIMIT %s
-            """,
-            (product_slug, like_query, like_query, like_query, text_query, prefix_query, like_query, limit),
-        )
+    text_query = clean_query_value(text_query)
+    if not text_query:
+        return []
 
-    return run_query(
-        """
+    base_select = """
         SELECT
           source_file,
           source_sheet,
+          source_row_number,
           category_name,
           product_slug,
           item_code,
@@ -1019,24 +1032,199 @@ def search_knowledge(text_query, *, product_slug=None, limit=10):
           content_type,
           file_name
         FROM knowledge_qa_items
-        WHERE
-          question ILIKE %s
-          OR answer ILIKE %s
-          OR category_name ILIKE %s
-          OR COALESCE(product_slug, '') ILIKE %s
-        ORDER BY
-          CASE
-            WHEN question ILIKE %s THEN 0
-            WHEN question ILIKE %s THEN 1
-            WHEN answer ILIKE %s THEN 2
-            ELSE 3
-          END,
-          source_sheet,
-          source_row_number
-        LIMIT %s
-        """,
-        (like_query, like_query, like_query, like_query, text_query, prefix_query, like_query, limit),
+    """
+    if product_slug:
+        candidates = run_query(
+            base_select + """
+            WHERE product_slug = %s
+            ORDER BY source_sheet, source_row_number
+            """,
+            (product_slug,),
+        )
+    else:
+        candidates = run_query(
+            base_select + """
+            ORDER BY source_sheet, source_row_number
+            """
+        )
+
+    ranked_items = []
+    for index, item in enumerate(candidates):
+        rank = build_knowledge_rank(item, text_query=text_query)
+        if rank is None:
+            continue
+        ranked_items.append((rank + (index,), item))
+
+    ranked_items.sort(key=lambda entry: entry[0])
+    deduped_items = []
+    seen_questions = set()
+    for _, item in ranked_items:
+        question_key = normalize_search_text(item.get("question"))
+        if question_key and question_key in seen_questions:
+            continue
+        if question_key:
+            seen_questions.add(question_key)
+        deduped_items.append(item)
+        if len(deduped_items) >= limit:
+            break
+    return deduped_items
+
+
+def normalize_search_text(value):
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+
+def compact_search_text(value):
+    return re.sub(r"[^a-z0-9]+", "", str(value or "").lower())
+
+
+def extract_search_tokens(value):
+    normalized_value = normalize_search_text(value)
+    informative_tokens = [
+        token
+        for token in normalized_value.split()
+        if token and token not in SEARCH_STOP_WORDS
+    ]
+    if informative_tokens:
+        return informative_tokens
+    return [token for token in normalized_value.split() if token]
+
+
+def get_field_match_stats(field_value, *, query_normalized, query_compact, query_tokens):
+    normalized_value = normalize_search_text(field_value)
+    compact_value = compact_search_text(field_value)
+    token_set = set(normalized_value.split())
+
+    token_hits = 0
+    for token in query_tokens:
+        if token in token_set or token in compact_value:
+            token_hits += 1
+
+    exact_match = bool(query_normalized) and (
+        normalized_value == query_normalized
+        or (query_compact and compact_value == query_compact)
     )
+    starts_match = bool(query_normalized) and (
+        normalized_value.startswith(query_normalized)
+        or (query_compact and compact_value.startswith(query_compact))
+    )
+    contains_match = bool(query_normalized) and (
+        query_normalized in normalized_value
+        or (query_compact and query_compact in compact_value)
+    )
+    all_tokens_match = bool(query_tokens) and token_hits == len(query_tokens)
+
+    return {
+        "normalized": normalized_value,
+        "exact": exact_match,
+        "starts": starts_match,
+        "contains": contains_match,
+        "all_tokens": all_tokens_match,
+        "token_hits": token_hits,
+    }
+
+
+def build_knowledge_rank(item, *, text_query):
+    query_normalized = normalize_search_text(text_query)
+    query_compact = compact_search_text(text_query)
+    query_tokens = extract_search_tokens(text_query)
+    product_compact = compact_search_text(item.get("product_slug"))
+
+    question_stats = get_field_match_stats(
+        item.get("question"),
+        query_normalized=query_normalized,
+        query_compact=query_compact,
+        query_tokens=query_tokens,
+    )
+    answer_stats = get_field_match_stats(
+        item.get("answer"),
+        query_normalized=query_normalized,
+        query_compact=query_compact,
+        query_tokens=query_tokens,
+    )
+    category_stats = get_field_match_stats(
+        item.get("category_name"),
+        query_normalized=query_normalized,
+        query_compact=query_compact,
+        query_tokens=query_tokens,
+    )
+    product_stats = get_field_match_stats(
+        item.get("product_slug"),
+        query_normalized=query_normalized,
+        query_compact=query_compact,
+        query_tokens=query_tokens,
+    )
+    category_priority = get_category_priority(item.get("category_name"))
+
+    identity_query_compact = query_compact
+    if product_compact and product_compact in query_compact:
+        identity_query_compact = query_compact.replace(product_compact, "", 1)
+
+    question_compact = compact_search_text(item.get("question"))
+    question_without_product_compact = question_compact
+    if product_compact and product_compact in question_compact:
+        question_without_product_compact = question_compact.replace(product_compact, "", 1)
+    is_identity_question = (
+        bool(product_compact)
+        and product_compact in question_compact
+        and question_without_product_compact in {"whatis", "whatisthe"}
+    )
+    is_identity_query = (
+        bool(product_compact)
+        and product_compact in query_compact
+        and identity_query_compact in IDENTITY_QUERY_COMPACTS
+    )
+
+    if is_identity_query and is_identity_question:
+        bucket = 0
+    elif question_stats["exact"]:
+        bucket = 0
+    elif question_stats["starts"]:
+        bucket = 1
+    elif question_stats["contains"]:
+        bucket = 2
+    elif question_stats["all_tokens"]:
+        bucket = 3
+    elif product_stats["exact"] or product_stats["all_tokens"]:
+        bucket = 4
+    elif category_stats["exact"] or category_stats["all_tokens"]:
+        bucket = 5
+    elif answer_stats["contains"]:
+        bucket = 6
+    elif answer_stats["all_tokens"]:
+        bucket = 7
+    elif question_stats["token_hits"] > 0:
+        bucket = 8
+    elif product_stats["token_hits"] > 0:
+        bucket = 9
+    elif category_stats["token_hits"] > 0:
+        bucket = 10
+    elif answer_stats["token_hits"] > 0:
+        bucket = 11
+    else:
+        return None
+
+    question_length_delta = abs(len(question_stats["normalized"]) - len(query_normalized))
+    return (
+        bucket,
+        category_priority,
+        -question_stats["token_hits"],
+        -product_stats["token_hits"],
+        -category_stats["token_hits"],
+        -answer_stats["token_hits"],
+        -len(str(item.get("answer") or "").strip()),
+        question_length_delta,
+        str(item.get("source_sheet") or ""),
+        int(item.get("source_row_number") or 0),
+    )
+
+
+def get_category_priority(category_name):
+    normalized_category = normalize_search_text(category_name)
+    for needle, priority in CATEGORY_PRIORITY_HINTS:
+        if needle in normalized_category:
+            return priority
+    return 10
 
 
 def search_prices(text_query, *, product_slug=None, limit=5):
@@ -1263,39 +1451,59 @@ def call_openai_responses_api(*, message, context_text, history=None):
 def chat_with_openai(message, *, product_slug=None, history=None, language="EN", voice=""):
     request_started_at = time.monotonic()
     context = build_context_text(message, product_slug=product_slug)
-    llm_started_at = time.monotonic()
-    openai_result = call_openai_responses_api(
-        message=message,
-        context_text=context["contextText"],
-        history=history or [],
-    )
-    llm_duration_ms = int((time.monotonic() - llm_started_at) * 1000)
-    log_timing(
-        "chat_llm_done",
-        productSlug=product_slug or (context["product"] or {}).get("slug"),
-        messageChars=len(message),
-        llmMs=llm_duration_ms,
-    )
+    resolved_product_slug = product_slug or (context["product"] or {}).get("slug")
 
-    # Chunked avatar playback is disabled, so /api/chat returns text immediately and leaves
-    # the full single-clip speech generation to the follow-up speak/avatar-speak request.
-    split_duration_ms = 0
+    # Strict database mode: if we already have a verified knowledge-base hit,
+    # return the exact stored answer instead of sending the question to the LLM.
+    if context["knowledgeItems"]:
+        primary_item = context["knowledgeItems"][0]
+        answer_text = str(primary_item.get("answer") or "").strip()
+        total_request_ms = int((time.monotonic() - request_started_at) * 1000)
+        log_timing(
+            "chat_database_exact_answer",
+            productSlug=resolved_product_slug or primary_item.get("product_slug"),
+            messageChars=len(message),
+            knowledgeCount=len(context["knowledgeItems"]),
+            totalRequestMs=total_request_ms,
+        )
+        return {
+            "answer": answer_text,
+            "model": "database_exact",
+            "answerSource": "knowledge_exact",
+            "productSlug": resolved_product_slug or primary_item.get("product_slug"),
+            "knowledgeItems": context["knowledgeItems"],
+            "priceItems": context["priceItems"],
+            "timings": {
+                "llmMs": 0,
+                "splitMs": 0,
+                "totalRequestMs": total_request_ms,
+            },
+            "sources": {
+                "knowledgeCount": len(context["knowledgeItems"]),
+                "priceCount": len(context["priceItems"]),
+            },
+        }
+
+    # Strict database mode: if there is no verified knowledge-base match, return
+    # an explicit "not enough verified information" response instead of guessing.
     total_request_ms = int((time.monotonic() - request_started_at) * 1000)
     log_timing(
-        "chat_single_response_ready",
+        "chat_no_verified_match",
+        productSlug=resolved_product_slug,
+        messageChars=len(message),
         totalRequestMs=total_request_ms,
-        answerChars=len(openai_result["answer"]),
     )
 
     return {
-        "answer": openai_result["answer"],
-        "model": get_openai_model(),
-        "productSlug": product_slug or (context["product"] or {}).get("slug"),
+        "answer": "I do not have enough verified information in the Crystal Prompter database yet.",
+        "model": "database_only",
+        "answerSource": "no_verified_info",
+        "productSlug": resolved_product_slug,
         "knowledgeItems": context["knowledgeItems"],
         "priceItems": context["priceItems"],
         "timings": {
-            "llmMs": llm_duration_ms,
-            "splitMs": split_duration_ms,
+            "llmMs": 0,
+            "splitMs": 0,
             "totalRequestMs": total_request_ms,
         },
         "sources": {
