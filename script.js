@@ -283,7 +283,7 @@
   function shouldShowClone16DefinitionSequence(answerText = '', productKey = '') {
     const normalizedAnswer = String(answerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
     const normalizedTarget = CLONE16_DEFINITION_ANSWER.replace(/\s+/g, ' ').trim().toLowerCase();
-    if (productKey !== 'clone16' || !normalizedAnswer) return false;
+    if (!normalizedAnswer) return false;
     if (normalizedAnswer === normalizedTarget) return true;
     const clone16DefinitionSignals = [
       'clone 16',
@@ -293,7 +293,10 @@
       'read scripts clearly',
       'facing the camera'
     ];
-    return clone16DefinitionSignals.filter((signal) => normalizedAnswer.includes(signal)).length >= 4;
+    const matchedSignals = clone16DefinitionSignals.filter((signal) => normalizedAnswer.includes(signal));
+    if (!matchedSignals.includes('clone 16')) return false;
+    if (productKey === 'clone16') return matchedSignals.length >= 4;
+    return matchedSignals.length >= 5;
   }
 
   function renderClone16DefinitionSequencePanel() {
