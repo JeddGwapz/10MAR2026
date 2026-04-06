@@ -283,7 +283,17 @@
   function shouldShowClone16DefinitionSequence(answerText = '', productKey = '') {
     const normalizedAnswer = String(answerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
     const normalizedTarget = CLONE16_DEFINITION_ANSWER.replace(/\s+/g, ' ').trim().toLowerCase();
-    return productKey === 'clone16' && normalizedAnswer === normalizedTarget;
+    if (productKey !== 'clone16' || !normalizedAnswer) return false;
+    if (normalizedAnswer === normalizedTarget) return true;
+    const clone16DefinitionSignals = [
+      'clone 16',
+      '15.6-inch',
+      'full hd',
+      'portable teleprompter',
+      'read scripts clearly',
+      'facing the camera'
+    ];
+    return clone16DefinitionSignals.filter((signal) => normalizedAnswer.includes(signal)).length >= 4;
   }
 
   function renderClone16DefinitionSequencePanel() {
