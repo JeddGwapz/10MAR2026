@@ -1944,8 +1944,8 @@
       summary: 'A portable teleprompter that connects to a laptop via HDMI for faster, more stable production. Ideal for interviews and product shoots, it allows instant script editing and smooth control. Its 16:9 widescreen display offers a wider view, replacing traditional 17-inch 4:3 models.',
       summaryHtml: `Portable interview teleprompter equipped with<br><br>a 16-inch, 500 cd/m², 16:9 monitor<br><br><strong>Portable and Precise Performance</strong><br><br>Clone 16 is a portable teleprompter that connects to a laptop via HDMI, enabling faster and more stable on-set production, and delivering exceptional performance for precise interviews or detailed product descriptions.<br><br><strong>Effortless Script Control and Wider View</strong><br><br>Connecting directly to a laptop, Clone 16 enables instant script edits and smooth production, while its 16:9 widescreen replaces 17-inch 4:3 teleprompters for a broader, ideal view of long-form scripts.`,
       images: [
-        'assets/clone16-image-shell.png',
-        'assets/clone16-image-shell.png'
+        CLONE16_READMORE_IMAGES[0],
+        CLONE16_READMORE_IMAGES[1] || CLONE16_READMORE_IMAGES[0]
       ],
       videoSrc: 'https://www.youtube.com/shorts/IJlVE8LUHZ0',
       videoTitle: 'Clone 16 - Introduction',
@@ -7851,6 +7851,31 @@
     setInitialVideoPanelHidden(false);
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
+
+    const shouldUseLocalClone16DefinitionFlow = shouldForceClone16DefinitionSequence(
+      msg,
+      detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '')
+    );
+    if (shouldUseLocalClone16DefinitionFlow) {
+      if (PRODUCTS.clone16) {
+        currentProductKey = 'clone16';
+        lastConfirmedProductKey = 'clone16';
+        hasExplicitProductSelection = true;
+        updatePlaceholderProductSelection();
+        selectProduct('clone16', { showQuickActions: true });
+      }
+      renderClone16DefinitionSequencePanel();
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(CLONE16_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CLONE16_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CLONE16_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
 
     const productSlugForApi = detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '');
 
