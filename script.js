@@ -77,7 +77,7 @@
   const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
-  const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
+  const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation-web.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
@@ -357,6 +357,7 @@
           <video
             class="clone16-answer-sequence-video"
             id="clone16AnswerSequenceVideo"
+            autoplay
             muted
             playsinline
             preload="auto"
