@@ -130,13 +130,30 @@ class AppHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=ROOT_DIR, **kwargs)
 
+    def _is_api_request(self):
+        return urlparse(self.path).path.startswith("/api/")
+
+    def _send_api_cors_headers(self):
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept")
+
     def end_headers(self):
         path = urlparse(self.path).path
-        if not path.startswith("/api/"):
+        if path.startswith("/api/"):
+            self._send_api_cors_headers()
+        else:
             self.send_header("Cache-Control", "no-store, max-age=0")
             self.send_header("Pragma", "no-cache")
             self.send_header("Expires", "0")
         super().end_headers()
+
+    def do_OPTIONS(self):
+        if not self._is_api_request():
+            self.send_error(HTTPStatus.NOT_FOUND, "Not found")
+            return
+        self.send_response(HTTPStatus.NO_CONTENT)
+        self.end_headers()
 
     def do_GET(self):
         parsed_url = urlparse(self.path)
