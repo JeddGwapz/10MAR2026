@@ -78,7 +78,35 @@
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
   const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
+  const CLONE16_PRODUCT_TYPE_PANEL_VIDEO = 'assets/clone16-2.mp4';
+  const CLONE16_MAIN_PURPOSE_PANEL_VIDEO = 'assets/clone16-3.mp4';
+  const CLONE16_USEFUL_PANEL_VIDEO = 'assets/clone16-4.mp4';
+  const CLONE16_ONE_SENTENCE_PANEL_VIDEO = 'assets/clone16-5.mp4';
+  const CLONE16_DISPLAY_SIZE_PANEL_VIDEO = 'assets/clone16-6.mp4';
+  const CLONE16_RESOLUTION_PANEL_VIDEO = 'assets/clone16-7.mp4';
+  const CLONE16_ASPECT_RATIO_PANEL_VIDEO = 'assets/clone16-8.mp4';
+  const CLONE16_BRIGHTNESS_PANEL_VIDEO = 'assets/clone16-9.mp4';
+  const CLONE16_INPUT_SIGNAL_PANEL_VIDEO = 'assets/clone16-10.mp4';
+  const CLONE16_POWER_SUPPLY_PANEL_VIDEO = 'assets/clone16-11.mp4';
+  const CLONE16_WEIGHT_PANEL_VIDEO = 'assets/clone16-12.mp4';
+  const CLONE16_CAPABILITIES_PANEL_VIDEO = 'assets/clone16-13.mp4';
+  const CLONE16_LARGE_TEXT_PANEL_VIDEO = 'assets/clone16-14.mp4';
+  const CLONE16_POWERPOINT_PANEL_VIDEO = 'assets/clone16-15.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
+  const CLONE16_PRODUCT_TYPE_ANSWER = 'Clone 16 is a multipurpose teleprompter used for script reading during video production, broadcasting, lectures, interviews, and public communication activities';
+  const CLONE16_MAIN_PURPOSE_ANSWER = 'The main purpose of Clone 16 is to help users deliver scripts more naturally, clearly, and professionally without needing to memorize their lines';
+  const CLONE16_USEFUL_ANSWER = 'Clone 16 is useful because it allows users to maintain eye contact with the camera while reading their scripts, which improves confidence, delivery, and professionalism';
+  const CLONE16_ONE_SENTENCE_ANSWER = 'Clone 16 is a portable, professional-grade teleprompter that helps users communicate more effectively on camera';
+  const CLONE16_DISPLAY_SIZE_ANSWER = 'Clone 16 has a 15.6-inch display panel';
+  const CLONE16_RESOLUTION_ANSWER = 'The resolution of Clone 16 is 1920 × 1080 Full HD';
+  const CLONE16_ASPECT_RATIO_ANSWER = 'Clone 16 uses a 16:9 aspect ratio, which is suitable for modern video and broadcasting formats';
+  const CLONE16_BRIGHTNESS_ANSWER = 'Clone 16 has a brightness of 500 cd/m², which provides clear visibility even during long recording sessions';
+  const CLONE16_INPUT_SIGNAL_ANSWER = 'Clone 16 supports HDMI input, allowing it to connect easily with compatible devices';
+  const CLONE16_POWER_SUPPLY_ANSWER = 'Clone 16 uses a 12 volt and 5 amp power adapter';
+  const CLONE16_WEIGHT_ANSWER = 'Clone 16 has a product weight of approximately 6.73 kg';
+  const CLONE16_CAPABILITIES_ANSWER = 'Clone 16 can display scripts, PowerPoint presentations, PDF files, and video playback, making it useful for various communication and production needs';
+  const CLONE16_LARGE_TEXT_ANSWER = 'Yes, Clone 16 supports large text display, making scripts easier to read during recording or live presentations';
+  const CLONE16_POWERPOINT_ANSWER = 'Yes, Clone 16 supports PowerPoint presentations, making it useful for lectures, meetings, and public information sharing';
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
   const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
@@ -310,25 +338,36 @@
     const identityPhrases = [
       'what is clone 16',
       'what is the clone 16',
+      'what type of product is clone 16',
+      'what is the main purpose of clone 16',
+      'why is clone 16 useful',
+      'how do you describe clone 16 in one sentence',
+      'what is the display size of clone 16',
+      'what is the resolution of clone 16',
+      'what is the aspect ratio of clone 16',
+      'how bright is the clone 16 monitor',
+      'what input signal does clone 16 support',
+      'what power supply does clone 16 use',
+      'how heavy is clone 16',
+      'what can clone 16 do',
+      'does clone 16 support large text display',
+      'can clone 16 be used for powerpoint and presentations',
       'tell me about clone 16',
       'introduce clone 16',
       'clone 16 overview',
       'about clone 16'
     ];
-    const hasExactIdentityPhrase = identityPhrases.some((phrase) => {
+    const hasIdentityPhrase = identityPhrases.some((phrase) => {
       const normalizedPhrase = normalizeQuestion(phrase);
       const compactPhrase = normalizedPhrase.replace(/\s+/g, '');
-      return normalizedQuestion === normalizedPhrase || compactQuestion === compactPhrase;
+      return normalizedQuestion.includes(normalizedPhrase) || compactQuestion.includes(compactPhrase);
     });
 
-    if (!hasExactIdentityPhrase) return false;
+    if (!hasIdentityPhrase) return false;
 
     const disallowedSignals = [
       'price',
       'cost',
-      'power',
-      'supply',
-      'adapter',
       'used for',
       'use case',
       'uses',
@@ -352,7 +391,101 @@
     return !disallowedSignals.some((signal) => normalizedQuestion.includes(signal));
   }
 
-  function renderClone16DefinitionSequencePanel() {
+  function getClone16InfoCardVideoForQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    if (normalizedQuestion === 'what type of product is clone 16') {
+      return CLONE16_PRODUCT_TYPE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what is the main purpose of clone 16') {
+      return CLONE16_MAIN_PURPOSE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'why is clone 16 useful') {
+      return CLONE16_USEFUL_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'how do you describe clone 16 in one sentence') {
+      return CLONE16_ONE_SENTENCE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what is the display size of clone 16') {
+      return CLONE16_DISPLAY_SIZE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what is the resolution of clone 16') {
+      return CLONE16_RESOLUTION_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what is the aspect ratio of clone 16') {
+      return CLONE16_ASPECT_RATIO_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'how bright is the clone 16 monitor') {
+      return CLONE16_BRIGHTNESS_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what input signal does clone 16 support') {
+      return CLONE16_INPUT_SIGNAL_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what power supply does clone 16 use') {
+      return CLONE16_POWER_SUPPLY_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'how heavy is clone 16') {
+      return CLONE16_WEIGHT_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what can clone 16 do') {
+      return CLONE16_CAPABILITIES_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'does clone 16 support large text display') {
+      return CLONE16_LARGE_TEXT_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'can clone 16 be used for powerpoint and presentations') {
+      return CLONE16_POWERPOINT_PANEL_VIDEO;
+    }
+    return CLONE16_DEFINITION_PANEL_VIDEO;
+  }
+
+  function getClone16SubtitleForQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    if (normalizedQuestion === 'what type of product is clone 16') {
+      return CLONE16_PRODUCT_TYPE_ANSWER;
+    }
+    if (normalizedQuestion === 'what is the main purpose of clone 16') {
+      return CLONE16_MAIN_PURPOSE_ANSWER;
+    }
+    if (normalizedQuestion === 'why is clone 16 useful') {
+      return CLONE16_USEFUL_ANSWER;
+    }
+    if (normalizedQuestion === 'how do you describe clone 16 in one sentence') {
+      return CLONE16_ONE_SENTENCE_ANSWER;
+    }
+    if (normalizedQuestion === 'what is the display size of clone 16') {
+      return CLONE16_DISPLAY_SIZE_ANSWER;
+    }
+    if (normalizedQuestion === 'what is the resolution of clone 16') {
+      return CLONE16_RESOLUTION_ANSWER;
+    }
+    if (normalizedQuestion === 'what is the aspect ratio of clone 16') {
+      return CLONE16_ASPECT_RATIO_ANSWER;
+    }
+    if (normalizedQuestion === 'how bright is the clone 16 monitor') {
+      return CLONE16_BRIGHTNESS_ANSWER;
+    }
+    if (normalizedQuestion === 'what input signal does clone 16 support') {
+      return CLONE16_INPUT_SIGNAL_ANSWER;
+    }
+    if (normalizedQuestion === 'what power supply does clone 16 use') {
+      return CLONE16_POWER_SUPPLY_ANSWER;
+    }
+    if (normalizedQuestion === 'how heavy is clone 16') {
+      return CLONE16_WEIGHT_ANSWER;
+    }
+    if (normalizedQuestion === 'what can clone 16 do') {
+      return CLONE16_CAPABILITIES_ANSWER;
+    }
+    if (normalizedQuestion === 'does clone 16 support large text display') {
+      return CLONE16_LARGE_TEXT_ANSWER;
+    }
+    if (normalizedQuestion === 'can clone 16 be used for powerpoint and presentations') {
+      return CLONE16_POWERPOINT_ANSWER;
+    }
+    return CLONE16_DEFINITION_ANSWER;
+  }
+
+  function renderClone16DefinitionSequencePanel(videoSrc = CLONE16_DEFINITION_PANEL_VIDEO) {
     if (!prepareInfoCardFrame({ stateClass: 'clone16-answer-sequence-state', locked: true, scrollable: false })) return;
     infoCard.innerHTML = `
       <section class="clone16-answer-sequence-card" aria-label="Clone 16 answer media">
@@ -365,7 +498,7 @@
             playsinline
             preload="auto"
           >
-            <source src="${CLONE16_DEFINITION_PANEL_VIDEO}" type="video/mp4" />
+            <source src="${videoSrc}" type="video/mp4" />
           </video>
         </div>
       </section>
@@ -7838,6 +7971,8 @@
     );
 
     if (shouldUseLocalClone16DefinitionFlow) {
+      const forcedVideoSrc = getClone16InfoCardVideoForQuestion(msg);
+      const forcedSubtitleText = getClone16SubtitleForQuestion(msg);
       currentProductKey = 'clone16';
       lastConfirmedProductKey = 'clone16';
       hasExplicitProductSelection = true;
@@ -7845,14 +7980,14 @@
       setInitialVideoPanelHidden(false);
       setQuickActionsMode('all');
       setQuickActionsHidden(false);
-      renderClone16DefinitionSequencePanel();
+      renderClone16DefinitionSequencePanel(forcedVideoSrc);
       if (!voiceOutputEnabled) {
-        setSubtitleStripText(CLONE16_DEFINITION_ANSWER);
+        setSubtitleStripText(forcedSubtitleText);
         runSpeechCompletionCallback(options.onComplete);
       } else {
-        speakAssistantText(CLONE16_DEFINITION_ANSWER, {
+        speakAssistantText(forcedSubtitleText, {
           onComplete: options.onComplete,
-          syncSubtitleText: CLONE16_DEFINITION_ANSWER
+          syncSubtitleText: forcedSubtitleText
         });
       }
       return;
@@ -7906,7 +8041,7 @@
         shouldShowClone16DefinitionSequence(subtitleAnswerText, resultProductKey) ||
         shouldForceClone16DefinitionSequence(msg, resultProductKey || detectedProductKey)
       ) {
-        renderClone16DefinitionSequencePanel();
+        renderClone16DefinitionSequencePanel(getClone16InfoCardVideoForQuestion(msg));
       }
       // Single-clip playback keeps the response path simple when chunked avatar playback is disabled.
       if (!voiceOutputEnabled) {
@@ -7936,7 +8071,7 @@
         shouldShowClone16DefinitionSequence(subtitleAnswerText, resultProductKey) ||
         shouldForceClone16DefinitionSequence(msg, resultProductKey || detectedProductKey)
       ) {
-        renderClone16DefinitionSequencePanel();
+        renderClone16DefinitionSequencePanel(getClone16InfoCardVideoForQuestion(msg));
       }
       if (!voiceOutputEnabled) {
         setSubtitleStripText(subtitleAnswerText);
