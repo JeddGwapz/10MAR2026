@@ -7829,6 +7829,32 @@
     updateComposerActionButton();
     setIntroEmptyState(false);
     const detectedProductKey = detectProductKeyFromText(msg);
+    const shouldUseLocalClone16DefinitionFlow = shouldForceClone16DefinitionSequence(
+      msg,
+      detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '')
+    );
+
+    if (shouldUseLocalClone16DefinitionFlow) {
+      currentProductKey = 'clone16';
+      lastConfirmedProductKey = 'clone16';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderClone16DefinitionSequencePanel();
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(CLONE16_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CLONE16_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CLONE16_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
     if (detectedProductKey && PRODUCTS[detectedProductKey]) {
       currentProductKey = detectedProductKey;
       lastConfirmedProductKey = detectedProductKey;
@@ -7851,31 +7877,6 @@
     setInitialVideoPanelHidden(false);
     setQuickActionsMode('all');
     setQuickActionsHidden(false);
-
-    const shouldUseLocalClone16DefinitionFlow = shouldForceClone16DefinitionSequence(
-      msg,
-      detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '')
-    );
-    if (shouldUseLocalClone16DefinitionFlow) {
-      if (PRODUCTS.clone16) {
-        currentProductKey = 'clone16';
-        lastConfirmedProductKey = 'clone16';
-        hasExplicitProductSelection = true;
-        updatePlaceholderProductSelection();
-        selectProduct('clone16', { showQuickActions: true });
-      }
-      renderClone16DefinitionSequencePanel();
-      if (!voiceOutputEnabled) {
-        setSubtitleStripText(CLONE16_DEFINITION_ANSWER);
-        runSpeechCompletionCallback(options.onComplete);
-      } else {
-        speakAssistantText(CLONE16_DEFINITION_ANSWER, {
-          onComplete: options.onComplete,
-          syncSubtitleText: CLONE16_DEFINITION_ANSWER
-        });
-      }
-      return;
-    }
 
     const productSlugForApi = detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '');
 
