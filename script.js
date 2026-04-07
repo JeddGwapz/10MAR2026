@@ -315,17 +315,20 @@
       'clone 16 overview',
       'about clone 16'
     ];
-    const hasIdentityPhrase = identityPhrases.some((phrase) => {
+    const hasExactIdentityPhrase = identityPhrases.some((phrase) => {
       const normalizedPhrase = normalizeQuestion(phrase);
       const compactPhrase = normalizedPhrase.replace(/\s+/g, '');
-      return normalizedQuestion.includes(normalizedPhrase) || compactQuestion.includes(compactPhrase);
+      return normalizedQuestion === normalizedPhrase || compactQuestion === compactPhrase;
     });
 
-    if (!hasIdentityPhrase) return false;
+    if (!hasExactIdentityPhrase) return false;
 
     const disallowedSignals = [
       'price',
       'cost',
+      'power',
+      'supply',
+      'adapter',
       'used for',
       'use case',
       'uses',
