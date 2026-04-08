@@ -92,6 +92,17 @@
   const CLONE16_CAPABILITIES_PANEL_VIDEO = 'assets/clone16-13.mp4';
   const CLONE16_LARGE_TEXT_PANEL_VIDEO = 'assets/clone16-14.mp4';
   const CLONE16_POWERPOINT_PANEL_VIDEO = 'assets/clone16-15.mp4';
+  const CLONE16_PDF_VIDEO_PLAYBACK_PANEL_VIDEO = 'assets/clone16-16.mp4';
+  const CLONE16_EASY_TO_OPERATE_PANEL_VIDEO = 'assets/clone16-17.mp4';
+  const CLONE16_REMOTE_CONTROL_PANEL_VIDEO = 'assets/clone16-18.mp4';
+  const CLONE16_WIRELESS_REMOTE_FUNCTION_PANEL_VIDEO = 'assets/clone16-19.mp4';
+  const CLONE16_SCREEN_FLIP_PANEL_VIDEO = 'assets/clone16-20.mp4';
+  const CLONE16_MATERIAL_PANEL_VIDEO = 'assets/clone16-21.mp4';
+  const CLONE16_ALUMINUM_REASON_PANEL_VIDEO = 'assets/clone16-22.mp4';
+  const CLONE16_PORTABLE_PANEL_VIDEO = 'assets/clone16-23.mp4';
+  const CLONE16_EASY_INSTALL_PANEL_VIDEO = 'assets/clone16-24.mp4';
+  const CLONE16_HARD_CASE_PANEL_VIDEO = 'assets/clone16-25.mp4';
+  const CLONE16_USERS_PANEL_VIDEO = 'assets/clone16-26.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
   const CLONE16_PRODUCT_TYPE_ANSWER = 'Clone 16 is a multipurpose teleprompter used for script reading during video production, broadcasting, lectures, interviews, and public communication activities';
   const CLONE16_MAIN_PURPOSE_ANSWER = 'The main purpose of Clone 16 is to help users deliver scripts more naturally, clearly, and professionally without needing to memorize their lines';
@@ -107,6 +118,17 @@
   const CLONE16_CAPABILITIES_ANSWER = 'Clone 16 can display scripts, PowerPoint presentations, PDF files, and video playback, making it useful for various communication and production needs';
   const CLONE16_LARGE_TEXT_ANSWER = 'Yes, Clone 16 supports large text display, making scripts easier to read during recording or live presentations';
   const CLONE16_POWERPOINT_ANSWER = 'Yes, Clone 16 supports PowerPoint presentations, making it useful for lectures, meetings, and public information sharing';
+  const CLONE16_PDF_VIDEO_PLAYBACK_ANSWER = 'Yes, Clone 16 supports PDF files and video playback, which makes it flexible for different presentation and broadcasting tasks';
+  const CLONE16_EASY_TO_OPERATE_ANSWER = 'Yes, Clone 16 is designed to be easy to use, even for non-experts or first-time users. It includes simple controls and remote operation support';
+  const CLONE16_REMOTE_CONTROL_ANSWER = 'Yes, Clone 16 includes a 2.4GHz wireless remote control that allows convenient control of script play/stop and scrolling speed';
+  const CLONE16_WIRELESS_REMOTE_FUNCTION_ANSWER = 'The wireless remote allows users to play, stop, and control the speed of the script, making script delivery easier and smoother';
+  const CLONE16_SCREEN_FLIP_ANSWER = 'Yes, Clone 16 has a built-in screen flip function, which allows the screen to be flipped depending on the production setup';
+  const CLONE16_MATERIAL_ANSWER = 'Clone 16 is made of 2.5 mm aluminum, which makes it strong, durable, and lightweight enough for practical use';
+  const CLONE16_ALUMINUM_REASON_ANSWER = 'Aluminum is used because it provides strength, durability, and reduced weight, which improves portability and stability';
+  const CLONE16_PORTABLE_ANSWER = 'Yes, Clone 16 is portable because it has a foldable design, is easy to move, and can be stored conveniently';
+  const CLONE16_EASY_INSTALL_ANSWER = 'Yes, Clone 16 is designed for easy installation and assembly, even for general users or non-experts';
+  const CLONE16_HARD_CASE_ANSWER = 'Yes, Clone 16 includes a dedicated hard case for safe storage and transport';
+  const CLONE16_USERS_ANSWER = 'Clone 16 can be used by students, teachers, broadcasters, reporters, content creators, government staff, company employees, and media professionals';
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
   const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
@@ -349,7 +371,18 @@
       'what input signal does clone 16 support',
       'what power supply does clone 16 use',
       'how heavy is clone 16',
+      'who can use clone 16',
+      'does clone 16 come with a hard case',
+      'is clone 16 easy to install',
+      'is clone 16 portable',
+      'why is aluminum used in clone 16',
+      'what material is clone 16 made of',
       'what can clone 16 do',
+      'does clone 16 have built in screen flip',
+      'what is the function of the wireless remote',
+      'does clone 16 include a remote control',
+      'is clone 16 easy to operate',
+      'does clone 16 support pdf and video playback',
       'does clone 16 support large text display',
       'can clone 16 be used for powerpoint and presentations',
       'tell me about clone 16',
@@ -393,6 +426,39 @@
 
   function getClone16InfoCardVideoForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (normalizedQuestion === 'who can use clone 16') {
+      return CLONE16_USERS_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'does clone 16 come with a hard case') {
+      return CLONE16_HARD_CASE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'is clone 16 easy to install') {
+      return CLONE16_EASY_INSTALL_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'is clone 16 portable') {
+      return CLONE16_PORTABLE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'why is aluminum used in clone 16') {
+      return CLONE16_ALUMINUM_REASON_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what material is clone 16 made of') {
+      return CLONE16_MATERIAL_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'does clone 16 have built in screen flip') {
+      return CLONE16_SCREEN_FLIP_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'what is the function of the wireless remote') {
+      return CLONE16_WIRELESS_REMOTE_FUNCTION_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'does clone 16 include a remote control') {
+      return CLONE16_REMOTE_CONTROL_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'is clone 16 easy to operate') {
+      return CLONE16_EASY_TO_OPERATE_PANEL_VIDEO;
+    }
+    if (normalizedQuestion === 'does clone 16 support pdf and video playback') {
+      return CLONE16_PDF_VIDEO_PLAYBACK_PANEL_VIDEO;
+    }
     if (normalizedQuestion === 'what type of product is clone 16') {
       return CLONE16_PRODUCT_TYPE_PANEL_VIDEO;
     }
@@ -440,6 +506,39 @@
 
   function getClone16SubtitleForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (normalizedQuestion === 'who can use clone 16') {
+      return CLONE16_USERS_ANSWER;
+    }
+    if (normalizedQuestion === 'does clone 16 come with a hard case') {
+      return CLONE16_HARD_CASE_ANSWER;
+    }
+    if (normalizedQuestion === 'is clone 16 easy to install') {
+      return CLONE16_EASY_INSTALL_ANSWER;
+    }
+    if (normalizedQuestion === 'is clone 16 portable') {
+      return CLONE16_PORTABLE_ANSWER;
+    }
+    if (normalizedQuestion === 'why is aluminum used in clone 16') {
+      return CLONE16_ALUMINUM_REASON_ANSWER;
+    }
+    if (normalizedQuestion === 'what material is clone 16 made of') {
+      return CLONE16_MATERIAL_ANSWER;
+    }
+    if (normalizedQuestion === 'does clone 16 have built in screen flip') {
+      return CLONE16_SCREEN_FLIP_ANSWER;
+    }
+    if (normalizedQuestion === 'what is the function of the wireless remote') {
+      return CLONE16_WIRELESS_REMOTE_FUNCTION_ANSWER;
+    }
+    if (normalizedQuestion === 'does clone 16 include a remote control') {
+      return CLONE16_REMOTE_CONTROL_ANSWER;
+    }
+    if (normalizedQuestion === 'is clone 16 easy to operate') {
+      return CLONE16_EASY_TO_OPERATE_ANSWER;
+    }
+    if (normalizedQuestion === 'does clone 16 support pdf and video playback') {
+      return CLONE16_PDF_VIDEO_PLAYBACK_ANSWER;
+    }
     if (normalizedQuestion === 'what type of product is clone 16') {
       return CLONE16_PRODUCT_TYPE_ANSWER;
     }
@@ -2100,17 +2199,24 @@
             keywords: ['overview', 'used', 'broadcasting', 'studio', 'cable', 'content', 'prompter']
           },
           {
+            id: 'material',
+            question: 'What material is Clone 16 made of?',
+            answer: 'Clone 16 is made of 2.5 mm aluminum, which makes it strong, durable, and lightweight enough for practical use.',
+            phrases: ['what material is clone 16 made of', 'what is clone 16 made of', 'is clone 16 made of aluminum', 'clone 16 material', 'why is aluminum used in clone 16'],
+            keywords: ['material', 'made', 'aluminum', 'aluminium', '2.5', 'durable', 'lightweight', 'portability', 'stability']
+          },
+          {
             id: 'content',
             question: 'What types of content can it display?',
             answer: 'Clone 16 supports large text display, PowerPoint presentations, PDF files, and video playback, making it suitable for presentations, lectures, and video production.',
-            phrases: ['what can clone 16 display', 'what types of content can it display', 'does clone 16 support powerpoint', 'does clone 16 support pdf', 'can clone 16 play video'],
-            keywords: ['content', 'display', 'text', 'powerpoint', 'ppt', 'pdf', 'video']
+            phrases: ['what can clone 16 display', 'what types of content can it display', 'does clone 16 support powerpoint', 'does clone 16 support pdf', 'can clone 16 play video', 'does clone 16 support pdf and video playback', 'does clone 16 have built in screen flip'],
+            keywords: ['content', 'display', 'text', 'powerpoint', 'ppt', 'pdf', 'video', 'screen', 'flip']
           },
           {
             id: 'setup',
             question: 'Is the Clone 16 easy to set up and carry?',
             answer: 'Yes. Clone 16 has a foldable design that makes it easy to install, store, and transport, and it comes with a dedicated hard case for protection and portability.',
-            phrases: ['is clone 16 easy to set up', 'is clone 16 easy to carry', 'is clone 16 portable', 'does clone 16 come with a hard case'],
+            phrases: ['is clone 16 easy to set up', 'is clone 16 easy to install', 'is clone 16 easy to carry', 'is clone 16 portable', 'does clone 16 come with a hard case'],
             keywords: ['easy', 'setup', 'carry', 'portable', 'foldable', 'transport', 'hard', 'case']
           },
           {
@@ -2131,7 +2237,7 @@
             id: 'remote',
             question: 'Does it include a remote control?',
             answer: 'Yes. Clone 16 includes a 2.4 GHz wireless remote control with an operating range of up to 10 meters for convenient control.',
-            phrases: ['does clone 16 include a remote', 'does it include a remote control', 'clone 16 remote control', 'wireless remote'],
+            phrases: ['does clone 16 include a remote', 'does clone 16 include a remote control', 'does it include a remote control', 'clone 16 remote control', 'wireless remote', 'what is the function of the wireless remote'],
             keywords: ['remote', 'wireless', 'control', '10', 'meters', '2.4ghz']
           },
           {
@@ -2145,14 +2251,14 @@
             id: 'beginner',
             question: 'Is it beginner-friendly?',
             answer: 'Yes. Clone 16 uses simple controls, so even first-time users can operate it without a complicated learning curve.',
-            phrases: ['is clone 16 beginner friendly', 'is clone 16 easy for beginners', 'is it beginner friendly', 'is clone 16 easy to use'],
+            phrases: ['is clone 16 beginner friendly', 'is clone 16 easy for beginners', 'is it beginner friendly', 'is clone 16 easy to use', 'is clone 16 easy to operate'],
             keywords: ['beginner', 'friendly', 'easy', 'simple', 'operate', 'first', 'time']
           },
           {
             id: 'users',
             question: 'Who commonly uses the Clone 16?',
             answer: 'Clone 16 is widely used by broadcasting companies, schools and educational institutions, government organizations, churches and religious groups, and content creators including YouTubers.',
-            phrases: ['who uses clone 16', 'who commonly uses the clone 16', 'who is clone 16 for', 'what is clone 16 used for in schools'],
+            phrases: ['who uses clone 16', 'who commonly uses the clone 16', 'who can use clone 16', 'who is clone 16 for', 'what is clone 16 used for in schools'],
             keywords: ['users', 'broadcasting', 'schools', 'educational', 'government', 'churches', 'creators', 'youtubers']
           },
           {
