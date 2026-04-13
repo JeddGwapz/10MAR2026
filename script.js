@@ -103,6 +103,30 @@
   const CLONE16_EASY_INSTALL_PANEL_VIDEO = 'assets/clone16-24.mp4';
   const CLONE16_HARD_CASE_PANEL_VIDEO = 'assets/clone16-25.mp4';
   const CLONE16_USERS_PANEL_VIDEO = 'assets/clone16-26.mp4';
+  const CLONE16_STUDENTS_PANEL_VIDEO = 'assets/clone16-27.mp4';
+  const CLONE16_TEACHERS_PANEL_VIDEO = 'assets/clone16-28.mp4';
+  const CLONE16_BROADCASTERS_PANEL_VIDEO = 'assets/clone16-29.mp4';
+  const CLONE16_CREATORS_PANEL_VIDEO = 'assets/clone16-30.mp4';
+  const CLONE16_COMMON_USE_PANEL_VIDEO = 'assets/clone16-31.mp4';
+  const CLONE16_INSTITUTIONS_PANEL_VIDEO = 'assets/clone16-32.mp4';
+  const CLONE16_GOVERNMENT_PANEL_VIDEO = 'assets/clone16-33.mp4';
+  const CLONE16_PUBLIC_ENTERPRISES_PANEL_VIDEO = 'assets/clone16-34.mp4';
+  const CLONE16_SCHOOLS_PANEL_VIDEO = 'assets/clone16-35.mp4';
+  const CLONE16_BENEFITS_PANEL_VIDEO = 'assets/clone16-36.mp4';
+  const CLONE16_COMMUNICATION_PANEL_VIDEO = 'assets/clone16-37.mp4';
+  const CLONE16_MISTAKES_PANEL_VIDEO = 'assets/clone16-38.mp4';
+  const CLONE16_PROFESSIONALISM_PANEL_VIDEO = 'assets/clone16-39.mp4';
+  const CLONE16_TIME_SAVING_PANEL_VIDEO = 'assets/clone16-40.mp4';
+  const CLONE16_MONITORS_PANEL_VIDEO = 'assets/clone16-41.mp4';
+  const CLONE16_UNIQUE_PANEL_VIDEO = 'assets/clone16-42.mp4';
+  const CLONE16_CHOOSE_PANEL_VIDEO = 'assets/clone16-43.mp4';
+  const CLONE16_STRONGEST_ADVANTAGE_PANEL_VIDEO = 'assets/clone16-44.mp4';
+  const CLONE16_PROS_AND_BEGINNERS_PANEL_VIDEO = 'assets/clone16-45.mp4';
+  const CLONE16_MARKETABLE_PANEL_VIDEO = 'assets/clone16-46.mp4';
+  const CLONE16_DEMAND_PANEL_VIDEO = 'assets/clone16-47.mp4';
+  const CLONE16_INSTITUTION_INVESTMENT_PANEL_VIDEO = 'assets/clone16-48.mp4';
+  const CLONE16_WORTH_SUPPORTING_PANEL_VIDEO = 'assets/clone16-49.mp4';
+  const CLONE16_ONE_SENTENCE_SUMMARY_PANEL_VIDEO = 'assets/clone16-50.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
   const CLONE16_PRODUCT_TYPE_ANSWER = 'Clone 16 is a multipurpose teleprompter used for script reading during video production, broadcasting, lectures, interviews, and public communication activities';
   const CLONE16_MAIN_PURPOSE_ANSWER = 'The main purpose of Clone 16 is to help users deliver scripts more naturally, clearly, and professionally without needing to memorize their lines';
@@ -129,6 +153,179 @@
   const CLONE16_EASY_INSTALL_ANSWER = 'Yes, Clone 16 is designed for easy installation and assembly, even for general users or non-experts';
   const CLONE16_HARD_CASE_ANSWER = 'Yes, Clone 16 includes a dedicated hard case for safe storage and transport';
   const CLONE16_USERS_ANSWER = 'Clone 16 can be used by students, teachers, broadcasters, reporters, content creators, government staff, company employees, and media professionals';
+  const CLONE16_STUDENTS_ANSWER = 'Yes, Clone 16 is suitable for students because it helps them during reporting, journalism, oral presentations, and practice in front of the camera';
+  const CLONE16_TEACHERS_ANSWER = 'Teachers can use Clone 16 as a teaching aid for lectures, recorded lessons, presentations, and educational video production';
+  const CLONE16_BROADCASTERS_ANSWER = 'Yes, Clone 16 is highly useful for broadcasting companies, cable channels, TV studios, and in-house production teams because it supports smooth and professional script delivery';
+  const CLONE16_CREATORS_ANSWER = 'Yes, content creators can use Clone 16 to improve their video production, script delivery, and on-camera communication';
+  const CLONE16_COMMON_USE_ANSWER = 'Clone 16 is commonly used in broadcasting stations, schools, universities, government offices, public enterprises, in-house broadcasting centers, and private organizations';
+  const CLONE16_INSTITUTIONS_ANSWER = 'Crystal Prompter products have been used in organizations such as the Ministry of Justice, Korea Economic TV, schools, churches, cultural foundations, and broadcasting-related institutions';
+  const CLONE16_GOVERNMENT_ANSWER = 'Clone 16 is suitable for government offices because it helps professionals clearly communicate complex information through internal broadcasting and public information systems';
+  const CLONE16_PUBLIC_ENTERPRISES_ANSWER = 'It is useful because it supports internal communication, public information sharing, and professional video production for employees and the public';
+  const CLONE16_SCHOOLS_ANSWER = 'Clone 16 is valuable in universities and schools because it serves as a teaching aid for educators and a practice and presentation tool for students';
+  const CLONE16_BENEFITS_ANSWER = `The main benefits of Clone 16 are:
+• easier script reading
+• better eye contact with the camera
+• improved confidence
+• more professional delivery
+• reduced need for memorization`;
+  const CLONE16_COMMUNICATION_ANSWER = 'Clone 16 helps users communicate better by making it easier to read scripts clearly while maintaining a natural speaking flow and professional appearance';
+  const CLONE16_MISTAKES_ANSWER = 'Clone 16 reduces mistakes by keeping the script visible in front of the user, so they are less likely to forget lines or lose track while speaking';
+  const CLONE16_PROFESSIONALISM_ANSWER = 'It improves professionalism by helping users present their message smoothly, maintain camera focus, and deliver information in a more polished way';
+  const CLONE16_TIME_SAVING_ANSWER = 'Clone 16 saves time by reducing the need for long memorization and minimizing retakes during filming or recording';
+  const CLONE16_MONITORS_ANSWER = 'Clone 16 is different from ordinary monitors because it is specifically designed as a teleprompter system for script reading, on-camera delivery, and professional production environments';
+  const CLONE16_UNIQUE_ANSWER = 'Clone 16 is unique because it combines high brightness, Full HD clarity, portability, script control, presentation support, and professional broadcasting usability in one product';
+  const CLONE16_CHOOSE_ANSWER = 'Users should choose Clone 16 because it offers clear display, simple operation, portability, and reliable performance for communication and production needs';
+  const CLONE16_STRONGEST_ADVANTAGE_ANSWER = 'Its strongest advantage is its ability to help users deliver scripts naturally and professionally while facing the camera';
+  const CLONE16_PROS_AND_BEGINNERS_ANSWER = 'No, Clone 16 is designed for both professionals and beginners, making it useful for a wide range of users';
+  const CLONE16_MARKETABLE_ANSWER = 'Clone 16 is marketable because many people today are involved in video recording, education, broadcasting, public communication, and digital content creation';
+  const CLONE16_DEMAND_ANSWER = 'There is demand because people increasingly need tools that improve script delivery, confidence, efficiency, and professionalism during on-camera work';
+  const CLONE16_INSTITUTION_INVESTMENT_ANSWER = 'Institutions would invest in Clone 16 because it supports professional communication, efficient content production, and clearer information delivery';
+  const CLONE16_WORTH_SUPPORTING_ANSWER = 'Clone 16 is worth supporting because it solves a real communication challenge and provides practical value in education, broadcasting, and organizational communication';
+  const CLONE16_ONE_SENTENCE_SUMMARY_ANSWER = 'Clone 16 is all about helping people communicate clearly, confidently, and professionally through easier script delivery';
+  const CLONE16_STUDENTS_TRIGGER_PHRASES = [
+    'is clone 16 suitable for students',
+    'is clone 16 good for students',
+    'can students use clone 16',
+    'is clone 16 okay for students'
+  ];
+  const CLONE16_TEACHERS_TRIGGER_PHRASES = [
+    'how can teachers use clone 16',
+    'how do teachers use clone 16',
+    'can teachers use clone 16',
+    'is clone 16 suitable for teachers'
+  ];
+  const CLONE16_BROADCASTERS_TRIGGER_PHRASES = [
+    'is clone 16 useful for broadcasters and tv studios',
+    'is clone 16 useful for broadcasters',
+    'is clone 16 good for tv studios',
+    'can broadcasters use clone 16'
+  ];
+  const CLONE16_CREATORS_TRIGGER_PHRASES = [
+    'can content creators use clone 16',
+    'can creators use clone 16',
+    'is clone 16 good for content creators',
+    'is clone 16 suitable for content creators'
+  ];
+  const CLONE16_COMMON_USE_TRIGGER_PHRASES = [
+    'where is clone 16 commonly used',
+    'where is clone 16 used',
+    'where is clone 16 usually used',
+    'where can clone 16 be commonly used'
+  ];
+  const CLONE16_INSTITUTIONS_TRIGGER_PHRASES = [
+    'what institutions have used crystal prompter products',
+    'what organizations have used crystal prompter products',
+    'who has used crystal prompter products',
+    'which institutions use crystal prompter products'
+  ];
+  const CLONE16_GOVERNMENT_TRIGGER_PHRASES = [
+    'why is clone 16 suitable for government offices',
+    'why is clone 16 good for government offices',
+    'can government offices use clone 16',
+    'is clone 16 suitable for government offices'
+  ];
+  const CLONE16_PUBLIC_ENTERPRISES_TRIGGER_PHRASES = [
+    'how is clone 16 useful in public enterprises and organizations',
+    'how is clone 16 useful in public enterprises',
+    'how is clone 16 useful in organizations',
+    'is clone 16 useful in public enterprises and organizations'
+  ];
+  const CLONE16_SCHOOLS_TRIGGER_PHRASES = [
+    'why is clone 16 valuable in universities and schools',
+    'why is clone 16 valuable in schools',
+    'why is clone 16 valuable in universities',
+    'is clone 16 valuable in universities and schools'
+  ];
+  const CLONE16_BENEFITS_TRIGGER_PHRASES = [
+    'what are the main benefits of clone 16',
+    'what are the benefits of clone 16',
+    'what benefits does clone 16 have',
+    'what are clone 16 main benefits'
+  ];
+  const CLONE16_COMMUNICATION_TRIGGER_PHRASES = [
+    'how does clone 16 help users communicate better',
+    'how does clone 16 help users communicate',
+    'how does clone 16 improve communication',
+    'how can clone 16 help users communicate better'
+  ];
+  const CLONE16_MISTAKES_TRIGGER_PHRASES = [
+    'how does clone 16 help reduce mistakes',
+    'how does clone 16 reduce mistakes',
+    'can clone 16 help reduce mistakes',
+    'how can clone 16 reduce speaking mistakes'
+  ];
+  const CLONE16_PROFESSIONALISM_TRIGGER_PHRASES = [
+    'how does clone 16 improve professionalism',
+    'how can clone 16 improve professionalism',
+    'does clone 16 improve professionalism',
+    'how does clone 16 make users look more professional'
+  ];
+  const CLONE16_TIME_SAVING_TRIGGER_PHRASES = [
+    'how does clone 16 save time',
+    'how can clone 16 save time',
+    'does clone 16 save time',
+    'how does clone 16 reduce retakes'
+  ];
+  const CLONE16_MONITORS_TRIGGER_PHRASES = [
+    'what makes clone 16 different from ordinary monitors',
+    'what makes clone 16 different from monitors',
+    'how is clone 16 different from ordinary monitors',
+    'why is clone 16 different from ordinary monitors'
+  ];
+  const CLONE16_UNIQUE_TRIGGER_PHRASES = [
+    'what makes clone 16 unique',
+    'why is clone 16 unique',
+    'what is unique about clone 16',
+    'what makes the clone 16 unique'
+  ];
+  const CLONE16_CHOOSE_TRIGGER_PHRASES = [
+    'why should users choose clone 16',
+    'why choose clone 16',
+    'why should people choose clone 16',
+    'why should i choose clone 16'
+  ];
+  const CLONE16_STRONGEST_ADVANTAGE_TRIGGER_PHRASES = [
+    'what is the strongest advantage of clone 16',
+    'what is clone 16 strongest advantage',
+    'what is the biggest advantage of clone 16',
+    'what is the main advantage of clone 16'
+  ];
+  const CLONE16_PROS_AND_BEGINNERS_TRIGGER_PHRASES = [
+    'is clone 16 only for professionals',
+    'is clone 16 just for professionals',
+    'is clone 16 for professionals only',
+    'can beginners use clone 16 too'
+  ];
+  const CLONE16_MARKETABLE_TRIGGER_PHRASES = [
+    'why is clone 16 marketable',
+    'what makes clone 16 marketable',
+    'why is clone 16 easy to market',
+    'is clone 16 marketable'
+  ];
+  const CLONE16_DEMAND_TRIGGER_PHRASES = [
+    'why is there a demand for teleprompter products like clone 16',
+    'why is there demand for teleprompter products like clone 16',
+    'why are teleprompter products like clone 16 in demand',
+    'why is clone 16 in demand'
+  ];
+  const CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES = [
+    'why would institutions invest in clone 16',
+    'why would organizations invest in clone 16',
+    'why should institutions invest in clone 16',
+    'why invest in clone 16'
+  ];
+  const CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES = [
+    'why is clone 16 worth supporting as a product',
+    'why is clone 16 worth supporting',
+    'why should clone 16 be supported as a product',
+    'why support clone 16 as a product'
+  ];
+  const CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES = [
+    'in one sentence what is clone 16 all about',
+    'in one sentence what is clone 16 about',
+    'what is clone 16 all about in one sentence',
+    'summarize clone 16 in one sentence'
+  ];
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
   const CLONE16_IMAGES_AVATAR_VIDEO = 'assets/clone 16 - images.mp4';
@@ -349,11 +546,133 @@
     return matchedSignals.length >= 5;
   }
 
+  function isClone16StudentsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_STUDENTS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16TeachersQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_TEACHERS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16BroadcastersQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_BROADCASTERS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16CreatorsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_CREATORS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16CommonUseQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_COMMON_USE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16InstitutionsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_INSTITUTIONS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16GovernmentQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_GOVERNMENT_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16PublicEnterprisesQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_PUBLIC_ENTERPRISES_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16SchoolsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_SCHOOLS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16BenefitsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_BENEFITS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16CommunicationQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_COMMUNICATION_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16MistakesQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_MISTAKES_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16ProfessionalismQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_PROFESSIONALISM_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16TimeSavingQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_TIME_SAVING_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16MonitorsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_MONITORS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16UniqueQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_UNIQUE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16ChooseQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_CHOOSE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16StrongestAdvantageQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_STRONGEST_ADVANTAGE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16ProsAndBeginnersQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_PROS_AND_BEGINNERS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16MarketableQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_MARKETABLE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16DemandQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_DEMAND_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16InstitutionInvestmentQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16WorthSupportingQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16OneSentenceSummaryQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
   function shouldForceClone16DefinitionSequence(questionText = '', productKey = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
     if (!normalizedQuestion) return false;
 
-    const resolvedProductKey = productKey || detectProductKeyFromText(questionText);
+    const resolvedProductKey = isClone16InstitutionsQuestion(normalizedQuestion)
+      ? 'clone16'
+      : (productKey || detectProductKeyFromText(questionText));
     if (resolvedProductKey !== 'clone16') return false;
 
     const compactQuestion = compactNormalizedText(questionText);
@@ -385,6 +704,30 @@
       'does clone 16 support pdf and video playback',
       'does clone 16 support large text display',
       'can clone 16 be used for powerpoint and presentations',
+      ...CLONE16_STUDENTS_TRIGGER_PHRASES,
+      ...CLONE16_TEACHERS_TRIGGER_PHRASES,
+      ...CLONE16_BROADCASTERS_TRIGGER_PHRASES,
+      ...CLONE16_CREATORS_TRIGGER_PHRASES,
+      ...CLONE16_COMMON_USE_TRIGGER_PHRASES,
+      ...CLONE16_INSTITUTIONS_TRIGGER_PHRASES,
+      ...CLONE16_GOVERNMENT_TRIGGER_PHRASES,
+      ...CLONE16_PUBLIC_ENTERPRISES_TRIGGER_PHRASES,
+      ...CLONE16_SCHOOLS_TRIGGER_PHRASES,
+      ...CLONE16_BENEFITS_TRIGGER_PHRASES,
+      ...CLONE16_COMMUNICATION_TRIGGER_PHRASES,
+      ...CLONE16_MISTAKES_TRIGGER_PHRASES,
+      ...CLONE16_PROFESSIONALISM_TRIGGER_PHRASES,
+      ...CLONE16_TIME_SAVING_TRIGGER_PHRASES,
+      ...CLONE16_MONITORS_TRIGGER_PHRASES,
+      ...CLONE16_UNIQUE_TRIGGER_PHRASES,
+      ...CLONE16_CHOOSE_TRIGGER_PHRASES,
+      ...CLONE16_STRONGEST_ADVANTAGE_TRIGGER_PHRASES,
+      ...CLONE16_PROS_AND_BEGINNERS_TRIGGER_PHRASES,
+      ...CLONE16_MARKETABLE_TRIGGER_PHRASES,
+      ...CLONE16_DEMAND_TRIGGER_PHRASES,
+      ...CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES,
+      ...CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES,
+      ...CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES,
       'tell me about clone 16',
       'introduce clone 16',
       'clone 16 overview',
@@ -426,6 +769,78 @@
 
   function getClone16InfoCardVideoForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (isClone16StudentsQuestion(normalizedQuestion)) {
+      return CLONE16_STUDENTS_PANEL_VIDEO;
+    }
+    if (isClone16TeachersQuestion(normalizedQuestion)) {
+      return CLONE16_TEACHERS_PANEL_VIDEO;
+    }
+    if (isClone16BroadcastersQuestion(normalizedQuestion)) {
+      return CLONE16_BROADCASTERS_PANEL_VIDEO;
+    }
+    if (isClone16CreatorsQuestion(normalizedQuestion)) {
+      return CLONE16_CREATORS_PANEL_VIDEO;
+    }
+    if (isClone16CommonUseQuestion(normalizedQuestion)) {
+      return CLONE16_COMMON_USE_PANEL_VIDEO;
+    }
+    if (isClone16InstitutionsQuestion(normalizedQuestion)) {
+      return CLONE16_INSTITUTIONS_PANEL_VIDEO;
+    }
+    if (isClone16GovernmentQuestion(normalizedQuestion)) {
+      return CLONE16_GOVERNMENT_PANEL_VIDEO;
+    }
+    if (isClone16PublicEnterprisesQuestion(normalizedQuestion)) {
+      return CLONE16_PUBLIC_ENTERPRISES_PANEL_VIDEO;
+    }
+    if (isClone16SchoolsQuestion(normalizedQuestion)) {
+      return CLONE16_SCHOOLS_PANEL_VIDEO;
+    }
+    if (isClone16BenefitsQuestion(normalizedQuestion)) {
+      return CLONE16_BENEFITS_PANEL_VIDEO;
+    }
+    if (isClone16CommunicationQuestion(normalizedQuestion)) {
+      return CLONE16_COMMUNICATION_PANEL_VIDEO;
+    }
+    if (isClone16MistakesQuestion(normalizedQuestion)) {
+      return CLONE16_MISTAKES_PANEL_VIDEO;
+    }
+    if (isClone16ProfessionalismQuestion(normalizedQuestion)) {
+      return CLONE16_PROFESSIONALISM_PANEL_VIDEO;
+    }
+    if (isClone16TimeSavingQuestion(normalizedQuestion)) {
+      return CLONE16_TIME_SAVING_PANEL_VIDEO;
+    }
+    if (isClone16MonitorsQuestion(normalizedQuestion)) {
+      return CLONE16_MONITORS_PANEL_VIDEO;
+    }
+    if (isClone16UniqueQuestion(normalizedQuestion)) {
+      return CLONE16_UNIQUE_PANEL_VIDEO;
+    }
+    if (isClone16ChooseQuestion(normalizedQuestion)) {
+      return CLONE16_CHOOSE_PANEL_VIDEO;
+    }
+    if (isClone16StrongestAdvantageQuestion(normalizedQuestion)) {
+      return CLONE16_STRONGEST_ADVANTAGE_PANEL_VIDEO;
+    }
+    if (isClone16ProsAndBeginnersQuestion(normalizedQuestion)) {
+      return CLONE16_PROS_AND_BEGINNERS_PANEL_VIDEO;
+    }
+    if (isClone16MarketableQuestion(normalizedQuestion)) {
+      return CLONE16_MARKETABLE_PANEL_VIDEO;
+    }
+    if (isClone16DemandQuestion(normalizedQuestion)) {
+      return CLONE16_DEMAND_PANEL_VIDEO;
+    }
+    if (isClone16InstitutionInvestmentQuestion(normalizedQuestion)) {
+      return CLONE16_INSTITUTION_INVESTMENT_PANEL_VIDEO;
+    }
+    if (isClone16WorthSupportingQuestion(normalizedQuestion)) {
+      return CLONE16_WORTH_SUPPORTING_PANEL_VIDEO;
+    }
+    if (isClone16OneSentenceSummaryQuestion(normalizedQuestion)) {
+      return CLONE16_ONE_SENTENCE_SUMMARY_PANEL_VIDEO;
+    }
     if (normalizedQuestion === 'who can use clone 16') {
       return CLONE16_USERS_PANEL_VIDEO;
     }
@@ -506,6 +921,78 @@
 
   function getClone16SubtitleForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (isClone16StudentsQuestion(normalizedQuestion)) {
+      return CLONE16_STUDENTS_ANSWER;
+    }
+    if (isClone16TeachersQuestion(normalizedQuestion)) {
+      return CLONE16_TEACHERS_ANSWER;
+    }
+    if (isClone16BroadcastersQuestion(normalizedQuestion)) {
+      return CLONE16_BROADCASTERS_ANSWER;
+    }
+    if (isClone16CreatorsQuestion(normalizedQuestion)) {
+      return CLONE16_CREATORS_ANSWER;
+    }
+    if (isClone16CommonUseQuestion(normalizedQuestion)) {
+      return CLONE16_COMMON_USE_ANSWER;
+    }
+    if (isClone16InstitutionsQuestion(normalizedQuestion)) {
+      return CLONE16_INSTITUTIONS_ANSWER;
+    }
+    if (isClone16GovernmentQuestion(normalizedQuestion)) {
+      return CLONE16_GOVERNMENT_ANSWER;
+    }
+    if (isClone16PublicEnterprisesQuestion(normalizedQuestion)) {
+      return CLONE16_PUBLIC_ENTERPRISES_ANSWER;
+    }
+    if (isClone16SchoolsQuestion(normalizedQuestion)) {
+      return CLONE16_SCHOOLS_ANSWER;
+    }
+    if (isClone16BenefitsQuestion(normalizedQuestion)) {
+      return CLONE16_BENEFITS_ANSWER;
+    }
+    if (isClone16CommunicationQuestion(normalizedQuestion)) {
+      return CLONE16_COMMUNICATION_ANSWER;
+    }
+    if (isClone16MistakesQuestion(normalizedQuestion)) {
+      return CLONE16_MISTAKES_ANSWER;
+    }
+    if (isClone16ProfessionalismQuestion(normalizedQuestion)) {
+      return CLONE16_PROFESSIONALISM_ANSWER;
+    }
+    if (isClone16TimeSavingQuestion(normalizedQuestion)) {
+      return CLONE16_TIME_SAVING_ANSWER;
+    }
+    if (isClone16MonitorsQuestion(normalizedQuestion)) {
+      return CLONE16_MONITORS_ANSWER;
+    }
+    if (isClone16UniqueQuestion(normalizedQuestion)) {
+      return CLONE16_UNIQUE_ANSWER;
+    }
+    if (isClone16ChooseQuestion(normalizedQuestion)) {
+      return CLONE16_CHOOSE_ANSWER;
+    }
+    if (isClone16StrongestAdvantageQuestion(normalizedQuestion)) {
+      return CLONE16_STRONGEST_ADVANTAGE_ANSWER;
+    }
+    if (isClone16ProsAndBeginnersQuestion(normalizedQuestion)) {
+      return CLONE16_PROS_AND_BEGINNERS_ANSWER;
+    }
+    if (isClone16MarketableQuestion(normalizedQuestion)) {
+      return CLONE16_MARKETABLE_ANSWER;
+    }
+    if (isClone16DemandQuestion(normalizedQuestion)) {
+      return CLONE16_DEMAND_ANSWER;
+    }
+    if (isClone16InstitutionInvestmentQuestion(normalizedQuestion)) {
+      return CLONE16_INSTITUTION_INVESTMENT_ANSWER;
+    }
+    if (isClone16WorthSupportingQuestion(normalizedQuestion)) {
+      return CLONE16_WORTH_SUPPORTING_ANSWER;
+    }
+    if (isClone16OneSentenceSummaryQuestion(normalizedQuestion)) {
+      return CLONE16_ONE_SENTENCE_SUMMARY_ANSWER;
+    }
     if (normalizedQuestion === 'who can use clone 16') {
       return CLONE16_USERS_ANSWER;
     }
@@ -2253,6 +2740,174 @@
             answer: 'Yes. Clone 16 uses simple controls, so even first-time users can operate it without a complicated learning curve.',
             phrases: ['is clone 16 beginner friendly', 'is clone 16 easy for beginners', 'is it beginner friendly', 'is clone 16 easy to use', 'is clone 16 easy to operate'],
             keywords: ['beginner', 'friendly', 'easy', 'simple', 'operate', 'first', 'time']
+          },
+          {
+            id: 'students',
+            question: 'Is Clone 16 suitable for students?',
+            answer: CLONE16_STUDENTS_ANSWER,
+            phrases: [...CLONE16_STUDENTS_TRIGGER_PHRASES],
+            keywords: ['students', 'student', 'reporting', 'journalism', 'presentations', 'camera']
+          },
+          {
+            id: 'teachers',
+            question: 'How can teachers use Clone 16?',
+            answer: CLONE16_TEACHERS_ANSWER,
+            phrases: [...CLONE16_TEACHERS_TRIGGER_PHRASES],
+            keywords: ['teachers', 'teacher', 'lectures', 'lessons', 'presentations', 'educational', 'video', 'production']
+          },
+          {
+            id: 'broadcasters',
+            question: 'Is Clone 16 useful for broadcasters and TV studios?',
+            answer: CLONE16_BROADCASTERS_ANSWER,
+            phrases: [...CLONE16_BROADCASTERS_TRIGGER_PHRASES],
+            keywords: ['broadcasters', 'broadcasting', 'tv', 'studios', 'studio', 'cable', 'channels', 'production', 'teams']
+          },
+          {
+            id: 'content_creators',
+            question: 'Can content creators use Clone 16?',
+            answer: CLONE16_CREATORS_ANSWER,
+            phrases: [...CLONE16_CREATORS_TRIGGER_PHRASES],
+            keywords: ['content', 'creators', 'creator', 'video', 'production', 'script', 'delivery', 'camera', 'communication']
+          },
+          {
+            id: 'common_use',
+            question: 'Where is Clone 16 commonly used?',
+            answer: CLONE16_COMMON_USE_ANSWER,
+            phrases: [...CLONE16_COMMON_USE_TRIGGER_PHRASES],
+            keywords: ['where', 'commonly', 'used', 'broadcasting', 'schools', 'universities', 'government', 'offices', 'organizations']
+          },
+          {
+            id: 'institutions',
+            question: 'What institutions have used Crystal Prompter products?',
+            answer: CLONE16_INSTITUTIONS_ANSWER,
+            phrases: [...CLONE16_INSTITUTIONS_TRIGGER_PHRASES],
+            keywords: ['institutions', 'organizations', 'crystal', 'prompter', 'ministry', 'justice', 'korea', 'economic', 'tv', 'churches']
+          },
+          {
+            id: 'government_offices',
+            question: 'Why is Clone 16 suitable for government offices?',
+            answer: CLONE16_GOVERNMENT_ANSWER,
+            phrases: [...CLONE16_GOVERNMENT_TRIGGER_PHRASES],
+            keywords: ['government', 'offices', 'internal', 'broadcasting', 'public', 'information', 'systems', 'professionals']
+          },
+          {
+            id: 'public_enterprises',
+            question: 'How is Clone 16 useful in public enterprises and organizations?',
+            answer: CLONE16_PUBLIC_ENTERPRISES_ANSWER,
+            phrases: [...CLONE16_PUBLIC_ENTERPRISES_TRIGGER_PHRASES],
+            keywords: ['public', 'enterprises', 'organizations', 'internal', 'communication', 'information', 'sharing', 'employees']
+          },
+          {
+            id: 'schools',
+            question: 'Why is Clone 16 valuable in universities and schools?',
+            answer: CLONE16_SCHOOLS_ANSWER,
+            phrases: [...CLONE16_SCHOOLS_TRIGGER_PHRASES],
+            keywords: ['universities', 'schools', 'educators', 'teaching', 'students', 'practice', 'presentation', 'tool']
+          },
+          {
+            id: 'benefits',
+            question: 'What are the main benefits of Clone 16?',
+            answer: CLONE16_BENEFITS_ANSWER,
+            phrases: [...CLONE16_BENEFITS_TRIGGER_PHRASES],
+            keywords: ['benefits', 'easier', 'script', 'reading', 'eye', 'contact', 'confidence', 'professional', 'memorization']
+          },
+          {
+            id: 'communication',
+            question: 'How does Clone 16 help users communicate better?',
+            answer: CLONE16_COMMUNICATION_ANSWER,
+            phrases: [...CLONE16_COMMUNICATION_TRIGGER_PHRASES],
+            keywords: ['communicate', 'communication', 'scripts', 'speaking', 'flow', 'professional', 'appearance']
+          },
+          {
+            id: 'reduce_mistakes',
+            question: 'How does Clone 16 help reduce mistakes?',
+            answer: CLONE16_MISTAKES_ANSWER,
+            phrases: [...CLONE16_MISTAKES_TRIGGER_PHRASES],
+            keywords: ['reduce', 'mistakes', 'script', 'visible', 'forget', 'lines', 'track', 'speaking']
+          },
+          {
+            id: 'professionalism',
+            question: 'How does Clone 16 improve professionalism?',
+            answer: CLONE16_PROFESSIONALISM_ANSWER,
+            phrases: [...CLONE16_PROFESSIONALISM_TRIGGER_PHRASES],
+            keywords: ['professionalism', 'professional', 'smoothly', 'camera', 'focus', 'polished', 'message', 'deliver']
+          },
+          {
+            id: 'time_saving',
+            question: 'How does Clone 16 save time?',
+            answer: CLONE16_TIME_SAVING_ANSWER,
+            phrases: [...CLONE16_TIME_SAVING_TRIGGER_PHRASES],
+            keywords: ['save', 'time', 'memorization', 'retakes', 'filming', 'recording', 'reduce']
+          },
+          {
+            id: 'ordinary_monitors',
+            question: 'What makes Clone 16 different from ordinary monitors?',
+            answer: CLONE16_MONITORS_ANSWER,
+            phrases: [...CLONE16_MONITORS_TRIGGER_PHRASES],
+            keywords: ['different', 'ordinary', 'monitors', 'teleprompter', 'script', 'camera', 'production', 'environments']
+          },
+          {
+            id: 'unique',
+            question: 'What makes Clone 16 unique?',
+            answer: CLONE16_UNIQUE_ANSWER,
+            phrases: [...CLONE16_UNIQUE_TRIGGER_PHRASES],
+            keywords: ['unique', 'brightness', 'full', 'hd', 'clarity', 'portability', 'script', 'presentation', 'broadcasting']
+          },
+          {
+            id: 'choose',
+            question: 'Why should users choose Clone 16?',
+            answer: CLONE16_CHOOSE_ANSWER,
+            phrases: [...CLONE16_CHOOSE_TRIGGER_PHRASES],
+            keywords: ['choose', 'clear', 'display', 'simple', 'operation', 'portability', 'reliable', 'performance']
+          },
+          {
+            id: 'strongest_advantage',
+            question: 'What is the strongest advantage of Clone 16?',
+            answer: CLONE16_STRONGEST_ADVANTAGE_ANSWER,
+            phrases: [...CLONE16_STRONGEST_ADVANTAGE_TRIGGER_PHRASES],
+            keywords: ['strongest', 'advantage', 'biggest', 'main', 'naturally', 'professionally', 'camera', 'scripts']
+          },
+          {
+            id: 'pros_and_beginners',
+            question: 'Is Clone 16 only for professionals?',
+            answer: CLONE16_PROS_AND_BEGINNERS_ANSWER,
+            phrases: [...CLONE16_PROS_AND_BEGINNERS_TRIGGER_PHRASES],
+            keywords: ['professionals', 'beginners', 'wide', 'range', 'users', 'designed', 'only']
+          },
+          {
+            id: 'marketable',
+            question: 'Why is Clone 16 marketable?',
+            answer: CLONE16_MARKETABLE_ANSWER,
+            phrases: [...CLONE16_MARKETABLE_TRIGGER_PHRASES],
+            keywords: ['marketable', 'video', 'recording', 'education', 'broadcasting', 'communication', 'digital', 'content', 'creation']
+          },
+          {
+            id: 'demand',
+            question: 'Why is there a demand for teleprompter products like Clone 16?',
+            answer: CLONE16_DEMAND_ANSWER,
+            phrases: [...CLONE16_DEMAND_TRIGGER_PHRASES],
+            keywords: ['demand', 'teleprompter', 'script', 'delivery', 'confidence', 'efficiency', 'professionalism', 'camera']
+          },
+          {
+            id: 'institution_investment',
+            question: 'Why would institutions invest in Clone 16?',
+            answer: CLONE16_INSTITUTION_INVESTMENT_ANSWER,
+            phrases: [...CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES],
+            keywords: ['institutions', 'invest', 'organizations', 'professional', 'communication', 'efficient', 'content', 'information', 'delivery']
+          },
+          {
+            id: 'worth_supporting',
+            question: 'Why is Clone 16 worth supporting as a product?',
+            answer: CLONE16_WORTH_SUPPORTING_ANSWER,
+            phrases: [...CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES],
+            keywords: ['worth', 'supporting', 'product', 'communication', 'challenge', 'practical', 'education', 'broadcasting', 'organizational']
+          },
+          {
+            id: 'one_sentence_summary',
+            question: 'In one sentence, what is Clone 16 all about?',
+            answer: CLONE16_ONE_SENTENCE_SUMMARY_ANSWER,
+            phrases: [...CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES],
+            keywords: ['one', 'sentence', 'all', 'about', 'communicate', 'clearly', 'confidently', 'professionally', 'script']
           },
           {
             id: 'users',
