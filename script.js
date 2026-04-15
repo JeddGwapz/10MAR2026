@@ -127,6 +127,16 @@
   const CLONE16_INSTITUTION_INVESTMENT_PANEL_VIDEO = 'assets/clone16-48.mp4';
   const CLONE16_WORTH_SUPPORTING_PANEL_VIDEO = 'assets/clone16-49.mp4';
   const CLONE16_ONE_SENTENCE_SUMMARY_PANEL_VIDEO = 'assets/clone16-50.mp4';
+  const CLONE16_MEMORIZE_SCRIPTS_PANEL_VIDEO = 'assets/clone16-51.mp4';
+  const CLONE16_BRIGHTNESS_IMPORTANCE_PANEL_VIDEO = 'assets/clone16-52.mp4';
+  const CLONE16_FULL_HD_IMPORTANCE_PANEL_VIDEO = 'assets/clone16-53.mp4';
+  const CLONE16_PORTABILITY_IMPORTANCE_PANEL_VIDEO = 'assets/clone16-54.mp4';
+  const CLONE16_EDUCATIONAL_INSTITUTIONS_PANEL_VIDEO = 'assets/clone16-55.mp4';
+  const CLONE16_INTERNAL_COMMUNICATION_PANEL_VIDEO = 'assets/clone16-56.mp4';
+  const CLONE16_PUBLIC_INFORMATION_DELIVERY_PANEL_VIDEO = 'assets/clone16-57.mp4';
+  const CLONE16_IN_HOUSE_BROADCASTING_PANEL_VIDEO = 'assets/clone16-58.mp4';
+  const CLONE16_NO_EXPERIENCE_PANEL_VIDEO = 'assets/clone16-59.mp4';
+  const CLONE16_LONG_TERM_VALUE_PANEL_VIDEO = 'assets/clone16-60.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
   const CLONE16_PRODUCT_TYPE_ANSWER = 'Clone 16 is a multipurpose teleprompter used for script reading during video production, broadcasting, lectures, interviews, and public communication activities';
   const CLONE16_MAIN_PURPOSE_ANSWER = 'The main purpose of Clone 16 is to help users deliver scripts more naturally, clearly, and professionally without needing to memorize their lines';
@@ -182,6 +192,16 @@
   const CLONE16_INSTITUTION_INVESTMENT_ANSWER = 'Institutions would invest in Clone 16 because it supports professional communication, efficient content production, and clearer information delivery';
   const CLONE16_WORTH_SUPPORTING_ANSWER = 'Clone 16 is worth supporting because it solves a real communication challenge and provides practical value in education, broadcasting, and organizational communication';
   const CLONE16_ONE_SENTENCE_SUMMARY_ANSWER = 'Clone 16 is all about helping people communicate clearly, confidently, and professionally through easier script delivery';
+  const CLONE16_MEMORIZE_SCRIPTS_ANSWER = 'While memorization is possible, it is not always efficient or practical. Clone 16 provides a more convenient and professional way to deliver scripts with less stress and fewer mistakes';
+  const CLONE16_BRIGHTNESS_IMPORTANCE_ANSWER = 'Brightness is important because it ensures the script remains clear and readable, even during long sessions or in brighter filming environments';
+  const CLONE16_FULL_HD_IMPORTANCE_ANSWER = 'Full HD resolution is important because it provides sharp, readable text and better display quality, which improves script reading accuracy';
+  const CLONE16_PORTABILITY_IMPORTANCE_ANSWER = 'Portability is important because users may need to move and set up the prompter in different locations such as classrooms, studios, offices, or filming sites';
+  const CLONE16_EDUCATIONAL_INSTITUTIONS_ANSWER = 'It is suitable for educational institutions because it helps both teachers and students in lectures, reporting, broadcasting activities, and communication practice';
+  const CLONE16_INTERNAL_COMMUNICATION_ANSWER = 'Clone 16 improves internal communication by helping staff and presenters share information more clearly and professionally through in-house video and broadcasting systems';
+  const CLONE16_PUBLIC_INFORMATION_DELIVERY_ANSWER = 'It is useful for public information delivery because it helps presenters explain information more clearly, accurately, and confidently';
+  const CLONE16_IN_HOUSE_BROADCASTING_ANSWER = 'It is effective because it supports clear script reading and professional delivery, which are essential for internal broadcasts and official communication';
+  const CLONE16_NO_EXPERIENCE_ANSWER = 'That is not a problem because Clone 16 is designed to be simple and user-friendly, even for first-time users';
+  const CLONE16_LONG_TERM_VALUE_ANSWER = 'We believe Clone 16 has long-term value because communication, education, and media production will continue to require tools that improve script delivery and presentation quality';
   const CLONE16_STUDENTS_TRIGGER_PHRASES = [
     'is clone 16 suitable for students',
     'is clone 16 good for students',
@@ -268,63 +288,149 @@
   ];
   const CLONE16_MONITORS_TRIGGER_PHRASES = [
     'what makes clone 16 different from ordinary monitors',
+    'what makes the clone 16 different from ordinary monitors',
     'what makes clone 16 different from monitors',
+    'what makes clone 16 different from an ordinary monitor',
+    'what makes clone 16 different from a regular monitor',
     'how is clone 16 different from ordinary monitors',
-    'why is clone 16 different from ordinary monitors'
+    'how is clone 16 different from an ordinary monitor',
+    'how is clone 16 different from a regular monitor',
+    'why is clone 16 different from ordinary monitors',
+    'why is clone 16 different from an ordinary monitor'
   ];
   const CLONE16_UNIQUE_TRIGGER_PHRASES = [
     'what makes clone 16 unique',
+    'what makes the clone 16 unique',
+    'what makes clone 16 so unique',
     'why is clone 16 unique',
+    'why is the clone 16 unique',
     'what is unique about clone 16',
-    'what makes the clone 16 unique'
+    'what is unique about the clone 16',
+    'what makes clone 16 different and unique'
   ];
   const CLONE16_CHOOSE_TRIGGER_PHRASES = [
     'why should users choose clone 16',
+    'why should users choose the clone 16',
     'why choose clone 16',
+    'why choose the clone 16',
     'why should people choose clone 16',
-    'why should i choose clone 16'
+    'why should people choose the clone 16',
+    'why should i choose clone 16',
+    'why should i choose the clone 16',
+    'why would users choose clone 16'
   ];
   const CLONE16_STRONGEST_ADVANTAGE_TRIGGER_PHRASES = [
     'what is the strongest advantage of clone 16',
+    'what is the strongest advantage of the clone 16',
     'what is clone 16 strongest advantage',
+    'what is the clone 16 strongest advantage',
     'what is the biggest advantage of clone 16',
-    'what is the main advantage of clone 16'
+    'what is the biggest advantage of the clone 16',
+    'what is the main advantage of clone 16',
+    'what is the main advantage of the clone 16',
+    'what advantage is strongest in clone 16'
   ];
   const CLONE16_PROS_AND_BEGINNERS_TRIGGER_PHRASES = [
     'is clone 16 only for professionals',
+    'is the clone 16 only for professionals',
     'is clone 16 just for professionals',
+    'is the clone 16 just for professionals',
     'is clone 16 for professionals only',
-    'can beginners use clone 16 too'
+    'is the clone 16 for professionals only',
+    'can beginners use clone 16 too',
+    'can beginners use the clone 16 too',
+    'is clone 16 also for beginners'
   ];
   const CLONE16_MARKETABLE_TRIGGER_PHRASES = [
     'why is clone 16 marketable',
+    'why is the clone 16 marketable',
     'what makes clone 16 marketable',
+    'what makes the clone 16 marketable',
     'why is clone 16 easy to market',
-    'is clone 16 marketable'
+    'why is the clone 16 easy to market',
+    'is clone 16 marketable',
+    'is the clone 16 marketable',
+    'why would clone 16 be marketable'
   ];
   const CLONE16_DEMAND_TRIGGER_PHRASES = [
     'why is there a demand for teleprompter products like clone 16',
+    'why is there a demand for teleprompter products like the clone 16',
     'why is there demand for teleprompter products like clone 16',
+    'why is there demand for teleprompter products like the clone 16',
     'why are teleprompter products like clone 16 in demand',
-    'why is clone 16 in demand'
+    'why are teleprompter products like the clone 16 in demand',
+    'why is clone 16 in demand',
+    'why is the clone 16 in demand',
+    'why is there demand for clone 16'
   ];
   const CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES = [
     'why would institutions invest in clone 16',
+    'why would institutions invest in the clone 16',
     'why would organizations invest in clone 16',
+    'why would organizations invest in the clone 16',
     'why should institutions invest in clone 16',
-    'why invest in clone 16'
+    'why should institutions invest in the clone 16',
+    'why invest in clone 16',
+    'why invest in the clone 16',
+    'why would an institution invest in clone 16'
   ];
   const CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES = [
     'why is clone 16 worth supporting as a product',
+    'why is the clone 16 worth supporting as a product',
     'why is clone 16 worth supporting',
+    'why is the clone 16 worth supporting',
     'why should clone 16 be supported as a product',
-    'why support clone 16 as a product'
+    'why should the clone 16 be supported as a product',
+    'why support clone 16 as a product',
+    'why support the clone 16 as a product',
+    'why is clone 16 worth supporting as product'
   ];
   const CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES = [
     'in one sentence what is clone 16 all about',
+    'in one sentence what is the clone 16 all about',
     'in one sentence what is clone 16 about',
+    'in one sentence what is the clone 16 about',
     'what is clone 16 all about in one sentence',
-    'summarize clone 16 in one sentence'
+    'what is the clone 16 all about in one sentence',
+    'summarize clone 16 in one sentence',
+    'summarize the clone 16 in one sentence',
+    'tell me clone 16 in one sentence'
+  ];
+  const CLONE16_MEMORIZE_SCRIPTS_TRIGGER_PHRASES = [
+    'why do users need clone 16 if they can just memorize scripts',
+    'why do users need the clone 16 if they can just memorize scripts',
+    'why use clone 16 if you can just memorize scripts',
+    'why use the clone 16 if you can just memorize scripts',
+    'why do people need clone 16 if they can memorize scripts',
+    'if users can memorize scripts why do they need clone 16',
+    'if people can memorize scripts why do they need clone 16'
+  ];
+  const CLONE16_BRIGHTNESS_IMPORTANCE_TRIGGER_PHRASES = [
+    'why is brightness important in a teleprompter'
+  ];
+  const CLONE16_FULL_HD_IMPORTANCE_TRIGGER_PHRASES = [
+    'why is full hd resolution important for clone 16'
+  ];
+  const CLONE16_PORTABILITY_IMPORTANCE_TRIGGER_PHRASES = [
+    'why is portability important for this product'
+  ];
+  const CLONE16_EDUCATIONAL_INSTITUTIONS_TRIGGER_PHRASES = [
+    'why is clone 16 suitable for educational institutions'
+  ];
+  const CLONE16_INTERNAL_COMMUNICATION_TRIGGER_PHRASES = [
+    'how can clone 16 improve internal communication in organizations'
+  ];
+  const CLONE16_PUBLIC_INFORMATION_DELIVERY_TRIGGER_PHRASES = [
+    'what makes clone 16 useful for public information delivery'
+  ];
+  const CLONE16_IN_HOUSE_BROADCASTING_TRIGGER_PHRASES = [
+    'why is clone 16 effective for in house broadcasting systems'
+  ];
+  const CLONE16_NO_EXPERIENCE_TRIGGER_PHRASES = [
+    'what if the user has no experience using a teleprompter'
+  ];
+  const CLONE16_LONG_TERM_VALUE_TRIGGER_PHRASES = [
+    'why do you believe clone 16 has long term value'
   ];
   const TAB12_AVATAR_VIDEO = 'assets/tab 12.mp4';
   const CUE24_INSTALLATION_AVATAR_VIDEO = 'assets/cue 24.mp4';
@@ -666,11 +772,72 @@
     return CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES.includes(normalizedQuestion);
   }
 
+  function isClone16MemorizeScriptsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_MEMORIZE_SCRIPTS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16BrightnessImportanceQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_BRIGHTNESS_IMPORTANCE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16FullHdImportanceQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_FULL_HD_IMPORTANCE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16PortabilityImportanceQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_PORTABILITY_IMPORTANCE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16EducationalInstitutionsQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_EDUCATIONAL_INSTITUTIONS_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16InternalCommunicationQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_INTERNAL_COMMUNICATION_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16PublicInformationDeliveryQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_PUBLIC_INFORMATION_DELIVERY_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16InHouseBroadcastingQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_IN_HOUSE_BROADCASTING_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16NoExperienceQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_NO_EXPERIENCE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
+  function isClone16LongTermValueQuestion(questionText = '') {
+    const normalizedQuestion = normalizeQuestion(questionText);
+    return CLONE16_LONG_TERM_VALUE_TRIGGER_PHRASES.includes(normalizedQuestion);
+  }
+
   function shouldForceClone16DefinitionSequence(questionText = '', productKey = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
     if (!normalizedQuestion) return false;
 
-    const resolvedProductKey = isClone16InstitutionsQuestion(normalizedQuestion)
+    const resolvedProductKey = (
+      isClone16InstitutionsQuestion(normalizedQuestion) ||
+      isClone16BrightnessImportanceQuestion(normalizedQuestion) ||
+      isClone16FullHdImportanceQuestion(normalizedQuestion) ||
+      isClone16PortabilityImportanceQuestion(normalizedQuestion) ||
+      isClone16EducationalInstitutionsQuestion(normalizedQuestion) ||
+      isClone16InternalCommunicationQuestion(normalizedQuestion) ||
+      isClone16PublicInformationDeliveryQuestion(normalizedQuestion) ||
+      isClone16InHouseBroadcastingQuestion(normalizedQuestion) ||
+      isClone16NoExperienceQuestion(normalizedQuestion) ||
+      isClone16LongTermValueQuestion(normalizedQuestion)
+    )
       ? 'clone16'
       : (productKey || detectProductKeyFromText(questionText));
     if (resolvedProductKey !== 'clone16') return false;
@@ -728,6 +895,16 @@
       ...CLONE16_INSTITUTION_INVESTMENT_TRIGGER_PHRASES,
       ...CLONE16_WORTH_SUPPORTING_TRIGGER_PHRASES,
       ...CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES,
+      ...CLONE16_MEMORIZE_SCRIPTS_TRIGGER_PHRASES,
+      ...CLONE16_BRIGHTNESS_IMPORTANCE_TRIGGER_PHRASES,
+      ...CLONE16_FULL_HD_IMPORTANCE_TRIGGER_PHRASES,
+      ...CLONE16_PORTABILITY_IMPORTANCE_TRIGGER_PHRASES,
+      ...CLONE16_EDUCATIONAL_INSTITUTIONS_TRIGGER_PHRASES,
+      ...CLONE16_INTERNAL_COMMUNICATION_TRIGGER_PHRASES,
+      ...CLONE16_PUBLIC_INFORMATION_DELIVERY_TRIGGER_PHRASES,
+      ...CLONE16_IN_HOUSE_BROADCASTING_TRIGGER_PHRASES,
+      ...CLONE16_NO_EXPERIENCE_TRIGGER_PHRASES,
+      ...CLONE16_LONG_TERM_VALUE_TRIGGER_PHRASES,
       'tell me about clone 16',
       'introduce clone 16',
       'clone 16 overview',
@@ -740,6 +917,8 @@
     });
 
     if (!hasIdentityPhrase) return false;
+
+    if (isClone16BrightnessImportanceQuestion(normalizedQuestion)) return true;
 
     const disallowedSignals = [
       'price',
@@ -769,6 +948,33 @@
 
   function getClone16InfoCardVideoForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (isClone16LongTermValueQuestion(normalizedQuestion)) {
+      return CLONE16_LONG_TERM_VALUE_PANEL_VIDEO;
+    }
+    if (isClone16NoExperienceQuestion(normalizedQuestion)) {
+      return CLONE16_NO_EXPERIENCE_PANEL_VIDEO;
+    }
+    if (isClone16InHouseBroadcastingQuestion(normalizedQuestion)) {
+      return CLONE16_IN_HOUSE_BROADCASTING_PANEL_VIDEO;
+    }
+    if (isClone16PublicInformationDeliveryQuestion(normalizedQuestion)) {
+      return CLONE16_PUBLIC_INFORMATION_DELIVERY_PANEL_VIDEO;
+    }
+    if (isClone16InternalCommunicationQuestion(normalizedQuestion)) {
+      return CLONE16_INTERNAL_COMMUNICATION_PANEL_VIDEO;
+    }
+    if (isClone16EducationalInstitutionsQuestion(normalizedQuestion)) {
+      return CLONE16_EDUCATIONAL_INSTITUTIONS_PANEL_VIDEO;
+    }
+    if (isClone16PortabilityImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_PORTABILITY_IMPORTANCE_PANEL_VIDEO;
+    }
+    if (isClone16FullHdImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_FULL_HD_IMPORTANCE_PANEL_VIDEO;
+    }
+    if (isClone16BrightnessImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_BRIGHTNESS_IMPORTANCE_PANEL_VIDEO;
+    }
     if (isClone16StudentsQuestion(normalizedQuestion)) {
       return CLONE16_STUDENTS_PANEL_VIDEO;
     }
@@ -840,6 +1046,9 @@
     }
     if (isClone16OneSentenceSummaryQuestion(normalizedQuestion)) {
       return CLONE16_ONE_SENTENCE_SUMMARY_PANEL_VIDEO;
+    }
+    if (isClone16MemorizeScriptsQuestion(normalizedQuestion)) {
+      return CLONE16_MEMORIZE_SCRIPTS_PANEL_VIDEO;
     }
     if (normalizedQuestion === 'who can use clone 16') {
       return CLONE16_USERS_PANEL_VIDEO;
@@ -921,6 +1130,33 @@
 
   function getClone16SubtitleForQuestion(questionText = '') {
     const normalizedQuestion = normalizeQuestion(questionText);
+    if (isClone16LongTermValueQuestion(normalizedQuestion)) {
+      return CLONE16_LONG_TERM_VALUE_ANSWER;
+    }
+    if (isClone16NoExperienceQuestion(normalizedQuestion)) {
+      return CLONE16_NO_EXPERIENCE_ANSWER;
+    }
+    if (isClone16InHouseBroadcastingQuestion(normalizedQuestion)) {
+      return CLONE16_IN_HOUSE_BROADCASTING_ANSWER;
+    }
+    if (isClone16PublicInformationDeliveryQuestion(normalizedQuestion)) {
+      return CLONE16_PUBLIC_INFORMATION_DELIVERY_ANSWER;
+    }
+    if (isClone16InternalCommunicationQuestion(normalizedQuestion)) {
+      return CLONE16_INTERNAL_COMMUNICATION_ANSWER;
+    }
+    if (isClone16EducationalInstitutionsQuestion(normalizedQuestion)) {
+      return CLONE16_EDUCATIONAL_INSTITUTIONS_ANSWER;
+    }
+    if (isClone16PortabilityImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_PORTABILITY_IMPORTANCE_ANSWER;
+    }
+    if (isClone16FullHdImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_FULL_HD_IMPORTANCE_ANSWER;
+    }
+    if (isClone16BrightnessImportanceQuestion(normalizedQuestion)) {
+      return CLONE16_BRIGHTNESS_IMPORTANCE_ANSWER;
+    }
     if (isClone16StudentsQuestion(normalizedQuestion)) {
       return CLONE16_STUDENTS_ANSWER;
     }
@@ -992,6 +1228,9 @@
     }
     if (isClone16OneSentenceSummaryQuestion(normalizedQuestion)) {
       return CLONE16_ONE_SENTENCE_SUMMARY_ANSWER;
+    }
+    if (isClone16MemorizeScriptsQuestion(normalizedQuestion)) {
+      return CLONE16_MEMORIZE_SCRIPTS_ANSWER;
     }
     if (normalizedQuestion === 'who can use clone 16') {
       return CLONE16_USERS_ANSWER;
@@ -2714,6 +2953,69 @@
             keywords: ['bright', 'brightness', 'display', 'monitor', '500']
           },
           {
+            id: 'brightness_importance',
+            question: 'Why is brightness important in a teleprompter?',
+            answer: CLONE16_BRIGHTNESS_IMPORTANCE_ANSWER,
+            phrases: [...CLONE16_BRIGHTNESS_IMPORTANCE_TRIGGER_PHRASES],
+            keywords: ['brightness', 'important', 'teleprompter', 'readable', 'clear', 'script', 'filming', 'environments']
+          },
+          {
+            id: 'full_hd_importance',
+            question: 'Why is Full HD resolution important for Clone 16?',
+            answer: CLONE16_FULL_HD_IMPORTANCE_ANSWER,
+            phrases: [...CLONE16_FULL_HD_IMPORTANCE_TRIGGER_PHRASES],
+            keywords: ['full', 'hd', 'resolution', 'important', 'sharp', 'readable', 'display', 'quality', 'accuracy']
+          },
+          {
+            id: 'portability_importance',
+            question: 'Why is portability important for this product?',
+            answer: CLONE16_PORTABILITY_IMPORTANCE_ANSWER,
+            phrases: [...CLONE16_PORTABILITY_IMPORTANCE_TRIGGER_PHRASES],
+            keywords: ['portability', 'important', 'move', 'setup', 'classrooms', 'studios', 'offices', 'filming', 'sites']
+          },
+          {
+            id: 'educational_institutions',
+            question: 'Why is Clone 16 suitable for educational institutions?',
+            answer: CLONE16_EDUCATIONAL_INSTITUTIONS_ANSWER,
+            phrases: [...CLONE16_EDUCATIONAL_INSTITUTIONS_TRIGGER_PHRASES],
+            keywords: ['educational', 'institutions', 'teachers', 'students', 'lectures', 'reporting', 'broadcasting', 'communication', 'practice']
+          },
+          {
+            id: 'internal_communication',
+            question: 'How can Clone 16 improve internal communication in organizations?',
+            answer: CLONE16_INTERNAL_COMMUNICATION_ANSWER,
+            phrases: [...CLONE16_INTERNAL_COMMUNICATION_TRIGGER_PHRASES],
+            keywords: ['internal', 'communication', 'organizations', 'staff', 'presenters', 'information', 'in-house', 'video', 'broadcasting']
+          },
+          {
+            id: 'public_information_delivery',
+            question: 'What makes Clone 16 useful for public information delivery?',
+            answer: CLONE16_PUBLIC_INFORMATION_DELIVERY_ANSWER,
+            phrases: [...CLONE16_PUBLIC_INFORMATION_DELIVERY_TRIGGER_PHRASES],
+            keywords: ['public', 'information', 'delivery', 'presenters', 'clearly', 'accurately', 'confidently', 'explain']
+          },
+          {
+            id: 'in_house_broadcasting',
+            question: 'Why is Clone 16 effective for in-house broadcasting systems?',
+            answer: CLONE16_IN_HOUSE_BROADCASTING_ANSWER,
+            phrases: [...CLONE16_IN_HOUSE_BROADCASTING_TRIGGER_PHRASES],
+            keywords: ['in-house', 'broadcasting', 'systems', 'internal', 'broadcasts', 'official', 'communication', 'delivery']
+          },
+          {
+            id: 'no_experience',
+            question: 'What if the user has no experience using a teleprompter?',
+            answer: CLONE16_NO_EXPERIENCE_ANSWER,
+            phrases: [...CLONE16_NO_EXPERIENCE_TRIGGER_PHRASES],
+            keywords: ['no', 'experience', 'teleprompter', 'simple', 'user-friendly', 'first-time', 'users']
+          },
+          {
+            id: 'long_term_value',
+            question: 'Why do you believe Clone 16 has long-term value?',
+            answer: CLONE16_LONG_TERM_VALUE_ANSWER,
+            phrases: [...CLONE16_LONG_TERM_VALUE_TRIGGER_PHRASES],
+            keywords: ['long-term', 'value', 'communication', 'education', 'media', 'production', 'script', 'delivery', 'presentation']
+          },
+          {
             id: 'camera',
             question: 'What cameras are compatible with this prompter?',
             answer: 'Clone 16 supports a wide range of cameras, including DSLR cameras and ENG cameras. Its adjustable structure helps keep the setup stable and balanced.',
@@ -2908,6 +3210,13 @@
             answer: CLONE16_ONE_SENTENCE_SUMMARY_ANSWER,
             phrases: [...CLONE16_ONE_SENTENCE_SUMMARY_TRIGGER_PHRASES],
             keywords: ['one', 'sentence', 'all', 'about', 'communicate', 'clearly', 'confidently', 'professionally', 'script']
+          },
+          {
+            id: 'memorize_scripts',
+            question: 'Why do users need Clone 16 if they can just memorize scripts?',
+            answer: CLONE16_MEMORIZE_SCRIPTS_ANSWER,
+            phrases: [...CLONE16_MEMORIZE_SCRIPTS_TRIGGER_PHRASES],
+            keywords: ['memorize', 'scripts', 'efficient', 'practical', 'convenient', 'professional', 'stress', 'mistakes']
           },
           {
             id: 'users',
