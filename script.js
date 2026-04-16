@@ -65,6 +65,7 @@
   const customPlaceholderContent = document.getElementById('customPlaceholderContent');
   const noMatchPickerShell = document.getElementById('noMatchPickerShell');
   const customCenterContent = document.getElementById('customCenterContent');
+  const avatarImage = document.getElementById('avatarImage');
   const avatarVideo = document.getElementById('avatarVideo');
   const avatarVideoSource = document.getElementById('avatarVideoSource');
   const avatarLipsyncShell = document.getElementById('avatarLipsyncShell');
@@ -73,10 +74,14 @@
   const installationVideoFrame = document.getElementById('installationVideoFrame');
   const mainContentPanel = document.querySelector('.main-content');
   const videoContent = document.getElementById('videoContent');
+  const AVATAR_IDLE_IMAGE = 'assets/Daniel Mobile.png';
   const AVATAR_IDLE_VIDEO = 'assets/steady.mp4';
   const AVATAR_RESPONSE_VIDEO = 'assets/daniel_ditto.mp4';
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
+  const CLONE16_OVERVIEW_VIDEO_ID = 'IJlVE8LUHZ0';
+  const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
+  const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
   const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
   const CLONE16_PRODUCT_TYPE_PANEL_VIDEO = 'assets/clone16-2.mp4';
   const CLONE16_MAIN_PURPOSE_PANEL_VIDEO = 'assets/clone16-3.mp4';
@@ -1691,6 +1696,7 @@
   let avatarLipSyncTimers = [];
   let assistantSpeechEndingHandlers = [];
   let pendingInstallationAutoplayTimer = null;
+  let pendingClone16OverviewAutoplayTimer = null;
 
   let localTtsAudio = null;
   let localTtsObjectUrl = '';
@@ -1714,10 +1720,27 @@
     });
   }
 
+  function syncClone16OverviewInteractionLock() {
+    const overviewFrames = document.querySelectorAll('.clone16-overview-video-frame');
+    overviewFrames.forEach((frame) => {
+      frame.classList.toggle('is-locked', assistantSpeaking);
+      const trigger = frame.querySelector('.clone16-overview-video-trigger');
+      if (!trigger) return;
+      if (assistantSpeaking) {
+        trigger.setAttribute('aria-disabled', 'true');
+        trigger.setAttribute('title', 'Please wait for the avatar video to finish.');
+      } else {
+        trigger.removeAttribute('aria-disabled');
+        trigger.removeAttribute('title');
+      }
+    });
+  }
+
   function setAssistantSpeakingState(active) {
     assistantSpeaking = Boolean(active);
     if (avatarBox) avatarBox.classList.toggle('is-speaking', active);
     if (assistantStatus) assistantStatus.classList.toggle('is-speaking', active);
+    syncClone16OverviewInteractionLock();
     if (!assistantSpeaking && micStickyMode && !micActive) {
       scheduleMicRecognitionStart(220);
     }
@@ -1812,6 +1835,12 @@
     if (!pendingInstallationAutoplayTimer) return;
     window.clearTimeout(pendingInstallationAutoplayTimer);
     pendingInstallationAutoplayTimer = null;
+  }
+
+  function clearPendingClone16OverviewAutoplay() {
+    if (!pendingClone16OverviewAutoplayTimer) return;
+    window.clearTimeout(pendingClone16OverviewAutoplayTimer);
+    pendingClone16OverviewAutoplayTimer = null;
   }
 
   function closeInstallationVideoOverlay() {
@@ -2297,6 +2326,7 @@
     resetAssistantChunkState();
     clearAssistantSpeechEndingHandlers();
     clearPendingInstallationAutoplay();
+    clearPendingClone16OverviewAutoplay();
     closeInstallationVideoOverlay();
     stopAvatarLipSync();
     setAssistantSpeakingState(false);
@@ -5838,14 +5868,341 @@
     src: 'assets/cue series - image.png',
     alt: 'Cue Series infographic'
   };
+  const CLONE16_DIRECT_TRIGGER_PHRASES = [
+    'clone 16',
+    'clone16',
+    'show clone 16',
+    'select clone 16',
+    'what is clone 16',
+    'introduce clone 16',
+    'about clone 16'
+  ];
+  const CLONE16_DIRECT_TRIGGER_SET = new Set(CLONE16_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const CLONE16_3D_VIEWER_SRCDOC = String.raw`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple 3D Box Viewer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #viewer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    #fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      text-align: center;
+      color: transparent;
+      background: transparent;
+      font-size: 0;
+      line-height: 0;
+      z-index: 2;
+      border-radius: 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewer">
+    <div id="fallback" aria-hidden="true"></div>
+  </div>
+
+  <script type="module">
+    const fallback = document.getElementById('fallback');
+
+    async function start() {
+      try {
+        const THREE = await import('https://esm.sh/three@0.160.0');
+        const { OrbitControls } = await import('https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls');
+
+        const container = document.getElementById('viewer');
+        if (!container) {
+          throw new Error('Viewer container not found.');
+        }
+
+        const scene = new THREE.Scene();
+        scene.background = null;
+
+        const camera = new THREE.PerspectiveCamera(
+          60,
+          container.clientWidth / container.clientHeight,
+          0.1,
+          1000
+        );
+        camera.position.set(2.5, 2, 3.8);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.domElement.style.background = 'transparent';
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 2;
+        controls.maxDistance = 10;
+        controls.target.set(0, 0.3, 0);
+        controls.update();
+
+        const group = new THREE.Group();
+        scene.add(group);
+
+        const boxGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+        const boxMaterial = new THREE.MeshStandardMaterial({
+          color: 0x2563eb,
+          roughness: 0.35,
+          metalness: 0.2
+        });
+        const cube = new THREE.Mesh(boxGeometry, boxMaterial);
+        cube.position.y = 0.8;
+        group.add(cube);
+
+        const edges = new THREE.EdgesGeometry(boxGeometry);
+        const edgeLines = new THREE.LineSegments(
+          edges,
+          new THREE.LineBasicMaterial({ color: 0xffffff })
+        );
+        cube.add(edgeLines);
+
+        const grid = new THREE.GridHelper(8, 8, 0xc7d2fe, 0xd1d5db);
+        grid.material.transparent = true;
+        grid.material.opacity = 0.22;
+        scene.add(grid);
+
+        const floor = new THREE.Mesh(
+          new THREE.CircleGeometry(2.6, 64),
+          new THREE.MeshStandardMaterial({
+            color: 0xe5e7eb,
+            roughness: 1,
+            metalness: 0,
+            transparent: true,
+            opacity: 0.18
+          })
+        );
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = 0.001;
+        scene.add(floor);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+        scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffffff, 2.8);
+        mainLight.position.set(4, 6, 5);
+        scene.add(mainLight);
+
+        const fillLight = new THREE.DirectionalLight(0xffffff, 1.4);
+        fillLight.position.set(-4, 3, -2);
+        scene.add(fillLight);
+
+        function resizeRenderer() {
+          const width = container.clientWidth;
+          const height = container.clientHeight;
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+          renderer.setSize(width, height);
+        }
+
+        window.addEventListener('resize', resizeRenderer);
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const elapsed = clock.getElapsedTime();
+          group.rotation.y = elapsed * 0.5;
+          controls.update();
+          renderer.render(scene, camera);
+        }
+
+        console.assert(typeof OrbitControls === 'function', 'OrbitControls should load correctly.');
+        console.assert(container.contains(renderer.domElement), 'Renderer canvas should be attached to the viewer.');
+        console.assert(scene.children.includes(group), 'Group should be added to the scene.');
+        console.assert(group.children.includes(cube), 'Cube should be present in the group.');
+        console.assert(cube.visible === true, 'Cube should be visible.');
+
+        resizeRenderer();
+        animate();
+      } catch (error) {
+        console.error('3D viewer failed:', error);
+        if (fallback) {
+          fallback.style.display = 'flex';
+          fallback.textContent = '';
+        }
+      }
+    }
+
+    start();
+  </script>
+</body>
+</html>`;
 
   function getProductSummaryStripText(product) {
     if (!product || !product.summary || !product.summary.body) return '';
     if (product.key === 'clone16') {
-      return 'The Clone 16 teleprompter is designed for portable, reliable prompting in studio and on-location workflows.';
+      return 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments';
     }
     const text = product.summary.body.trim();
     return text.length > 120 ? `${text.slice(0, 117).trimEnd()}...` : text;
+  }
+
+  function isDirectClone16OverviewRequest(rawText = '') {
+    return CLONE16_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function getClone16OverviewPreviewHtml() {
+    return `
+      <button
+        class="clone16-overview-video-trigger"
+        type="button"
+        aria-label="Play Clone 16 introduction video"
+        onclick="activateClone16OverviewVideo(this)"
+      >
+        <span class="clone16-overview-video-poster" aria-hidden="true"></span>
+        <span class="clone16-overview-video-play" aria-hidden="true"></span>
+      </button>
+    `;
+  }
+
+  function getClone16OverviewEmbedSrc() {
+    try {
+      const embedUrl = new URL(CLONE16_OVERVIEW_EMBED_URL, window.location.href);
+      embedUrl.searchParams.set('autoplay', '1');
+      embedUrl.searchParams.set('mute', '1');
+      embedUrl.searchParams.set('rel', '0');
+      embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('enablejsapi', '1');
+      embedUrl.searchParams.set('modestbranding', '1');
+      embedUrl.searchParams.set('iv_load_policy', '3');
+      embedUrl.searchParams.set('controls', '0');
+      embedUrl.searchParams.set('fs', '0');
+      embedUrl.searchParams.set('disablekb', '1');
+      embedUrl.searchParams.set('playlist', CLONE16_OVERVIEW_VIDEO_ID);
+      if (window.location.origin) {
+        embedUrl.searchParams.set('origin', window.location.origin);
+      }
+      return embedUrl.toString();
+    } catch (error) {
+      return `${CLONE16_OVERVIEW_EMBED_URL}?autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1&playlist=${CLONE16_OVERVIEW_VIDEO_ID}`;
+    }
+  }
+
+  function restoreClone16OverviewVideo(frameOrChild) {
+    const frame = frameOrChild?.classList?.contains('clone16-overview-video-frame')
+      ? frameOrChild
+      : frameOrChild?.closest('.clone16-overview-video-frame');
+    if (!frame) return;
+    frame.dataset.loaded = 'false';
+    frame.classList.remove('is-playing');
+    frame.innerHTML = getClone16OverviewPreviewHtml();
+    syncClone16OverviewInteractionLock();
+  }
+
+  function activateClone16OverviewVideo(trigger) {
+    const frame = trigger?.classList?.contains('clone16-overview-video-frame')
+      ? trigger
+      : trigger?.closest('.clone16-overview-video-frame');
+    if (!frame || frame.dataset.loaded === 'true' || assistantSpeaking) return;
+    frame.dataset.loaded = 'true';
+    frame.classList.add('is-playing');
+    const playerId = `clone16-overview-player-${Date.now()}`;
+    frame.dataset.playerId = playerId;
+    frame.innerHTML = `
+      <iframe
+        id="${playerId}"
+        class="clone16-overview-embed clone16-overview-embed-video"
+        src="${escapeHtml(getClone16OverviewEmbedSrc())}"
+        title="${escapeHtml(CLONE16_OVERVIEW_EMBED_TITLE)}"
+        loading="eager"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    `;
+    const overviewEmbed = frame.querySelector('.clone16-overview-embed-video');
+    if (overviewEmbed) {
+      overviewEmbed.addEventListener('load', () => {
+        window.setTimeout(() => {
+          if (!document.getElementById(playerId)) return;
+          if (overviewEmbed.contentWindow) {
+            overviewEmbed.contentWindow.postMessage(JSON.stringify({ event: 'listening' }), '*');
+          }
+          sendClone16OverviewPlayerCommand(overviewEmbed, 'addEventListener', ['onReady']);
+          sendClone16OverviewPlayerCommand(overviewEmbed, 'addEventListener', ['onStateChange']);
+          sendClone16OverviewPlayerCommand(overviewEmbed, 'mute');
+          sendClone16OverviewPlayerCommand(overviewEmbed, 'playVideo');
+        }, 220);
+      }, { once: true });
+    }
+  }
+
+  function sendClone16OverviewPlayerCommand(iframe, func, args = []) {
+    if (!iframe?.contentWindow) return;
+    iframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func,
+      args
+    }), '*');
+  }
+
+  function handleClone16OverviewPlayerMessage(event) {
+    if (!event || typeof event.data !== 'string' || !event.data) return;
+    let payload;
+    try {
+      payload = JSON.parse(event.data);
+    } catch (error) {
+      return;
+    }
+
+    if (!payload || typeof payload !== 'object') return;
+    const playerId = payload.id || '';
+    if (!playerId || !playerId.startsWith('clone16-overview-player-')) return;
+
+    const iframe = document.getElementById(playerId);
+    if (!iframe) return;
+    const frame = iframe.closest('.clone16-overview-video-frame');
+    if (!frame) return;
+
+    if (payload.event === 'onReady') {
+      sendClone16OverviewPlayerCommand(iframe, 'mute');
+      sendClone16OverviewPlayerCommand(iframe, 'playVideo');
+      return;
+    }
+
+    if (payload.event === 'onStateChange' && Number(payload.info) === 0) {
+      restoreClone16OverviewVideo(frame);
+    }
   }
 
   function shouldUseShowcaseLayout(productKey, section = 'summary') {
@@ -5855,6 +6212,32 @@
   function getProductShowcaseHtml(product) {
     const summaryHtml = product.summary.bodyHtml || escapeHtml(product.summary.body);
     const showcaseMeta = PRODUCT_SHOWCASE_META[product.key] || '';
+    if (product.key === 'clone16') {
+      const viewerSrcdoc = escapeHtml(CLONE16_3D_VIEWER_SRCDOC);
+      return `
+        <section class="clone16-overview-showcase" aria-label="${escapeHtml(product.name)} overview">
+          <div class="clone16-overview-panel clone16-overview-panel-video">
+            <div class="clone16-overview-media-shell">
+              <div class="clone16-overview-video-frame" data-loaded="false">
+                ${getClone16OverviewPreviewHtml()}
+              </div>
+            </div>
+          </div>
+          <div class="clone16-overview-panel clone16-overview-panel-viewer">
+            <div class="clone16-overview-media-shell">
+              <iframe
+                class="clone16-overview-embed"
+                srcdoc="${viewerSrcdoc}"
+                title="Simple 3D Box Viewer"
+                sandbox="allow-scripts allow-same-origin"
+                allowtransparency="true"
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+          </div>
+        </section>
+      `;
+    }
     const isImageOnlyShowcase = product.key === 'clone16' || product.key === 'cue10' || product.key === 'cue24' || product.key === 'cue27' || product.key === 'tab12' || product.key === 'cue32' || product.key === 'emperor22' || product.key === 'adamas19' || product.key === 'adamas22' || product.key === 'adamas24' || product.key === 'cubic15' || product.key === 'cubic19' || product.key === 'momo12' || product.key === 'plain14' || product.key === 'pop24' || product.key === 'pop27' || product.key === 'pop32' || product.key === 'ptz24' || product.key === 'ptz27' || product.key === 'ptz32' || product.key === 'rotunda15' || product.key === 'spot18' || product.key === 'theGreat22' || product.key === 'theGreat24' || product.key === 'ultra43' || product.key === 'ultra55' || product.key === 'wide22' || product.key === 'wide24' || product.key === 'wide27' || product.key === 'wide32' || product.key === 'ep30k' || product.key === 'ep40k' || product.key === 'ep50k' || product.key === 'ep60k' || product.key === 'ep80k' || product.key === 'flex15' || product.key === 'folder22n' || product.key === 'framer24' || product.key === 'framer27' || product.key === 'framer32' || product.key === 'lessonQ24' || product.key === 'lessonQ27' || product.key === 'lessonQ32' || product.key === 'lessonQ43' || product.key === 'mime24' || product.key === 'mime27' || product.key === 'mime32' || product.key === 'olleson18';
     const showcaseClass = isImageOnlyShowcase
       ? 'cue-series-showcase cue-series-showcase-image-only'
@@ -5885,6 +6268,7 @@
     if (!product || !infoCard || !product.images?.[0]) return;
     prepareInfoCardFrame({ locked: true, scrollable: false });
     infoCard.innerHTML = getProductShowcaseHtml(product);
+    syncClone16OverviewInteractionLock();
     playInfoCardAnimation('slide');
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
@@ -5898,6 +6282,7 @@
       phrases: [
         definition.name.toLowerCase(),
         ...definition.aliases.map((alias) => alias.toLowerCase()),
+        ...(definition.key === 'clone16' ? CLONE16_DIRECT_TRIGGER_PHRASES : []),
         ...definition.aliases.map((alias) => `show ${alias.toLowerCase()}`),
         ...definition.aliases.map((alias) => `select ${alias.toLowerCase()}`),
         ...definition.aliases.map((alias) => `what is ${alias.toLowerCase()}`)
@@ -7340,6 +7725,7 @@
   window.openLessonQ27Brochure = openLessonQ27Brochure;
   window.openLessonQ27MobileBrochure = openLessonQ27MobileBrochure;
   window.playClone16InstallationEmbed = playClone16InstallationEmbed;
+  window.activateClone16OverviewVideo = activateClone16OverviewVideo;
   window.addEventListener('resize', updateClone16BrochureButtonState);
   window.addEventListener('resize', updateClone16InstallationDesktopOnlyVisibility);
 
@@ -8315,6 +8701,7 @@
     const product = PRODUCTS[productKey];
     if (!product) return;
 
+    clearPendingClone16OverviewAutoplay();
     currentProductKey = productKey;
     lastConfirmedProductKey = productKey;
     hasExplicitProductSelection = true;
@@ -8430,6 +8817,8 @@
 
   function applyMatchedResponse(match) {
     if (!match) return;
+
+    clearPendingClone16OverviewAutoplay();
 
     if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
       applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, FAQs, or Installation.');
@@ -8978,6 +9367,25 @@
     return best;
   }
 
+  function showAvatarIdleImage() {
+    if (avatarImage) {
+      avatarImage.src = AVATAR_IDLE_IMAGE;
+      avatarImage.style.display = 'block';
+    }
+    if (avatarVideo) {
+      avatarVideo.style.display = 'none';
+    }
+  }
+
+  function showAvatarResponseVideo() {
+    if (avatarImage) {
+      avatarImage.style.display = 'none';
+    }
+    if (avatarVideo) {
+      avatarVideo.style.display = 'block';
+    }
+  }
+
   function restoreAvatarIdleVideo() {
     if (!avatarVideo || !avatarVideoSource) return;
     avatarVideo.pause();
@@ -8986,8 +9394,8 @@
     avatarVideo.currentTime = 0;
     avatarVideo.muted = true;
     avatarVideo.loop = true;
-    const idlePlay = avatarVideo.play();
-    if (idlePlay && typeof idlePlay.catch === 'function') idlePlay.catch(() => {});
+    avatarVideo.onended = null;
+    showAvatarIdleImage();
   }
 
   function playAvatarResponseVideo(src = AVATAR_RESPONSE_VIDEO, options = {}) {
@@ -9000,6 +9408,7 @@
     avatarVideo.pause();
     avatarVideo.loop = loop;
     avatarVideo.muted = muted;
+    showAvatarResponseVideo();
     avatarVideo.onended = restoreOnEnd
       ? () => {
           restoreAvatarIdleVideo();
@@ -9025,6 +9434,7 @@
     avatarVideo.muted = true;
     avatarVideo.loop = false;
     avatarVideo.onended = null;
+    showAvatarIdleImage();
   }
 
   async function sendMessage(text, options = {}) {
@@ -9039,6 +9449,20 @@
       msg,
       detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '')
     );
+    const matchedScriptedQuestion = matchScriptedQuestion(msg);
+
+    if (
+      isDirectClone16OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'clone16'
+    ) {
+      applyMatchedResponse(matchedScriptedQuestion);
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(getProductSummaryStripText(PRODUCTS.clone16));
+        runSpeechCompletionCallback(options.onComplete);
+      }
+      return;
+    }
 
     if (shouldUseLocalClone16DefinitionFlow) {
       const forcedVideoSrc = getClone16InfoCardVideoForQuestion(msg);
@@ -9293,6 +9717,8 @@
     assistantLauncher.addEventListener('click', openAssistant);
   }
 
+  window.openAssistant = openAssistant;
+
   if (assistantMinimizeBtn) {
     assistantMinimizeBtn.addEventListener('click', minimizeAssistant);
   }
@@ -9331,6 +9757,7 @@
   setAssistantShellState(false);
   startLauncherHintCycle();
   window.closeInstallationVideoOverlay = closeInstallationVideoOverlay;
+  window.addEventListener('message', handleClone16OverviewPlayerMessage);
 
   resetInfoCardAutoScroll();
   renderNoMatchPicker();
