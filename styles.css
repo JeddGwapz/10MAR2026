@@ -228,6 +228,15 @@
     .app-container.intro-empty-state .bottom-cards {
       display: none;
     }
+    .app-container.intro-empty-state .input-card-strip {
+      display: none;
+    }
+    .app-container.pre-interaction-state .input-card-strip {
+      display: none;
+    }
+    .app-container.input-cards-hidden .input-card-strip {
+      display: none;
+    }
     .app-container.intro-empty-state .info-card.main-card {
       flex: 1;
       min-height: 0;
@@ -419,6 +428,51 @@
       width: 100%;
       min-height: 0;
       padding: 18px 18px 16px;
+    }
+    .app-container.cue-series-infographic-only-mode .center-panel,
+    .app-container.cue-series-infographic-only-mode .bottom-cards {
+      display: none;
+    }
+    .app-container.cue-series-infographic-only-mode .main-content {
+      gap: 14px;
+    }
+    .app-container.cue-series-infographic-only-mode .cards-panel {
+      flex: 1;
+      width: 100%;
+      max-width: 100%;
+      gap: 0;
+    }
+    .app-container.cue-series-infographic-only-mode .info-card.main-card {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      padding: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      background: transparent;
+      box-shadow: none;
+    }
+    .app-container.clone16-video-only-mode .center-panel,
+    .app-container.clone16-video-only-mode .bottom-cards {
+      display: none;
+    }
+    .app-container.clone16-video-only-mode .main-content {
+      gap: 14px;
+    }
+    .app-container.clone16-video-only-mode .cards-panel {
+      flex: 1;
+      width: 100%;
+      max-width: 100%;
+      gap: 0;
+    }
+    .app-container.clone16-video-only-mode .info-card.main-card {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      padding: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #000000;
     }
     .app-container.buy-now-mode .main-content {
       align-items: flex-start;
@@ -929,6 +983,17 @@
       object-fit: cover;
       display: block;
       background: transparent;
+    }
+    .clone16-answer-sequence-image-mode {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: rgba(255,255,255,0.12);
+    }
+    .clone16-answer-sequence-image-mode .clone16-answer-sequence-image {
+      object-fit: contain;
+      object-position: center;
     }
     .main-content.initial-no-video #videoPanel {
       background: rgba(255,255,255,0.15);
@@ -2701,7 +2766,7 @@
     .clone16-spec-image-shell {
       position: relative;
       border-radius: 28px;
-      padding: 66px 14px 14px;
+      padding: 14px;
       background:
         radial-gradient(circle at top right, rgba(123,167,255,0.16), transparent 28%),
         radial-gradient(circle at bottom left, rgba(110,194,173,0.12), transparent 30%),
@@ -2771,6 +2836,51 @@
       width: 100%;
       height: auto;
       border-radius: 14px;
+    }
+    .clone16-spec-image-card-plain {
+      gap: 0;
+    }
+    .clone16-spec-image-card-plain .clone16-spec-image-card-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      gap: 0;
+      padding: 0;
+      border-radius: 0;
+      background: rgba(245, 247, 247, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .clone16-spec-image-card-plain .clone16-spec-image-header-copy {
+      gap: 0;
+    }
+    .clone16-spec-image-card-plain .clone16-spec-image-kicker {
+      display: none;
+    }
+    .clone16-spec-image-card-plain .clone16-spec-image-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+    }
+    .clone16-spec-image-card-plain .clone16-spec-brochure-link {
+      min-height: 28px;
+      padding: 0 12px;
+      background: rgba(27, 62, 68, 0.7);
+      box-shadow: none;
+      font-size: 10px;
+    }
+    .clone16-spec-image-frame-plain {
+      position: relative;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .clone16-spec-image-asset-plain {
+      border-radius: 0;
+      margin: 0;
     }
     .lessonq32-infographic {
       min-height: 100%;
@@ -4819,7 +4929,7 @@
         font-size: 11px;
       }
       .clone16-spec-image-shell {
-        padding: 58px 8px 8px;
+        padding: 8px;
         border-radius: 20px;
       }
       .clone16-spec-image-titlebar {
@@ -5169,7 +5279,7 @@
         gap: 10px;
       }
       .clone16-spec-image-shell {
-        padding: 40px 6px 6px;
+        padding: 6px;
         border-radius: 16px;
       }
       .clone16-spec-image-titlebar {
@@ -5688,6 +5798,22 @@
       gap: 18px;
       min-height: 100%;
       align-items: stretch;
+    }
+    .cue24-infographic-only-card {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+    .cue24-infographic-only-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+      background: transparent;
+    }
+    .clone16-overview-showcase-no-video {
+      grid-template-columns: minmax(0, 1fr);
     }
     .clone16-overview-panel {
       display: grid;
@@ -6945,6 +7071,18 @@
       min-height: clamp(210px, 27vw, 290px);
       height: clamp(210px, 27vw, 290px);
     }
+    .clone16-video-only-card {
+      width: 100%;
+      height: 100%;
+      background: #000000;
+    }
+    .clone16-inline-video-only {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      background: #000000;
+      aspect-ratio: auto;
+    }
     .clone16-inline-video-embed {
       border: 0;
     }
@@ -8104,6 +8242,7 @@
       padding: 12px 14px;
       display: flex;
       align-items: center;
+      gap: 12px;
       backdrop-filter: blur(8px);
     }
     .bottom-area.nomatch-actions-layout .input-area {
@@ -8246,7 +8385,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      width: 100%;
+      flex: 1;
+      min-width: 0;
     }
     .input-field-wrap {
       flex: 1;
@@ -8257,6 +8397,101 @@
       border-radius: 12px;
       border: 1px solid rgba(212,163,115,0.82);
       padding: 8px 12px;
+    }
+    .input-card-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 172px));
+      gap: 6px;
+      flex-shrink: 0;
+      align-self: center;
+      grid-auto-rows: 60px;
+    }
+    .input-side-card {
+      width: 172px;
+      height: 60px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(232,240,242,0.2) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        0 10px 18px rgba(27, 62, 68, 0.08);
+      flex: 0 0 auto;
+      overflow: hidden;
+      position: relative;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .input-side-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 42%, rgba(255,255,255,0.02) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .input-side-card::after {
+      content: "";
+      position: absolute;
+      top: -35%;
+      left: -45%;
+      width: 42%;
+      height: 170%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.42) 50%, rgba(255,255,255,0) 100%);
+      transform: rotate(18deg);
+      pointer-events: none;
+      z-index: 3;
+      animation: inputCardGlassShine 5.5s ease-in-out infinite;
+    }
+    .input-side-card-image {
+      background: #ffffff;
+    }
+    .input-side-card-media {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+      transform: scale(0.92);
+      position: relative;
+      z-index: 1;
+    }
+    .input-side-card-video .input-side-card-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      pointer-events: none;
+    }
+    .input-side-card-video .input-side-card-play::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      border-left: 22px solid rgba(255, 255, 255, 0.8);
+      filter: drop-shadow(0 4px 10px rgba(27, 62, 68, 0.35));
+    }
+
+    @keyframes inputCardGlassShine {
+      0%, 100% {
+        left: -45%;
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.95;
+      }
+      32% {
+        left: 115%;
+        opacity: 0;
+      }
     }
 
     .voice-btn {
@@ -8701,7 +8936,18 @@
       .action-row { overflow-x: auto; padding-bottom: 2px; }
       .action-row::-webkit-scrollbar { display: none; }
 
-      .input-area { width: 100%; }
+      .input-area {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .input-card-strip {
+        width: 100%;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .input-side-card {
+        width: 100%;
+        height: 52px;
+      }
       .app-container.layout-locked .assistant-panel {
         flex-direction: row;
         width: 100%;

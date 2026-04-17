@@ -12,7 +12,7 @@
 </head>
 <body class="assistant-closed">
 
-<div class="app-container layout-locked" id="appContainer">
+<div class="app-container layout-locked pre-interaction-state" id="appContainer">
 
   <!-- SETTINGS MODAL -->
   <div class="modal-overlay" id="settingsModal" aria-hidden="true">
@@ -186,6 +186,18 @@
           >🔊</button>
         </div>
         <button class="send-btn mic-mode" id="composerActionBtn" type="button" aria-label="Start voice input" title="Voice input" onclick="handleComposerAction()"></button>
+      </div>
+      <div class="input-card-strip" aria-hidden="true">
+        <div class="input-side-card input-side-card-image">
+          <img src="assets/2.png" alt="Clone 16 specification thumbnail" class="input-side-card-media" />
+        </div>
+        <div class="input-side-card input-side-card-image">
+          <img src="assets/1.png" alt="Clone 16 product preview" class="input-side-card-media" />
+        </div>
+        <div class="input-side-card input-side-card-image input-side-card-video">
+          <img src="assets/3.png" alt="Clone 16 video thumbnail" class="input-side-card-media" />
+          <span class="input-side-card-play" aria-hidden="true"></span>
+        </div>
       </div>
     </div>
 

@@ -1351,6 +1351,25 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
+  function renderClone16DefinitionImageCard(imageSrc = CLONE16_DEFINITION_INFO_IMAGE) {
+    if (!prepareInfoCardFrame({ stateClass: 'clone16-answer-sequence-state', locked: true, scrollable: false })) return;
+    infoCard.innerHTML = `
+      <section class="clone16-answer-sequence-card" aria-label="Clone 16 infographic">
+        <div class="clone16-answer-sequence clone16-answer-sequence-image-mode">
+          <img
+            class="clone16-answer-sequence-image"
+            src="${escapeHtml(imageSrc)}"
+            alt="Clone 16 infographic"
+            loading="eager"
+          />
+        </div>
+      </section>
+    `;
+
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
   const INFO_CARD_FRAME_CLASSES = [
     'image-card',
     'info-card-show-scrollbar',
@@ -4562,11 +4581,30 @@
     });
   }
 
+  function getClone16VideoOnlyInfoHtml(product) {
+    const videoTitle = escapeHtml(product.video.title);
+    const rawVideoSrc = product.video.src || PANEL_DEFAULT_VIDEO;
+    const youtubeEmbedSrc = getYouTubeEmbedUrl(rawVideoSrc);
+    const videoSrc = escapeHtml(rawVideoSrc);
+    const safeYoutubeEmbedSrc = escapeHtml(youtubeEmbedSrc);
+    return `
+      <section class="clone16-video-only-card" aria-label="Clone 16 video">
+        ${safeYoutubeEmbedSrc
+          ? `<iframe class="clone16-inline-video clone16-inline-video-embed clone16-inline-video-only" src="${safeYoutubeEmbedSrc}" title="${videoTitle}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+          : `<video class="clone16-inline-video clone16-inline-video-only" controls playsinline preload="metadata">
+              <source src="${videoSrc}" type="video/mp4" />
+            </video>`}
+      </section>
+    `;
+  }
+
   function renderClone16VideoInfoCard() {
     const product = PRODUCTS.clone16;
     if (!product || !infoCard) return;
     prepareInfoCardFrame({ locked: true, scrollable: false });
-    infoCard.innerHTML = getClone16VideoInfoHtml(product);
+    infoCard.innerHTML = appContainer?.classList.contains('clone16-video-only-mode')
+      ? getClone16VideoOnlyInfoHtml(product)
+      : getClone16VideoInfoHtml(product);
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
   }
@@ -4645,39 +4683,29 @@
 
   function getClone16SpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="Clone 16 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">Clone 16 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
-          </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openClone16Brochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openClone16MobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-            <div class="clone16-spec-image-meta" aria-label="Clone 16 specification highlights">
-              <span>16-inch</span>
-              <span>500 cd/m²</span>
-              <span>16:9</span>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="Clone 16 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">Clone 16 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
             </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openClone16Brochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openClone16MobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png"
-              alt="Clone 16 specifications"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png"
+            alt="Clone 16 specifications"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -5868,16 +5896,33 @@
     src: 'assets/cue series - image.png',
     alt: 'Cue Series infographic'
   };
+  const CUE24_INFOGRAPHIC_IMAGE = 'assets/cue24-infographics-image1.png';
+  const CUE27_INFOGRAPHIC_IMAGE = 'assets/cue27-infographics-image1.png';
+  const CUE32_INFOGRAPHIC_IMAGE = 'assets/cue32-infographics-image1.png';
+  const EP30_INFOGRAPHIC_IMAGE = 'assets/ep30-infographics-image1.png';
+  const EP40_INFOGRAPHIC_IMAGE = 'assets/ep40-infographics-image1.png';
+  const EP50_INFOGRAPHIC_IMAGE = 'assets/ep50-infographics-image1.png';
+  const EP60_INFOGRAPHIC_IMAGE = 'assets/ep60-infographics-image1.png';
+  const FRAMER24_INFOGRAPHIC_IMAGE = 'assets/framer24-infographics-image1.png';
+  const FRAMER27_INFOGRAPHIC_IMAGE = 'assets/framer27-infographics-image1.png';
+  const FRAMER32_INFOGRAPHIC_IMAGE = 'assets/framer32-infographics-image1.png';
+  const LESSONQ24_INFOGRAPHIC_IMAGE = 'assets/lessonq24-infographics-image1.png';
+  const LESSONQ27_INFOGRAPHIC_IMAGE = 'assets/lessonq27-infographics-image1.png';
+  const LESSONQ32_INFOGRAPHIC_IMAGE = 'assets/lessonq32-infographics-image1.png';
+  const LESSONQ43_INFOGRAPHIC_IMAGE = 'assets/lessonq43-infographics-image1.png';
   const CLONE16_DIRECT_TRIGGER_PHRASES = [
     'clone 16',
+    'clone 16?',
     'clone16',
     'show clone 16',
     'select clone 16',
     'what is clone 16',
+    'what is clone 16?',
     'introduce clone 16',
     'about clone 16'
   ];
   const CLONE16_DIRECT_TRIGGER_SET = new Set(CLONE16_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const CLONE16_DEFINITION_INFO_IMAGE = 'assets/clone16-infographics-image1.png';
   const CLONE16_3D_VIEWER_SRCDOC = String.raw`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6215,14 +6260,7 @@
     if (product.key === 'clone16') {
       const viewerSrcdoc = escapeHtml(CLONE16_3D_VIEWER_SRCDOC);
       return `
-        <section class="clone16-overview-showcase" aria-label="${escapeHtml(product.name)} overview">
-          <div class="clone16-overview-panel clone16-overview-panel-video">
-            <div class="clone16-overview-media-shell">
-              <div class="clone16-overview-video-frame" data-loaded="false">
-                ${getClone16OverviewPreviewHtml()}
-              </div>
-            </div>
-          </div>
+        <section class="clone16-overview-showcase clone16-overview-showcase-no-video" aria-label="${escapeHtml(product.name)} overview">
           <div class="clone16-overview-panel clone16-overview-panel-viewer">
             <div class="clone16-overview-media-shell">
               <iframe
@@ -6270,6 +6308,23 @@
     infoCard.innerHTML = getProductShowcaseHtml(product);
     syncClone16OverviewInteractionLock();
     playInfoCardAnimation('slide');
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCueSeriesInfographicOnlyCard(imageSrc, altText) {
+    if (!infoCard) return;
+    prepareInfoCardFrame({ locked: true, scrollable: false });
+    infoCard.innerHTML = `
+      <section class="cue24-infographic-only-card" aria-label="${escapeHtml(altText)}">
+        <img
+          src="${escapeHtml(imageSrc)}"
+          alt="${escapeHtml(altText)}"
+          class="cue24-infographic-only-image"
+          loading="eager"
+        />
+      </section>
+    `;
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
   }
@@ -8363,6 +8418,7 @@
     currentProductKey = 'clone16';
     lastConfirmedProductKey = 'clone16';
     hasExplicitProductSelection = false;
+    setInputCardStripHidden(false);
     applyAboutStyleLayout(DEFAULT_SUBTITLE_TEXT);
     setInfoCardText('', getInitialInfoCardHtml(), true);
     setQuickActionsMode('all');
@@ -8643,6 +8699,16 @@
     cardsPanel.classList.toggle('response-hidden', hidden);
   }
 
+  function setInputCardStripHidden(hidden) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('input-cards-hidden', hidden);
+  }
+
+  function clearPreInteractionState() {
+    if (!appContainer) return;
+    appContainer.classList.remove('pre-interaction-state');
+  }
+
   function setIntroEmptyState(enabled) {
     if (!appContainer) return;
     appContainer.classList.toggle('intro-empty-state', enabled);
@@ -8673,14 +8739,27 @@
     appContainer.classList.toggle('product-summary-mode', enabled);
   }
 
+  function setCueSeriesInfographicOnlyMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('cue-series-infographic-only-mode', enabled);
+  }
+
+  function setClone16VideoOnlyMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('clone16-video-only-mode', enabled);
+  }
+
   function applyAboutStyleLayout(subtitleText = '', options = {}) {
     const showEmptyCard = options.showEmptyCard !== false;
+    const hideInputCards = options.hideInputCards === true;
     stopAvatarVideo();
     setIntroEmptyState(false);
     setDetailFocusMode(true);
     setInfoCardOnlyMode(false);
     setBuyNowMode(false);
     setProductSummaryMode(false);
+    setCueSeriesInfographicOnlyMode(false);
+    setClone16VideoOnlyMode(false);
     setCueSeriesMode(true);
     setClone16ActionLayout(false);
     setCardsPanelHidden(false);
@@ -8690,6 +8769,7 @@
     setInitialVideoPanelHidden(true);
     setPlaceholderMode('intro');
     stopPanelVideo();
+    setInputCardStripHidden(hideInputCards);
     showMergedEmptyBottomCard();
     setSubtitleStripText(subtitleText);
     if (showEmptyCard) {
@@ -8702,6 +8782,8 @@
     if (!product) return;
 
     clearPendingClone16OverviewAutoplay();
+    clearPreInteractionState();
+    setInputCardStripHidden(false);
     currentProductKey = productKey;
     lastConfirmedProductKey = productKey;
     hasExplicitProductSelection = true;
@@ -8710,6 +8792,8 @@
     setInfoCardOnlyMode(false);
     setBuyNowMode(false);
     setProductSummaryMode(true);
+    setCueSeriesInfographicOnlyMode(productKey === 'cue24' || productKey === 'cue27' || productKey === 'cue32' || productKey === 'ep30k' || productKey === 'ep40k' || productKey === 'ep50k' || productKey === 'ep60k' || productKey === 'framer24' || productKey === 'framer27' || productKey === 'framer32' || productKey === 'lessonQ24' || productKey === 'lessonQ27' || productKey === 'lessonQ32' || productKey === 'lessonQ43');
+    setClone16VideoOnlyMode(false);
     setCueSeriesMode(shouldUseShowcaseLayout(productKey, 'summary'));
     setClone16ActionLayout(false);
     if (options.setPlaceholderMode !== false) {
@@ -8724,6 +8808,34 @@
     setSubtitleStripText(getProductSummaryStripText(product));
     if (productKey === 'clone16') {
       renderProductShowcaseInfoCard(product);
+    } else if (productKey === 'cue24') {
+      renderCueSeriesInfographicOnlyCard(CUE24_INFOGRAPHIC_IMAGE, 'Cue 24 infographic');
+    } else if (productKey === 'cue27') {
+      renderCueSeriesInfographicOnlyCard(CUE27_INFOGRAPHIC_IMAGE, 'Cue 27 infographic');
+    } else if (productKey === 'cue32') {
+      renderCueSeriesInfographicOnlyCard(CUE32_INFOGRAPHIC_IMAGE, 'Cue 32 infographic');
+    } else if (productKey === 'ep30k') {
+      renderCueSeriesInfographicOnlyCard(EP30_INFOGRAPHIC_IMAGE, 'EP 30 infographic');
+    } else if (productKey === 'ep40k') {
+      renderCueSeriesInfographicOnlyCard(EP40_INFOGRAPHIC_IMAGE, 'EP 40 infographic');
+    } else if (productKey === 'ep50k') {
+      renderCueSeriesInfographicOnlyCard(EP50_INFOGRAPHIC_IMAGE, 'EP 50 infographic');
+    } else if (productKey === 'ep60k') {
+      renderCueSeriesInfographicOnlyCard(EP60_INFOGRAPHIC_IMAGE, 'EP 60 infographic');
+    } else if (productKey === 'framer24') {
+      renderCueSeriesInfographicOnlyCard(FRAMER24_INFOGRAPHIC_IMAGE, 'Framer 24 infographic');
+    } else if (productKey === 'framer27') {
+      renderCueSeriesInfographicOnlyCard(FRAMER27_INFOGRAPHIC_IMAGE, 'Framer 27 infographic');
+    } else if (productKey === 'framer32') {
+      renderCueSeriesInfographicOnlyCard(FRAMER32_INFOGRAPHIC_IMAGE, 'Framer 32 infographic');
+    } else if (productKey === 'lessonQ24') {
+      renderCueSeriesInfographicOnlyCard(LESSONQ24_INFOGRAPHIC_IMAGE, 'LessonQ 24 infographic');
+    } else if (productKey === 'lessonQ27') {
+      renderCueSeriesInfographicOnlyCard(LESSONQ27_INFOGRAPHIC_IMAGE, 'LessonQ 27 infographic');
+    } else if (productKey === 'lessonQ32') {
+      renderCueSeriesInfographicOnlyCard(LESSONQ32_INFOGRAPHIC_IMAGE, 'LessonQ 32 infographic');
+    } else if (productKey === 'lessonQ43') {
+      renderCueSeriesInfographicOnlyCard(LESSONQ43_INFOGRAPHIC_IMAGE, 'LessonQ 43 infographic');
     } else if (product.images?.[0]) {
       renderProductShowcaseInfoCard(product);
     } else {
@@ -8750,6 +8862,9 @@
     const product = getCurrentProduct();
     applyAboutStyleLayout(getProductSummaryStripText(product));
     if (product.key === 'clone16') {
+      setDetailFocusMode(false);
+      setInfoCardOnlyMode(false);
+      setClone16VideoOnlyMode(true);
       renderClone16VideoInfoCard();
     }
   }
@@ -8803,7 +8918,7 @@
       return;
     }
     if (section === 'buy_now') {
-      applyAboutStyleLayout(`Complete the form below to request ${product.name} pricing and availability.`);
+      applyAboutStyleLayout(`Complete the form below to request ${product.name} pricing and availability.`, { hideInputCards: true });
     }
   }
 
@@ -8819,6 +8934,8 @@
     if (!match) return;
 
     clearPendingClone16OverviewAutoplay();
+    clearPreInteractionState();
+    setInputCardStripHidden(false);
 
     if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
       applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, FAQs, or Installation.');
@@ -8834,6 +8951,8 @@
     setInfoCardOnlyMode(false);
     setBuyNowMode(false);
     setProductSummaryMode(false);
+    setCueSeriesInfographicOnlyMode(false);
+    setClone16VideoOnlyMode(false);
     setPlaceholderMode('intro');
     restoreAvatarIdleVideo();
     setQuickActionsMode('all');
@@ -8879,7 +8998,7 @@
       showCueSeriesIntroInfoCard();
     }
     if (match.id === 'about_us') {
-      applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false });
+      applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false, hideInputCards: true });
       setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true);
     }
     if (match.id === 'product_list') {
@@ -9443,6 +9562,8 @@
     if (!msg) return;
     input.value = '';
     updateComposerActionButton();
+    clearPreInteractionState();
+    setInputCardStripHidden(false);
     setIntroEmptyState(false);
     const detectedProductKey = detectProductKeyFromText(msg);
     const shouldUseLocalClone16DefinitionFlow = shouldForceClone16DefinitionSequence(
@@ -9456,10 +9577,23 @@
       matchedScriptedQuestion?.id?.startsWith('product_') &&
       matchedScriptedQuestion.productKey === 'clone16'
     ) {
-      applyMatchedResponse(matchedScriptedQuestion);
+      currentProductKey = 'clone16';
+      lastConfirmedProductKey = 'clone16';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderClone16DefinitionImageCard();
       if (!voiceOutputEnabled) {
-        setSubtitleStripText(getProductSummaryStripText(PRODUCTS.clone16));
+        setSubtitleStripText(CLONE16_DEFINITION_ANSWER);
         runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CLONE16_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CLONE16_DEFINITION_ANSWER
+        });
       }
       return;
     }
