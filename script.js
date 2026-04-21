@@ -82,6 +82,9 @@
   const CLONE16_OVERVIEW_VIDEO_ID = 'IJlVE8LUHZ0';
   const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
   const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
+  const CRYSTAL_PROMPTER_BRAND_VIDEO_ID = '3V9xlKOeVUU';
+  const CRYSTAL_PROMPTER_BRAND_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CRYSTAL_PROMPTER_BRAND_VIDEO_ID}`;
+  const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'Crystal Prompter brand video';
   const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
   const CLONE16_PRODUCT_TYPE_PANEL_VIDEO = 'assets/clone16-2.mp4';
   const CLONE16_MAIN_PURPOSE_PANEL_VIDEO = 'assets/clone16-3.mp4';
@@ -143,6 +146,32 @@
   const CLONE16_NO_EXPERIENCE_PANEL_VIDEO = 'assets/clone16-59.mp4';
   const CLONE16_LONG_TERM_VALUE_PANEL_VIDEO = 'assets/clone16-60.mp4';
   const CLONE16_DEFINITION_ANSWER = 'Clone 16 is a 15.6-inch Full HD portable teleprompter designed to help users read scripts clearly while facing the camera. It is optimized for broadcasting, educational, corporate, and public communication environments.';
+  const CRYSTAL_PROMPTER_BRAND_VIDEO_SUBTITLE = 'Crystal Prompter brand video';
+  const CUE24_DEFINITION_ANSWER = 'Cue 24 is a 23.8-inch Full HD teleprompter designed for broadcasting, online lectures, presentations, and professional video production. It helps users read scripts clearly while facing the camera.';
+  const CUE27_DEFINITION_ANSWER = 'Cue 27 is a 27-inch Full HD teleprompter designed for broadcasting, online lectures, presentations, and professional video production. It helps users read scripts clearly while facing the camera.';
+  const CUE32_DEFINITION_ANSWER = 'Cue 32 is a 32-inch Full HD teleprompter designed for broadcasting, online lectures, presentations, and professional video production. It helps users read scripts clearly while facing the camera.';
+  const EP30_DEFINITION_ANSWER = 'EP 30K is an electric pedestal designed to support cameras and prompters while allowing easy height adjustment through an electric motor.';
+  const EP40_DEFINITION_ANSWER = 'EP 40K is an electric pedestal designed for the safe and convenient use of medium-to-large teleprompters and cameras at filming sites.';
+  const EP50_DEFINITION_ANSWER = 'EP 50K is an electric pedestal for prompter and camera designed for free movement and convenient height adjustment during filming and production.';
+  const EP60_DEFINITION_ANSWER = 'EP 60K is an electric pedestal for prompter and camera designed for free movement and convenient height adjustment in professional filming environments.';
+  const FRAMER24_DEFINITION_ANSWER = 'Framer 24 is a teleprompter system designed for online lectures, broadcasting, presentations, and professional video production. It helps users read scripts clearly while facing the camera.';
+  const FRAMER27_DEFINITION_ANSWER = 'Framer 27 is a professional teleprompter system designed for online lectures, broadcasting, and video production to help users deliver scripts clearly and naturally.';
+  const FRAMER32_DEFINITION_ANSWER = 'Framer 32 is a professional teleprompter system designed for online lectures, broadcasting, and video production to help users deliver scripts clearly and naturally.';
+  const LESSONQ24_DEFINITION_ANSWER = 'LessonQ 24 is an all-in-one educational teleprompter system specifically designed for online lectures, teaching videos, and lecture broadcasting. It helps presenters deliver content clearly while facing the camera.';
+  const LESSONQ27_DEFINITION_ANSWER = 'LessonQ 27 is an all-in-one teleprompter system for lecturing that is specially designed for online lectures, educational video production, and lecture broadcasting.';
+  const LESSONQ32_DEFINITION_ANSWER = 'LessonQ 32 is an all-in-one teleprompter system designed for online lectures and professional video production.';
+  const LESSONQ43_DEFINITION_ANSWER = 'LessonQ 43 is an all-in-one teleprompter system designed for online lectures, educational broadcasting, and professional communication.';
+  const MIME24_DEFINITION_ANSWER = 'Mime 24 is a compact and portable teleprompter system designed for online lectures, presentations, and video production.';
+  const MIME27_DEFINITION_ANSWER = 'Mime 27 is a portable and professional teleprompter system designed for online lectures, video presentations, broadcasting, and content creation.';
+  const MIME32_DEFINITION_ANSWER = 'Mime 32 is a portable and professional teleprompter system designed for online lectures, presentations, broadcasting, and video production.';
+  const ADAMAS19_DEFINITION_ANSWER = 'Adamas 19 is a bright and clear speech prompter designed for speeches, presentations, broadcasting, and professional communication';
+  const ADAMAS22_DEFINITION_ANSWER = 'Adamas 22 is a bright and clear speech prompter designed for speeches, presentations, interviews, and professional communication.';
+  const ADAMAS24_DEFINITION_ANSWER = 'Adamas 24 is a bright and clear speech prompter designed for speeches, presentations, interviews, and professional communication.';
+  const ROTUNDA15_DEFINITION_ANSWER = 'The Rotunda 15 is a 15.6-inch teleprompter designed for legislative, educational, corporate, and broadcasting use. It helps speakers, presenters, and content creators deliver speeches or scripts naturally while maintaining eye contact with the audience or camera.';
+  const TAB12_DEFINITION_ANSWER = 'The TAB 12 is a portable tablet-based teleprompter designed to help presenters, speakers, vloggers, educators, and content creators read scripts smoothly while maintaining natural eye contact with the camera or audience';
+  const ULTRA43_DEFINITION_ANSWER = 'The Ultra 43 is a 43-inch professional teleprompter designed for online lectures, broadcasting, institutional communication, and large-scale presentation environments. It helps presenters read scripts, presentations, and multimedia content naturally while maintaining eye contact with the audience or camera.';
+  const ULTRA55_DEFINITION_ANSWER = 'The Ultra 55 is a 55-inch professional teleprompter system specifically designed for large studios, online lectures, and large lecture halls. It helps presenters, lecturers, and broadcasters read scripts and multimedia content naturally while maintaining eye contact with the camera or audience.';
+  const OLLESON18_DEFINITION_ANSWER = 'Ollesson 18 is a portable professional teleprompter designed for broadcasting, video production, and presentations.';
   const CLONE16_PRODUCT_TYPE_ANSWER = 'Clone 16 is a multipurpose teleprompter used for script reading during video production, broadcasting, lectures, interviews, and public communication activities';
   const CLONE16_MAIN_PURPOSE_ANSWER = 'The main purpose of Clone 16 is to help users deliver scripts more naturally, clearly, and professionally without needing to memorize their lines';
   const CLONE16_USEFUL_ANSWER = 'Clone 16 is useful because it allows users to maintain eye contact with the camera while reading their scripts, which improves confidence, delivery, and professionalism';
@@ -1351,15 +1380,15 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
-  function renderClone16DefinitionImageCard(imageSrc = CLONE16_DEFINITION_INFO_IMAGE) {
+  function renderProductDefinitionImageCard(imageSrc, altText) {
     if (!prepareInfoCardFrame({ stateClass: 'clone16-answer-sequence-state', locked: true, scrollable: false })) return;
     infoCard.innerHTML = `
-      <section class="clone16-answer-sequence-card" aria-label="Clone 16 infographic">
+      <section class="clone16-answer-sequence-card" aria-label="${escapeHtml(altText)}">
         <div class="clone16-answer-sequence clone16-answer-sequence-image-mode">
           <img
             class="clone16-answer-sequence-image"
             src="${escapeHtml(imageSrc)}"
-            alt="Clone 16 infographic"
+            alt="${escapeHtml(altText)}"
             loading="eager"
           />
         </div>
@@ -1368,6 +1397,10 @@
 
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderClone16DefinitionImageCard(imageSrc = CLONE16_DEFINITION_INFO_IMAGE) {
+    renderProductDefinitionImageCard(imageSrc, 'Clone 16 infographic');
   }
 
   const INFO_CARD_FRAME_CLASSES = [
@@ -1382,8 +1415,60 @@
     'clone16-images-info-state',
     'clone16-spec-image-state',
     'clone16-answer-sequence-state',
+    'crystal-prompter-video-state',
     'info-card-locked-layout'
   ];
+
+  function getCrystalPrompterBrandEmbedSrc() {
+    try {
+      const embedUrl = new URL(CRYSTAL_PROMPTER_BRAND_EMBED_URL, window.location.href);
+      embedUrl.searchParams.set('autoplay', '1');
+      embedUrl.searchParams.set('mute', '1');
+      embedUrl.searchParams.set('rel', '0');
+      embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('modestbranding', '1');
+      embedUrl.searchParams.set('iv_load_policy', '3');
+      embedUrl.searchParams.set('controls', '0');
+      embedUrl.searchParams.set('fs', '0');
+      embedUrl.searchParams.set('disablekb', '1');
+      if (window.location.origin) {
+        embedUrl.searchParams.set('origin', window.location.origin);
+      }
+      return embedUrl.toString();
+    } catch (error) {
+      return `${CRYSTAL_PROMPTER_BRAND_EMBED_URL}?autoplay=1&mute=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
+    }
+  }
+
+  function setCrystalPrompterVideoMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('crystal-prompter-video-mode', Boolean(enabled));
+  }
+
+  function renderCrystalPrompterBrandVideoCard() {
+    if (!infoCard) return;
+    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'crystal-prompter-video-state' });
+    const embedSrc = getCrystalPrompterBrandEmbedSrc();
+    infoCard.innerHTML = `
+      <section class="crystal-prompter-video-card" aria-label="Crystal Prompter video">
+        <div class="crystal-prompter-video-frame">
+          <iframe
+            class="crystal-prompter-video-embed"
+            src="${escapeHtml(embedSrc)}"
+            title="${escapeHtml(CRYSTAL_PROMPTER_BRAND_EMBED_TITLE)}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            tabindex="-1"
+          ></iframe>
+          <div class="crystal-prompter-video-overlay" aria-hidden="true"></div>
+        </div>
+      </section>
+    `;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
 
   function prepareInfoCardFrame(options = {}) {
     if (!infoCard) return false;
@@ -4273,36 +4358,25 @@
   ];
 
   const INFO_TEXT = {
-    aboutUs: {
-      title: '',
-      bodyHtml: `
-        <section class="about-card-embed about-card-animated" aria-label="About Us">
-          <div class="about-shell">
-            <div class="about-copy-panel">
-              <span class="about-kicker">Crystal Prompter</span>
-              <h1 class="about-window-flip-text">About Us</h1>
-              <h2 class="about-pop-text" style="--about-delay: 0.22s;">Crystal Prompter Co., Ltd.</h2>
-              <p class="about-lead" aria-live="polite">
-                <span
-                  class="about-typing-target"
-                  data-full-text="Established in 2017, Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows with a focus on reliability, clarity, and practical production use."
-                ></span>
-              </p>
-              <div class="about-pill-row" aria-label="Company highlights">
-                <span class="about-pill" style="--about-delay: 0.92s;">Since 2017</span>
-                <span class="about-pill" style="--about-delay: 1.04s;">Korea-based production</span>
-                <span class="about-pill" style="--about-delay: 1.16s;">Studio to creator setups</span>
-              </div>
-            </div>
-            <div class="about-social-panel" aria-label="Crystal Prompter social links">
-              <p class="about-social-label">Follow Us :</p>
-              ${getSocialLinksHtml()}
-            </div>
-          </div>
-        </section>
-      `
-    }
-  };
+	    aboutUs: {
+	      title: '',
+	      bodyHtml: `
+	        <section class="about-body-content about-card-animated" aria-label="About Us">
+	          <h1 class="about-window-flip-text">About Us</h1>
+	          <h2 class="about-pop-text" style="--about-delay: 0.22s;">Crystal Prompter Co., Ltd.</h2>
+	          <div class="about-inline-social" aria-label="Crystal Prompter social links">
+	            ${getSocialLinksHtml()}
+	          </div>
+	          <p class="about-lead" aria-live="polite">
+	            <span
+	              class="about-typing-target"
+	              data-full-text="Established in 2017, Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows with a focus on reliability, clarity, and practical production use."
+	            ></span>
+	          </p>
+	        </section>
+	      `
+	    }
+	  };
 
   function getBuyNowInfoHtml(product) {
     return `
@@ -4711,36 +4785,145 @@
     `;
   }
 
+  const PRODUCT_SPEC_IMAGE_OVERRIDES = {
+    clone16: 'https://static.wixstatic.com/media/d0630a_079ce8e28dcb4f42b37249321d11a02d~mv2.png/v1/fill/w_971,h_1174,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Clone%2016.png',
+    cue24: 'https://static.wixstatic.com/media/d0630a_b47696bb2b2c47e8a2584ee5906edb07~mv2.png/v1/fill/w_488,h_574,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2024.png',
+    cue27: 'https://static.wixstatic.com/media/d0630a_1157c76add834be68349f813012f85bb~mv2.png/v1/fill/w_492,h_586,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2027.png',
+    cue32: 'https://static.wixstatic.com/media/d0630a_5f68de7b66ec46f591254ac8dbd89e07~mv2.png/v1/fill/w_481,h_568,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032.png',
+    adamas19: 'assets/adamas19-infographics-image1.png',
+    adamas22: 'assets/adamas22-infographics-image1.png',
+    adamas24: 'assets/adamas24-infographics-image1.png',
+    framer24: 'assets/framer24-infographics-image1.png',
+    framer27: 'assets/framer27-infographics-image1.png',
+    framer32: 'assets/framer32-infographics-image1.png',
+    folder22n: 'https://static.wixstatic.com/media/d0630a_30ab1fb89a614b6bbb9bd1d66ca814f5~mv2.png/v1/fill/w_490,h_595,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FOLDER%2022N.png',
+    lessonQ24: 'https://www.dropbox.com/scl/fi/tzbgc3ysxfr1evns2x28m/LessonQ-24.png?rlkey=lmqfpoh748aeyyiee1jt4gak9&raw=1',
+    lessonQ27: 'https://1drv.ms/i/c/94a3066e2e4acdae/IQTn8Ukz2fevTqYg9kwqoMbpAXUZ-dYoZfoLwb-hMU6mBA0',
+    lessonQ32: 'assets/lessonq32-infographics-image1.png',
+    lessonQ43: 'assets/lessonq43-infographics-image1.png',
+    mime24: 'assets/mime24-infographics-image1.png',
+    mime27: 'assets/mime27-infographics-image1.png',
+    mime32: 'assets/mime32-infographics-image1.png',
+    tab12: 'assets/tab12-infographics-image1.png',
+    ultra43: 'assets/ultra43-infographics-image1.png',
+    ultra55: 'assets/ultra55-infographics-image1.png',
+    rotunda15: 'assets/rotunda15-infographics-image1.png',
+    olleson18: 'assets/ollesson18-infographics-image1.png',
+    ep30k: 'assets/ep30-infographics-image1.png',
+    ep40k: 'assets/ep40-infographics-image1.png',
+    ep50k: 'assets/ep50-infographics-image1.png',
+    ep60k: 'assets/ep60-infographics-image1.png'
+  };
+
+  const PRODUCT_SPEC_BROCHURE_ACTIONS = {
+    clone16: {
+      desktop: 'openClone16Brochure()',
+      mobile: 'openClone16MobileBrochure()'
+    },
+    cue24: {
+      desktop: 'openCue24Brochure()',
+      mobile: 'openCue24MobileBrochure()'
+    },
+    cue27: {
+      desktop: 'openCue27Brochure()',
+      mobile: 'openCue27MobileBrochure()'
+    },
+    cue32: {
+      desktop: 'openCue32Brochure()',
+      mobile: 'openCue32MobileBrochure()'
+    },
+    folder22n: {
+      desktop: 'openFolder22NBrochure()',
+      mobile: 'openFolder22NMobileBrochure()'
+    },
+    lessonQ24: {
+      desktop: 'openLessonQBrochure()',
+      mobile: 'openLessonQMobileBrochure()'
+    },
+    lessonQ27: {
+      desktop: 'openLessonQ27Brochure()',
+      mobile: 'openLessonQ27MobileBrochure()'
+    }
+  };
+
+  function getProductSpecificationImageSrc(product) {
+    const overrideSrc = PRODUCT_SPEC_IMAGE_OVERRIDES[product.key];
+    if (overrideSrc) {
+      return overrideSrc;
+    }
+    if (Array.isArray(product.images) && product.images[0]) {
+      return product.images[0];
+    }
+    return 'assets/cp-mark.svg';
+  }
+
+  function getProductSpecificationBrochureButtonsHtml(product) {
+    const actions = PRODUCT_SPEC_BROCHURE_ACTIONS[product.key];
+    if (!actions) {
+      return '';
+    }
+    return `
+      <button
+        type="button"
+        class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+        onclick="${actions.desktop}"
+      >Click Here to view Brochure -&gt;&gt;</button>
+      <button
+        type="button"
+        class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+        onclick="${actions.mobile}"
+      >Click Here to view Mobile -&gt;&gt;</button>
+    `;
+  }
+
+  function getGenericProductSpecificationImageInfoHtml(product) {
+    const imageSrc = escapeHtml(getProductSpecificationImageSrc(product));
+    const brochureButtonsHtml = getProductSpecificationBrochureButtonsHtml(product);
+    return `
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="${escapeHtml(product.name)} specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">${escapeHtml(product.name)} Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            ${brochureButtonsHtml}
+          </div>
+          <img
+            src="${imageSrc}"
+            alt="${escapeHtml(product.name)} specification image"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
+        </div>
+      </section>
+    `;
+  }
+
   function getCue24SpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="Cue 24 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">Cue 24 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="Cue 24 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">Cue 24 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openCue24Brochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openCue24MobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openCue24Brochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openCue24MobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_b47696bb2b2c47e8a2584ee5906edb07~mv2.png/v1/fill/w_488,h_574,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2024.png"
-              alt="Cue 24 technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_b47696bb2b2c47e8a2584ee5906edb07~mv2.png/v1/fill/w_488,h_574,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2024.png"
+            alt="Cue 24 technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -4783,34 +4966,29 @@
 
   function getCue27SpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="Cue 27 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">Cue 27 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="Cue 27 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">Cue 27 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openCue27Brochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openCue27MobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openCue27Brochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openCue27MobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_1157c76add834be68349f813012f85bb~mv2.png/v1/fill/w_492,h_586,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2027.png"
-              alt="Cue 27 technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_1157c76add834be68349f813012f85bb~mv2.png/v1/fill/w_492,h_586,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2027.png"
+            alt="Cue 27 technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -4818,34 +4996,29 @@
 
   function getCue32SpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="Cue 32 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">Cue 32 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="Cue 32 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">Cue 32 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openCue32Brochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openCue32MobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openCue32Brochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openCue32MobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_5f68de7b66ec46f591254ac8dbd89e07~mv2.png/v1/fill/w_481,h_568,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032.png"
-              alt="Cue 32 technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_5f68de7b66ec46f591254ac8dbd89e07~mv2.png/v1/fill/w_481,h_568,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cue%2032.png"
+            alt="Cue 32 technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -4853,34 +5026,29 @@
 
   function getFolder22NSpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="Folder 22N specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">Folder 22N Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="Folder 22N specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">Folder 22N Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openFolder22NBrochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openFolder22NMobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openFolder22NBrochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openFolder22NMobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://static.wixstatic.com/media/d0630a_30ab1fb89a614b6bbb9bd1d66ca814f5~mv2.png/v1/fill/w_490,h_595,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FOLDER%2022N.png"
-              alt="Folder 22N technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://static.wixstatic.com/media/d0630a_30ab1fb89a614b6bbb9bd1d66ca814f5~mv2.png/v1/fill/w_490,h_595,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FOLDER%2022N.png"
+            alt="Folder 22N technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -4888,34 +5056,29 @@
 
   function getLessonQSpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="LessonQ 24 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">LessonQ 24 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="LessonQ 24 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">LessonQ 24 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openLessonQBrochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openLessonQMobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openLessonQBrochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openLessonQMobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://www.dropbox.com/scl/fi/tzbgc3ysxfr1evns2x28m/LessonQ-24.png?rlkey=lmqfpoh748aeyyiee1jt4gak9&raw=1"
-              alt="LessonQ 24 technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://www.dropbox.com/scl/fi/tzbgc3ysxfr1evns2x28m/LessonQ-24.png?rlkey=lmqfpoh748aeyyiee1jt4gak9&raw=1"
+            alt="LessonQ 24 technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -4923,34 +5086,29 @@
 
   function getLessonQ27SpecificationImageInfoHtml() {
     return `
-      <section class="clone16-spec-image-card" aria-label="LessonQ 27 specifications">
-        <div class="clone16-spec-image-card-header">
-          <div class="clone16-spec-image-header-copy">
-            <p class="clone16-spec-image-eyebrow">LessonQ 27 Specification</p>
-            <h3 class="clone16-spec-image-kicker">Specifications</h3>
+      <section class="clone16-spec-image-card clone16-spec-image-card-plain" aria-label="LessonQ 27 specifications">
+        <div class="clone16-spec-image-frame clone16-spec-image-frame-plain">
+          <div class="clone16-spec-image-card-header">
+            <div class="clone16-spec-image-header-copy">
+              <p class="clone16-spec-image-eyebrow">LessonQ 27 Specification</p>
+              <h3 class="clone16-spec-image-kicker">Specifications</h3>
+            </div>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
+              onclick="openLessonQ27Brochure()"
+            >Click Here to view Brochure -&gt;&gt;</button>
+            <button
+              type="button"
+              class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
+              onclick="openLessonQ27MobileBrochure()"
+            >Click Here to view Mobile -&gt;&gt;</button>
           </div>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-desktop"
-            onclick="openLessonQ27Brochure()"
-          >Click Here to view Brochure -&gt;&gt;</button>
-          <button
-            type="button"
-            class="clone16-spec-brochure-link clone16-spec-brochure-link-mobile"
-            onclick="openLessonQ27MobileBrochure()"
-          >Click Here to view Mobile -&gt;&gt;</button>
-        </div>
-        <div class="clone16-spec-image-shell">
-          <div class="clone16-spec-image-titlebar">
-            <span class="clone16-spec-image-title">Technical Sheet</span>
-          </div>
-          <div class="clone16-spec-image-frame">
-            <img
-              src="https://1drv.ms/i/c/94a3066e2e4acdae/IQTn8Ukz2fevTqYg9kwqoMbpAXUZ-dYoZfoLwb-hMU6mBA0"
-              alt="LessonQ 27 technical sheet"
-              class="clone16-spec-image-asset"
-            />
-          </div>
+          <img
+            src="https://1drv.ms/i/c/94a3066e2e4acdae/IQTn8Ukz2fevTqYg9kwqoMbpAXUZ-dYoZfoLwb-hMU6mBA0"
+            alt="LessonQ 27 technical sheet"
+            class="clone16-spec-image-asset clone16-spec-image-asset-plain"
+          />
         </div>
       </section>
     `;
@@ -5254,6 +5412,20 @@
     infoCard.classList.add('clone16-spec-image-state');
     infoCard.classList.toggle('info-card-show-scrollbar', true);
     infoCard.innerHTML = getLessonQ32SpecificationInfoHtml();
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderGenericProductSpecificationInfoCard(product = getCurrentProduct()) {
+    if (!product || !infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    infoCard.classList.remove('image-card', 'info-card-empty-state', 'no-match-info-state', 'clone16-intro-info-state', 'clone16-readmore-info-state', 'clone16-images-info-state', 'clone16-spec-image-state');
+    infoCard.classList.add('clone16-spec-image-state');
+    infoCard.classList.toggle('info-card-show-scrollbar', true);
+    infoCard.innerHTML = getGenericProductSpecificationImageInfoHtml(product);
+    updateClone16BrochureButtonState();
     resetInfoCardAutoScroll();
     scheduleCueSeriesAvatarHeightSync();
   }
@@ -5921,7 +6093,350 @@
     'introduce clone 16',
     'about clone 16'
   ];
+  const CUE24_DIRECT_TRIGGER_PHRASES = [
+    'cue 24',
+    'cue 24?',
+    'cue24',
+    'show cue 24',
+    'select cue 24',
+    'what is cue 24',
+    'what is cue 24?',
+    'introduce cue 24',
+    'about cue 24'
+  ];
+  const CUE27_DIRECT_TRIGGER_PHRASES = [
+    'cue 27',
+    'cue 27?',
+    'cue27',
+    'show cue 27',
+    'select cue 27',
+    'what is cue 27',
+    'what is cue 27?',
+    'introduce cue 27',
+    'about cue 27'
+  ];
+  const CUE32_DIRECT_TRIGGER_PHRASES = [
+    'cue 32',
+    'cue 32?',
+    'cue32',
+    'show cue 32',
+    'select cue 32',
+    'what is cue 32',
+    'what is cue 32?',
+    'introduce cue 32',
+    'about cue 32'
+  ];
+  const EP30_DIRECT_TRIGGER_PHRASES = [
+    'ep 30k',
+    'ep 30k?',
+    'ep30k',
+    'show ep 30k',
+    'select ep 30k',
+    'what is ep 30k',
+    'what is ep 30k?',
+    'introduce ep 30k',
+    'about ep 30k'
+  ];
+  const EP40_DIRECT_TRIGGER_PHRASES = [
+    'ep 40k',
+    'ep 40k?',
+    'ep40k',
+    'show ep 40k',
+    'select ep 40k',
+    'what is ep 40k',
+    'what is ep 40k?',
+    'introduce ep 40k',
+    'about ep 40k'
+  ];
+  const EP50_DIRECT_TRIGGER_PHRASES = [
+    'ep 50k',
+    'ep 50k?',
+    'ep50k',
+    'show ep 50k',
+    'select ep 50k',
+    'what is ep 50k',
+    'what is ep 50k?',
+    'introduce ep 50k',
+    'about ep 50k'
+  ];
+  const EP60_DIRECT_TRIGGER_PHRASES = [
+    'ep 60k',
+    'ep 60k?',
+    'ep60k',
+    'show ep 60k',
+    'select ep 60k',
+    'what is ep 60k',
+    'what is ep 60k?',
+    'introduce ep 60k',
+    'about ep 60k'
+  ];
+  const FRAMER24_DIRECT_TRIGGER_PHRASES = [
+    'framer 24',
+    'framer 24?',
+    'framer24',
+    'show framer 24',
+    'select framer 24',
+    'what is framer 24',
+    'what is framer 24?',
+    'introduce framer 24',
+    'about framer 24'
+  ];
+  const FRAMER27_DIRECT_TRIGGER_PHRASES = [
+    'framer 27',
+    'framer 27?',
+    'framer27',
+    'show framer 27',
+    'select framer 27',
+    'what is framer 27',
+    'what is framer 27?',
+    'introduce framer 27',
+    'about framer 27'
+  ];
+  const FRAMER32_DIRECT_TRIGGER_PHRASES = [
+    'framer 32',
+    'framer 32?',
+    'framer32',
+    'show framer 32',
+    'select framer 32',
+    'what is framer 32',
+    'what is framer 32?',
+    'introduce framer 32',
+    'about framer 32'
+  ];
+  const LESSONQ24_DIRECT_TRIGGER_PHRASES = [
+    'lessonq 24',
+    'lessonq 24?',
+    'lessonq24',
+    'lesson q 24',
+    'lesson q 24?',
+    'show lessonq 24',
+    'select lessonq 24',
+    'what is lessonq 24',
+    'what is lessonq 24?',
+    'introduce lessonq 24',
+    'about lessonq 24'
+  ];
+  const LESSONQ27_DIRECT_TRIGGER_PHRASES = [
+    'lessonq 27',
+    'lessonq 27?',
+    'lessonq27',
+    'lesson q 27',
+    'lesson q 27?',
+    'show lessonq 27',
+    'select lessonq 27',
+    'what is lessonq 27',
+    'what is lessonq 27?',
+    'introduce lessonq 27',
+    'about lessonq 27'
+  ];
+  const LESSONQ32_DIRECT_TRIGGER_PHRASES = [
+    'lessonq 32',
+    'lessonq 32?',
+    'lessonq32',
+    'lesson q 32',
+    'lesson q 32?',
+    'show lessonq 32',
+    'select lessonq 32',
+    'what is lessonq 32',
+    'what is lessonq 32?',
+    'introduce lessonq 32',
+    'about lessonq 32'
+  ];
+  const LESSONQ43_DIRECT_TRIGGER_PHRASES = [
+    'lessonq 43',
+    'lessonq 43?',
+    'lessonq43',
+    'lesson q 43',
+    'lesson q 43?',
+    'show lessonq 43',
+    'select lessonq 43',
+    'what is lessonq 43',
+    'what is lessonq 43?',
+    'introduce lessonq 43',
+    'about lessonq 43'
+  ];
+  const MIME24_DIRECT_TRIGGER_PHRASES = [
+    'mime 24',
+    'mime 24?',
+    'mime24',
+    'why is mime 24',
+    'why is mime 24?',
+    'why is mime24',
+    'why is mime24?',
+    'show mime 24',
+    'select mime 24',
+    'what is mime 24',
+    'what is mime 24?',
+    'introduce mime 24',
+    'about mime 24'
+  ];
+  const MIME27_DIRECT_TRIGGER_PHRASES = [
+    'mime 27',
+    'mime 27?',
+    'mime27',
+    'why is mime 27',
+    'why is mime 27?',
+    'why is mime27',
+    'why is mime27?',
+    'show mime 27',
+    'select mime 27',
+    'what is mime 27',
+    'what is mime 27?',
+    'introduce mime 27',
+    'about mime 27'
+  ];
+  const MIME32_DIRECT_TRIGGER_PHRASES = [
+    'mime 32',
+    'mime 32?',
+    'mime32',
+    'why is mime 32',
+    'why is mime 32?',
+    'why is mime32',
+    'why is mime32?',
+    'show mime 32',
+    'select mime 32',
+    'what is mime 32',
+    'what is mime 32?',
+    'introduce mime 32',
+    'about mime 32'
+  ];
+  const ADAMAS19_DIRECT_TRIGGER_PHRASES = [
+    'adamas 19',
+    'adamas 19?',
+    'adamas19',
+    'show adamas 19',
+    'select adamas 19',
+    'what is adamas 19',
+    'what is adamas 19?',
+    'introduce adamas 19',
+    'about adamas 19'
+  ];
+  const ADAMAS22_DIRECT_TRIGGER_PHRASES = [
+    'adamas 22',
+    'adamas 22?',
+    'adamas22',
+    'show adamas 22',
+    'select adamas 22',
+    'what is adamas 22',
+    'what is adamas 22?',
+    'introduce adamas 22',
+    'about adamas 22'
+  ];
+  const ADAMAS24_DIRECT_TRIGGER_PHRASES = [
+    'adamas 24',
+    'adamas 24?',
+    'adamas24',
+    'show adamas 24',
+    'select adamas 24',
+    'what is adamas 24',
+    'what is adamas 24?',
+    'introduce adamas 24',
+    'about adamas 24'
+  ];
+  const ROTUNDA15_DIRECT_TRIGGER_PHRASES = [
+    'rotunda 15',
+    'rotunda 15?',
+    'rotunda15',
+    'why is rotunda 15',
+    'why is rotunda 15?',
+    'why is rotunda15',
+    'why is rotunda15?',
+    'show rotunda 15',
+    'select rotunda 15',
+    'what is rotunda 15',
+    'what is rotunda 15?',
+    'introduce rotunda 15',
+    'about rotunda 15'
+  ];
+  const TAB12_DIRECT_TRIGGER_PHRASES = [
+    'tab 12',
+    'tab 12?',
+    'tab12',
+    'show tab 12',
+    'select tab 12',
+    'what is tab 12',
+    'what is tab 12?',
+    'what is tab 12 product',
+    'what is tab 12 product?',
+    'introduce tab 12',
+    'about tab 12'
+  ];
+  const ULTRA43_DIRECT_TRIGGER_PHRASES = [
+    'ultra 43',
+    'ultra 43?',
+    'ultra43',
+    'show ultra 43',
+    'select ultra 43',
+    'what is ultra 43',
+    'what is ultra 43?',
+    'introduce ultra 43',
+    'about ultra 43'
+  ];
+  const ULTRA55_DIRECT_TRIGGER_PHRASES = [
+    'ultra 55',
+    'ultra 55?',
+    'ultra55',
+    'show ultra 55',
+    'select ultra 55',
+    'what is ultra 55',
+    'what is ultra 55?',
+    'introduce ultra 55',
+    'about ultra 55'
+  ];
+  const OLLESON18_DIRECT_TRIGGER_PHRASES = [
+    'olleson 18',
+    'olleson 18?',
+    'olleson18',
+    'ollesson 18',
+    'ollesson 18?',
+    'ollesson18',
+    'why is olleson 18',
+    'why is olleson 18?',
+    'why is olleson18',
+    'why is olleson18?',
+    'why is ollesson 18',
+    'why is ollesson 18?',
+    'why is ollesson18',
+    'why is ollesson18?',
+    'show olleson 18',
+    'show ollesson 18',
+    'select olleson 18',
+    'select ollesson 18',
+    'what is olleson 18',
+    'what is olleson 18?',
+    'what is ollesson 18',
+    'what is ollesson 18?',
+    'introduce olleson 18',
+    'introduce ollesson 18',
+    'about olleson 18',
+    'about ollesson 18'
+  ];
   const CLONE16_DIRECT_TRIGGER_SET = new Set(CLONE16_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const CUE24_DIRECT_TRIGGER_SET = new Set(CUE24_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const CUE27_DIRECT_TRIGGER_SET = new Set(CUE27_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const CUE32_DIRECT_TRIGGER_SET = new Set(CUE32_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const EP30_DIRECT_TRIGGER_SET = new Set(EP30_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const EP40_DIRECT_TRIGGER_SET = new Set(EP40_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const EP50_DIRECT_TRIGGER_SET = new Set(EP50_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const EP60_DIRECT_TRIGGER_SET = new Set(EP60_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const FRAMER24_DIRECT_TRIGGER_SET = new Set(FRAMER24_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const FRAMER27_DIRECT_TRIGGER_SET = new Set(FRAMER27_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const FRAMER32_DIRECT_TRIGGER_SET = new Set(FRAMER32_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const LESSONQ24_DIRECT_TRIGGER_SET = new Set(LESSONQ24_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const LESSONQ27_DIRECT_TRIGGER_SET = new Set(LESSONQ27_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const LESSONQ32_DIRECT_TRIGGER_SET = new Set(LESSONQ32_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const LESSONQ43_DIRECT_TRIGGER_SET = new Set(LESSONQ43_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const MIME24_DIRECT_TRIGGER_SET = new Set(MIME24_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const MIME27_DIRECT_TRIGGER_SET = new Set(MIME27_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const MIME32_DIRECT_TRIGGER_SET = new Set(MIME32_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ADAMAS19_DIRECT_TRIGGER_SET = new Set(ADAMAS19_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ADAMAS22_DIRECT_TRIGGER_SET = new Set(ADAMAS22_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ADAMAS24_DIRECT_TRIGGER_SET = new Set(ADAMAS24_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ROTUNDA15_DIRECT_TRIGGER_SET = new Set(ROTUNDA15_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const TAB12_DIRECT_TRIGGER_SET = new Set(TAB12_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ULTRA43_DIRECT_TRIGGER_SET = new Set(ULTRA43_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const ULTRA55_DIRECT_TRIGGER_SET = new Set(ULTRA55_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
+  const OLLESON18_DIRECT_TRIGGER_SET = new Set(OLLESON18_DIRECT_TRIGGER_PHRASES.map((phrase) => normalizeQuestion(phrase)));
   const CLONE16_DEFINITION_INFO_IMAGE = 'assets/clone16-infographics-image1.png';
   const CLONE16_3D_VIEWER_SRCDOC = String.raw`<!DOCTYPE html>
 <html lang="en">
@@ -6124,6 +6639,106 @@
 
   function isDirectClone16OverviewRequest(rawText = '') {
     return CLONE16_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectCue24OverviewRequest(rawText = '') {
+    return CUE24_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectCue27OverviewRequest(rawText = '') {
+    return CUE27_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectCue32OverviewRequest(rawText = '') {
+    return CUE32_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectEp30OverviewRequest(rawText = '') {
+    return EP30_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectEp40OverviewRequest(rawText = '') {
+    return EP40_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectEp50OverviewRequest(rawText = '') {
+    return EP50_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectEp60OverviewRequest(rawText = '') {
+    return EP60_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectFramer24OverviewRequest(rawText = '') {
+    return FRAMER24_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectFramer27OverviewRequest(rawText = '') {
+    return FRAMER27_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectFramer32OverviewRequest(rawText = '') {
+    return FRAMER32_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectLessonQ24OverviewRequest(rawText = '') {
+    return LESSONQ24_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectLessonQ27OverviewRequest(rawText = '') {
+    return LESSONQ27_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectLessonQ32OverviewRequest(rawText = '') {
+    return LESSONQ32_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectLessonQ43OverviewRequest(rawText = '') {
+    return LESSONQ43_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectMime24OverviewRequest(rawText = '') {
+    return MIME24_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectMime27OverviewRequest(rawText = '') {
+    return MIME27_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectMime32OverviewRequest(rawText = '') {
+    return MIME32_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectAdamas19OverviewRequest(rawText = '') {
+    return ADAMAS19_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectAdamas22OverviewRequest(rawText = '') {
+    return ADAMAS22_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectAdamas24OverviewRequest(rawText = '') {
+    return ADAMAS24_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectRotunda15OverviewRequest(rawText = '') {
+    return ROTUNDA15_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectTab12OverviewRequest(rawText = '') {
+    return TAB12_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectUltra43OverviewRequest(rawText = '') {
+    return ULTRA43_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectUltra55OverviewRequest(rawText = '') {
+    return ULTRA55_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
+  }
+
+  function isDirectOlleson18OverviewRequest(rawText = '') {
+    return OLLESON18_DIRECT_TRIGGER_SET.has(normalizeQuestion(rawText));
   }
 
   function getClone16OverviewPreviewHtml() {
@@ -6338,12 +6953,50 @@
         definition.name.toLowerCase(),
         ...definition.aliases.map((alias) => alias.toLowerCase()),
         ...(definition.key === 'clone16' ? CLONE16_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'cue24' ? CUE24_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'cue27' ? CUE27_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'cue32' ? CUE32_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ep30k' ? EP30_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ep40k' ? EP40_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ep50k' ? EP50_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ep60k' ? EP60_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'framer24' ? FRAMER24_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'framer27' ? FRAMER27_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'framer32' ? FRAMER32_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'lessonQ24' ? LESSONQ24_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'lessonQ27' ? LESSONQ27_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'lessonQ32' ? LESSONQ32_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'lessonQ43' ? LESSONQ43_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'mime24' ? MIME24_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'mime27' ? MIME27_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'mime32' ? MIME32_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'adamas19' ? ADAMAS19_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'adamas22' ? ADAMAS22_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'adamas24' ? ADAMAS24_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'rotunda15' ? ROTUNDA15_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'tab12' ? TAB12_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ultra43' ? ULTRA43_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'ultra55' ? ULTRA55_DIRECT_TRIGGER_PHRASES : []),
+        ...(definition.key === 'olleson18' ? OLLESON18_DIRECT_TRIGGER_PHRASES : []),
         ...definition.aliases.map((alias) => `show ${alias.toLowerCase()}`),
         ...definition.aliases.map((alias) => `select ${alias.toLowerCase()}`),
         ...definition.aliases.map((alias) => `what is ${alias.toLowerCase()}`)
       ],
       keywords: definition.name.toLowerCase().split(/[\s]+/).filter(Boolean)
     })),
+    {
+      id: 'crystal_prompter_video',
+      label: 'Crystal Prompter',
+      phrases: [
+        'crystal prompter',
+        'crystal prompter?',
+        'what is crystal prompter',
+        'what is crystal prompter?',
+        'why is crystal prompter',
+        'why is crystal prompter?'
+      ],
+      keywords: ['crystal', 'prompter', 'company', 'brand', 'video']
+    },
     {
       id: 'about_us',
       label: 'About Us',
@@ -6839,6 +7492,61 @@
     `;
   }
 
+  function getAboutUsContactHtml() {
+    return `
+      <aside class="about-us-contact-panel" aria-label="Crystal Prompter contact details">
+        <p class="about-us-contact-intro">Have questions? We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
+        <div class="about-us-contact-list">
+          <article class="about-us-contact-item">
+            <span class="about-us-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path fill="currentColor" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11zm2.1-.5 5.9 4.7L17.9 6H6.1zm11.9 1.3-5.4 4.3a1 1 0 0 1-1.2 0L6 7.3v10.2c0 .3.2.5.5.5h11c.3 0 .5-.2.5-.5V7.3z"/>
+              </svg>
+            </span>
+            <div class="about-us-contact-copy">
+              <h4>Email Us</h4>
+              <a href="mailto:sales@crystalprompter.co.kr">sales@crystalprompter.co.kr</a>
+            </div>
+          </article>
+          <article class="about-us-contact-item">
+            <span class="about-us-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path fill="currentColor" d="M6.6 10.8c1.7 3.4 4.5 6.2 7.9 7.9l2.6-2.6c.3-.3.8-.4 1.2-.3 1 .3 2.1.4 3.2.4.7 0 1.1.5 1.1 1.1V21c0 .7-.5 1.1-1.1 1.1C10.2 22.1 1.9 13.8 1.9 3.6c0-.7.5-1.1 1.1-1.1h3.8c.7 0 1.1.5 1.1 1.1 0 1.1.2 2.2.4 3.2.1.4 0 .9-.3 1.2l-2.4 2.8z"/>
+              </svg>
+            </span>
+            <div class="about-us-contact-copy">
+              <h4>Call Us</h4>
+              <a href="tel:+82325760277">(+82) 32-576-0277</a>
+            </div>
+          </article>
+          <article class="about-us-contact-item">
+            <span class="about-us-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path fill="currentColor" d="M12 2.8a9.2 9.2 0 1 0 9.2 9.2A9.2 9.2 0 0 0 12 2.8zm.9 9.2V7.3h-1.8v5.5l4 2.4.9-1.5-3.1-1.7z"/>
+              </svg>
+            </span>
+            <div class="about-us-contact-copy">
+              <h4>Support Hours</h4>
+              <p class="about-us-support-hours-text">24/7 Chat · Mon-Fri Phone</p>
+            </div>
+          </article>
+          <article class="about-us-contact-item">
+            <span class="about-us-contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path fill="currentColor" d="M12 2.5c-3.9 0-7 3-7 6.8 0 4.8 5.6 10.7 6.2 11.3.4.4 1.1.4 1.5 0 .6-.6 6.2-6.5 6.2-11.3 0-3.8-3.1-6.8-7-6.8zm0 9.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/>
+              </svg>
+            </span>
+            <div class="about-us-contact-copy">
+              <h4>Location</h4>
+              <p class="about-us-location-text">Head Office &amp; Factory: Incheon, Korea</p>
+              <p class="about-us-location-text">Showroom: Incheon, Korea</p>
+            </div>
+          </article>
+        </div>
+      </aside>
+    `;
+  }
+
   function playInfoCardAnimation(animationName) {
     if (!infoCard) return;
     infoCard.classList.remove('info-card-slide-enter');
@@ -6958,6 +7666,31 @@
     `;
     resetInfoCardAutoScroll();
     playInfoCardAnimation(animation);
+    startAboutUsAnimations();
+    scheduleCueSeriesAvatarHeightSync();
+    if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
+  }
+
+  function renderAboutUsMainCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-show-scrollbar',
+      'info-card-empty-state',
+      'no-match-info-state',
+      'cue-series-intro-card',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state',
+      'clone16-spec-image-state',
+      'clone16-answer-sequence-state'
+    );
+    infoCard.innerHTML = INFO_TEXT.aboutUs.bodyHtml;
+    resetInfoCardAutoScroll();
     startAboutUsAnimations();
     scheduleCueSeriesAvatarHeightSync();
     if (infoCard && infoCard.matches(':hover')) restartInfoCardAutoScroll();
@@ -8626,8 +9359,64 @@
     }
     if (card2) {
       card2.className = 'info-card social-card';
-      card2.innerHTML = getSocialLinksHtml();
+      card2.innerHTML = `
+        <section class="about-us-cards-panel" aria-label="About Us contact details">
+          <div class="about-us-cards-panel-copy">
+            <h3>About Us</h3>
+            <p>Crystal Prompter Co., Ltd.</p>
+            <div class="about-us-cards-panel-body">
+              Established in 2017, Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows with a focus on reliability, clarity, and practical production use.
+            </div>
+          </div>
+        </section>
+      `;
     }
+    if (card3) {
+      card3.className = 'info-card image-card';
+      card3.innerHTML = '';
+    }
+  }
+
+  function showAboutUsSocialInfoCard() {
+    if (!infoCard) return;
+    stopClone16ReadMoreAutoplay();
+    stopClone16ImagesFeatureAutoplay();
+    stopClone16ComponentsAutoplay();
+    stopAboutUsAnimationCycle();
+    infoCard.classList.remove(
+      'image-card',
+      'info-card-show-scrollbar',
+      'info-card-slide-enter',
+      'cue-series-intro-card',
+      'no-match-info-state',
+      'clone16-intro-info-state',
+      'clone16-readmore-info-state',
+      'clone16-images-info-state',
+      'clone16-spec-image-state',
+      'clone16-answer-sequence-state'
+    );
+    infoCard.classList.add('info-card-empty-state');
+    infoCard.innerHTML = `
+	      <div class="info-card-empty-shell about-us-social-info-shell">
+	        <section class="about-us-cards-panel" aria-label="About Us details">
+	          <div class="about-us-main-content">
+	            <div class="about-us-primary-column">
+	              <div class="about-us-cards-panel-copy">
+	                <h3 class="about-us-main-title">About Us</h3>
+	                <p>Crystal Prompter Co., Ltd.</p>
+	              </div>
+	              ${getSocialLinksHtml()}
+	              <div class="about-us-cards-panel-body">
+	                Established in 2017, Crystal Prompter develops professional teleprompters and electric pedestal solutions for studio, field, education, and creator workflows with a focus on reliability, clarity, and practical production use.
+	              </div>
+	            </div>
+	            ${getAboutUsContactHtml()}
+	          </div>
+	        </section>
+	      </div>
+    `;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
   }
 
   function showMergedEmptyBottomCard() {
@@ -8744,6 +9533,11 @@
     appContainer.classList.toggle('cue-series-infographic-only-mode', enabled);
   }
 
+  function setAboutUsCardsPanelMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('about-us-cards-panel-mode', enabled);
+  }
+
   function setClone16VideoOnlyMode(enabled) {
     if (!appContainer) return;
     appContainer.classList.toggle('clone16-video-only-mode', enabled);
@@ -8759,6 +9553,7 @@
     setBuyNowMode(false);
     setProductSummaryMode(false);
     setCueSeriesInfographicOnlyMode(false);
+    setAboutUsCardsPanelMode(false);
     setClone16VideoOnlyMode(false);
     setCueSeriesMode(true);
     setClone16ActionLayout(false);
@@ -8793,6 +9588,7 @@
     setBuyNowMode(false);
     setProductSummaryMode(true);
     setCueSeriesInfographicOnlyMode(productKey === 'cue24' || productKey === 'cue27' || productKey === 'cue32' || productKey === 'ep30k' || productKey === 'ep40k' || productKey === 'ep50k' || productKey === 'ep60k' || productKey === 'framer24' || productKey === 'framer27' || productKey === 'framer32' || productKey === 'lessonQ24' || productKey === 'lessonQ27' || productKey === 'lessonQ32' || productKey === 'lessonQ43');
+    setAboutUsCardsPanelMode(false);
     setClone16VideoOnlyMode(false);
     setCueSeriesMode(shouldUseShowcaseLayout(productKey, 'summary'));
     setClone16ActionLayout(false);
@@ -8873,38 +9669,7 @@
     const product = getCurrentProduct();
     if (section === 'specification') {
       applyAboutStyleLayout(getProductSummaryStripText(product));
-      if (product.key === 'clone16') {
-        renderClone16SpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'cue24') {
-        renderCue24SpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'cue27') {
-        renderCue27SpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'cue32') {
-        renderCue32SpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'folder22n') {
-        renderFolder22NSpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'lessonQ24') {
-        renderLessonQSpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'lessonQ27') {
-        renderLessonQ27SpecificationInfoCard();
-        return;
-      }
-      if (product.key === 'lessonQ32') {
-        renderLessonQ32SpecificationInfoCard();
-        return;
-      }
+      renderGenericProductSpecificationInfoCard(product);
       return;
     }
     if (section === 'faqs') {
@@ -8952,7 +9717,9 @@
     setBuyNowMode(false);
     setProductSummaryMode(false);
     setCueSeriesInfographicOnlyMode(false);
+    setAboutUsCardsPanelMode(false);
     setClone16VideoOnlyMode(false);
+    setCrystalPrompterVideoMode(false);
     setPlaceholderMode('intro');
     restoreAvatarIdleVideo();
     setQuickActionsMode('all');
@@ -8997,9 +9764,25 @@
       setSubtitleStripText('Cue Series infographic overview');
       showCueSeriesIntroInfoCard();
     }
+    if (match.id === 'crystal_prompter_video') {
+      setCueSeriesMode(false);
+      setClone16ActionLayout(false);
+      stopAvatarVideo();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      clearCustomCenterPanel();
+      showMergedEmptyBottomCard();
+      setCrystalPrompterVideoMode(true);
+      setSubtitleStripText(CRYSTAL_PROMPTER_BRAND_VIDEO_SUBTITLE);
+      renderCrystalPrompterBrandVideoCard();
+      return;
+    }
     if (match.id === 'about_us') {
       applyAboutStyleLayout('Crystal Prompter provides professional teleprompter solutions for studio, field, education, and creator workflows.', { showEmptyCard: false, hideInputCards: true });
-      setInfoCardText(INFO_TEXT.aboutUs.title, INFO_TEXT.aboutUs.bodyHtml, true);
+      setAboutUsCardsPanelMode(true);
+      setInfoCardOnlyMode(false);
+      showAboutUsSocialInfoCard();
+      showMergedEmptyBottomCard();
     }
     if (match.id === 'product_list') {
       applyAboutStyleLayout('Browse the available Crystal Prompter models and select one to continue.');
@@ -9593,6 +10376,656 @@
         speakAssistantText(CLONE16_DEFINITION_ANSWER, {
           onComplete: options.onComplete,
           syncSubtitleText: CLONE16_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectCue24OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'cue24'
+    ) {
+      currentProductKey = 'cue24';
+      lastConfirmedProductKey = 'cue24';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(CUE24_INFOGRAPHIC_IMAGE, 'Cue 24 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(CUE24_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CUE24_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CUE24_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectCue27OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'cue27'
+    ) {
+      currentProductKey = 'cue27';
+      lastConfirmedProductKey = 'cue27';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(CUE27_INFOGRAPHIC_IMAGE, 'Cue 27 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(CUE27_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CUE27_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CUE27_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectCue32OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'cue32'
+    ) {
+      currentProductKey = 'cue32';
+      lastConfirmedProductKey = 'cue32';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(CUE32_INFOGRAPHIC_IMAGE, 'Cue 32 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(CUE32_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(CUE32_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: CUE32_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectEp30OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ep30k'
+    ) {
+      currentProductKey = 'ep30k';
+      lastConfirmedProductKey = 'ep30k';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(EP30_INFOGRAPHIC_IMAGE, 'EP 30 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(EP30_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(EP30_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: EP30_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectEp40OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ep40k'
+    ) {
+      currentProductKey = 'ep40k';
+      lastConfirmedProductKey = 'ep40k';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(EP40_INFOGRAPHIC_IMAGE, 'EP 40 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(EP40_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(EP40_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: EP40_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectEp50OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ep50k'
+    ) {
+      currentProductKey = 'ep50k';
+      lastConfirmedProductKey = 'ep50k';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(EP50_INFOGRAPHIC_IMAGE, 'EP 50 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(EP50_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(EP50_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: EP50_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectEp60OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ep60k'
+    ) {
+      currentProductKey = 'ep60k';
+      lastConfirmedProductKey = 'ep60k';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(EP60_INFOGRAPHIC_IMAGE, 'EP 60 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(EP60_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(EP60_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: EP60_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectFramer24OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'framer24'
+    ) {
+      currentProductKey = 'framer24';
+      lastConfirmedProductKey = 'framer24';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(FRAMER24_INFOGRAPHIC_IMAGE, 'Framer 24 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(FRAMER24_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(FRAMER24_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: FRAMER24_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectFramer27OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'framer27'
+    ) {
+      currentProductKey = 'framer27';
+      lastConfirmedProductKey = 'framer27';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(FRAMER27_INFOGRAPHIC_IMAGE, 'Framer 27 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(FRAMER27_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(FRAMER27_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: FRAMER27_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectFramer32OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'framer32'
+    ) {
+      currentProductKey = 'framer32';
+      lastConfirmedProductKey = 'framer32';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(FRAMER32_INFOGRAPHIC_IMAGE, 'Framer 32 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(FRAMER32_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(FRAMER32_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: FRAMER32_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectLessonQ24OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'lessonQ24'
+    ) {
+      currentProductKey = 'lessonQ24';
+      lastConfirmedProductKey = 'lessonQ24';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(LESSONQ24_INFOGRAPHIC_IMAGE, 'LessonQ 24 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(LESSONQ24_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(LESSONQ24_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: LESSONQ24_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectLessonQ27OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'lessonQ27'
+    ) {
+      currentProductKey = 'lessonQ27';
+      lastConfirmedProductKey = 'lessonQ27';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(LESSONQ27_INFOGRAPHIC_IMAGE, 'LessonQ 27 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(LESSONQ27_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(LESSONQ27_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: LESSONQ27_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectLessonQ32OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'lessonQ32'
+    ) {
+      currentProductKey = 'lessonQ32';
+      lastConfirmedProductKey = 'lessonQ32';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(LESSONQ32_INFOGRAPHIC_IMAGE, 'LessonQ 32 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(LESSONQ32_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(LESSONQ32_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: LESSONQ32_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectLessonQ43OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'lessonQ43'
+    ) {
+      currentProductKey = 'lessonQ43';
+      lastConfirmedProductKey = 'lessonQ43';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard(LESSONQ43_INFOGRAPHIC_IMAGE, 'LessonQ 43 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(LESSONQ43_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(LESSONQ43_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: LESSONQ43_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectMime24OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'mime24'
+    ) {
+      currentProductKey = 'mime24';
+      lastConfirmedProductKey = 'mime24';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/mime24-infographics-image1.png', 'Mime 24 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(MIME24_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(MIME24_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: MIME24_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectMime27OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'mime27'
+    ) {
+      currentProductKey = 'mime27';
+      lastConfirmedProductKey = 'mime27';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/mime27-infographics-image1.png', 'Mime 27 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(MIME27_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(MIME27_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: MIME27_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectMime32OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'mime32'
+    ) {
+      currentProductKey = 'mime32';
+      lastConfirmedProductKey = 'mime32';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/mime32-infographics-image1.png', 'Mime 32 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(MIME32_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(MIME32_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: MIME32_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectAdamas19OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'adamas19'
+    ) {
+      currentProductKey = 'adamas19';
+      lastConfirmedProductKey = 'adamas19';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/adamas19-infographics-image1.png', 'Adamas 19 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ADAMAS19_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ADAMAS19_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ADAMAS19_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectAdamas22OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'adamas22'
+    ) {
+      currentProductKey = 'adamas22';
+      lastConfirmedProductKey = 'adamas22';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/adamas22-infographics-image1.png', 'Adamas 22 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ADAMAS22_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ADAMAS22_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ADAMAS22_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectAdamas24OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'adamas24'
+    ) {
+      currentProductKey = 'adamas24';
+      lastConfirmedProductKey = 'adamas24';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/adamas24-infographics-image1.png', 'Adamas 24 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ADAMAS24_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ADAMAS24_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ADAMAS24_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectRotunda15OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'rotunda15'
+    ) {
+      currentProductKey = 'rotunda15';
+      lastConfirmedProductKey = 'rotunda15';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/rotunda15-infographics-image1.png', 'Rotunda 15 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ROTUNDA15_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ROTUNDA15_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ROTUNDA15_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectTab12OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'tab12'
+    ) {
+      currentProductKey = 'tab12';
+      lastConfirmedProductKey = 'tab12';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/tab12-infographics-image1.png', 'TAB 12 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(TAB12_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(TAB12_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: TAB12_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectUltra43OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ultra43'
+    ) {
+      currentProductKey = 'ultra43';
+      lastConfirmedProductKey = 'ultra43';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/ultra43-infographics-image1.png', 'Ultra 43 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ULTRA43_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ULTRA43_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ULTRA43_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectUltra55OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'ultra55'
+    ) {
+      currentProductKey = 'ultra55';
+      lastConfirmedProductKey = 'ultra55';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/ultra55-infographics-image1.png', 'Ultra 55 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(ULTRA55_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(ULTRA55_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: ULTRA55_DEFINITION_ANSWER
+        });
+      }
+      return;
+    }
+
+    if (
+      isDirectOlleson18OverviewRequest(msg) &&
+      matchedScriptedQuestion?.id?.startsWith('product_') &&
+      matchedScriptedQuestion.productKey === 'olleson18'
+    ) {
+      currentProductKey = 'olleson18';
+      lastConfirmedProductKey = 'olleson18';
+      hasExplicitProductSelection = true;
+      updatePlaceholderProductSelection();
+      setCardsPanelHidden(false);
+      setInitialVideoPanelHidden(false);
+      setQuickActionsMode('all');
+      setQuickActionsHidden(false);
+      renderProductDefinitionImageCard('assets/ollesson18-infographics-image1.png', 'Ollesson 18 infographic');
+      if (!voiceOutputEnabled) {
+        setSubtitleStripText(OLLESON18_DEFINITION_ANSWER);
+        runSpeechCompletionCallback(options.onComplete);
+      } else {
+        speakAssistantText(OLLESON18_DEFINITION_ANSWER, {
+          onComplete: options.onComplete,
+          syncSubtitleText: OLLESON18_DEFINITION_ANSWER
         });
       }
       return;
