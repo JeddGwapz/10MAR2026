@@ -722,6 +722,16 @@
 	      display: none;
 	    }
 
+	    .app-container.cue24-videos-mode .assistant-panel {
+	      display: none;
+	    }
+	    .app-container.cue27-videos-mode .assistant-panel {
+	      display: none;
+	    }
+	    .app-container.cue32-videos-mode .assistant-panel {
+	      display: none;
+	    }
+
     .avatar-box {
       width: 100%;
       height: 100%;
@@ -2259,7 +2269,39 @@
 	      display: none;
 	    }
 
+	    .app-container.cue24-videos-mode .bottom-cards {
+	      display: none;
+	    }
+	    .app-container.cue27-videos-mode .bottom-cards {
+	      display: none;
+	    }
+	    .app-container.cue32-videos-mode .bottom-cards {
+	      display: none;
+	    }
+
 	    .info-card.main-card.crystal-prompter-video-state {
+	      padding: 0;
+	      border: 0;
+	      box-shadow: none;
+	      cursor: default;
+	      overflow: hidden;
+	    }
+
+	    .info-card.main-card.cue24-video-state {
+	      padding: 0;
+	      border: 0;
+	      box-shadow: none;
+	      cursor: default;
+	      overflow: hidden;
+	    }
+	    .info-card.main-card.cue27-video-state {
+	      padding: 0;
+	      border: 0;
+	      box-shadow: none;
+	      cursor: default;
+	      overflow: hidden;
+	    }
+	    .info-card.main-card.cue32-video-state {
 	      padding: 0;
 	      border: 0;
 	      box-shadow: none;
@@ -2296,6 +2338,99 @@
 	      inset: 0;
 	      z-index: 2;
 	      pointer-events: auto;
+	      background: transparent;
+	    }
+
+	    .cue24-video-card {
+	      width: 100%;
+	      height: 100%;
+	      min-height: 0;
+	    }
+
+	    .cue24-video-frame {
+	      position: relative;
+	      width: 100%;
+	      height: 100%;
+	      min-height: 220px;
+	      background: #000;
+	    }
+
+	    .cue24-video-embed {
+	      position: absolute;
+	      inset: 0;
+	      width: 100%;
+	      height: 100%;
+	      border: 0;
+	      pointer-events: none;
+	    }
+
+	    .cue24-video-overlay {
+	      position: absolute;
+	      inset: 0;
+	      z-index: 2;
+	      pointer-events: auto;
+	      background: transparent;
+	    }
+
+	    .cue27-video-card {
+	      width: 100%;
+	      height: 100%;
+	      min-height: 0;
+	    }
+
+	    .cue27-video-frame {
+	      position: relative;
+	      width: 100%;
+	      height: 100%;
+	      min-height: 220px;
+	      background: #000;
+	    }
+
+	    .cue27-video-embed {
+	      position: absolute;
+	      inset: 0;
+	      width: 100%;
+	      height: 100%;
+	      border: 0;
+	      pointer-events: none;
+	    }
+
+	    .cue27-video-overlay {
+	      position: absolute;
+	      inset: 0;
+	      z-index: 2;
+	      pointer-events: none;
+	      background: transparent;
+	    }
+
+	    .cue32-video-card {
+	      width: 100%;
+	      height: 100%;
+	      min-height: 0;
+	    }
+
+	    .cue32-video-frame {
+	      position: relative;
+	      width: 100%;
+	      height: 100%;
+	      min-height: 220px;
+	      background: #000;
+	    }
+
+	    .cue32-video-embed {
+	      position: absolute;
+	      inset: 0;
+	      width: 100%;
+	      height: 100%;
+	      border: 0;
+	      pointer-events: none;
+	    }
+
+	    .cue32-video-overlay {
+	      position: absolute;
+	      inset: 0;
+	      z-index: 2;
+	      pointer-events: none;
 	      background: transparent;
 	    }
     .info-card.main-card:has(.initial-info-card) {

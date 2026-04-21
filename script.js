@@ -82,6 +82,12 @@
   const CLONE16_OVERVIEW_VIDEO_ID = 'IJlVE8LUHZ0';
   const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
   const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
+  const CUE24_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/jmy31E2XFgk?si=vnyUGd83-nl0hTxh';
+  const CUE24_SHORTS_EMBED_TITLE = 'Cue 24 video';
+  const CUE27_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/cmeOc4GNkhk?si=TqAE3YmznARhxW7K';
+  const CUE27_SHORTS_EMBED_TITLE = 'Cue 27 video';
+  const CUE32_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/ZFNiWKEY71s?si=y3F7WMVayE6Aepxv';
+  const CUE32_SHORTS_EMBED_TITLE = 'Cue 32 video';
   // Uses the exact embed URL pattern requested (we append autoplay/controls params at runtime).
   const CRYSTAL_PROMPTER_BRAND_EMBED_URL = 'https://www.youtube.com/embed/3V9xlKOeVUU?si=JAmS_-j3mVVR-gql';
   const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'YouTube video player';
@@ -1416,8 +1422,77 @@
     'clone16-spec-image-state',
     'clone16-answer-sequence-state',
     'crystal-prompter-video-state',
+    'cue24-video-state',
+    'cue27-video-state',
+    'cue32-video-state',
     'info-card-locked-layout'
   ];
+
+  function getCue24ShortsEmbedSrc() {
+    try {
+      const embedUrl = new URL(CUE24_SHORTS_EMBED_URL, window.location.href);
+      embedUrl.searchParams.set('autoplay', '1');
+      embedUrl.searchParams.set('mute', '0');
+      embedUrl.searchParams.set('rel', '0');
+      embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('enablejsapi', '1');
+      embedUrl.searchParams.set('modestbranding', '1');
+      embedUrl.searchParams.set('iv_load_policy', '3');
+      embedUrl.searchParams.set('controls', '0');
+      embedUrl.searchParams.set('fs', '0');
+      embedUrl.searchParams.set('disablekb', '1');
+      if (window.location.origin) {
+        embedUrl.searchParams.set('origin', window.location.origin);
+      }
+      return embedUrl.toString();
+    } catch (error) {
+      return `${CUE24_SHORTS_EMBED_URL}&autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
+    }
+  }
+
+  function getCue27ShortsEmbedSrc() {
+    try {
+      const embedUrl = new URL(CUE27_SHORTS_EMBED_URL, window.location.href);
+      embedUrl.searchParams.set('autoplay', '1');
+      embedUrl.searchParams.set('mute', '0');
+      embedUrl.searchParams.set('rel', '0');
+      embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('enablejsapi', '1');
+      embedUrl.searchParams.set('modestbranding', '1');
+      embedUrl.searchParams.set('iv_load_policy', '3');
+      embedUrl.searchParams.set('controls', '0');
+      embedUrl.searchParams.set('fs', '0');
+      embedUrl.searchParams.set('disablekb', '1');
+      if (window.location.origin) {
+        embedUrl.searchParams.set('origin', window.location.origin);
+      }
+      return embedUrl.toString();
+    } catch (error) {
+      return `${CUE27_SHORTS_EMBED_URL}&autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
+    }
+  }
+
+  function getCue32ShortsEmbedSrc() {
+    try {
+      const embedUrl = new URL(CUE32_SHORTS_EMBED_URL, window.location.href);
+      embedUrl.searchParams.set('autoplay', '1');
+      embedUrl.searchParams.set('mute', '0');
+      embedUrl.searchParams.set('rel', '0');
+      embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('enablejsapi', '1');
+      embedUrl.searchParams.set('modestbranding', '1');
+      embedUrl.searchParams.set('iv_load_policy', '3');
+      embedUrl.searchParams.set('controls', '0');
+      embedUrl.searchParams.set('fs', '0');
+      embedUrl.searchParams.set('disablekb', '1');
+      if (window.location.origin) {
+        embedUrl.searchParams.set('origin', window.location.origin);
+      }
+      return embedUrl.toString();
+    } catch (error) {
+      return `${CUE32_SHORTS_EMBED_URL}&autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
+    }
+  }
 
   function getCrystalPrompterBrandEmbedSrc() {
     try {
@@ -1455,11 +1530,62 @@
     }), '*');
   }
 
+  function setCue24VideosMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('cue24-videos-mode', Boolean(enabled));
+  }
+
+  function setCue27VideosMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('cue27-videos-mode', Boolean(enabled));
+  }
+
+  function setCue32VideosMode(enabled) {
+    if (!appContainer) return;
+    appContainer.classList.toggle('cue32-videos-mode', Boolean(enabled));
+  }
+
   function primeCrystalPrompterBrandPlayback(frameOrChild) {
     const frame = frameOrChild?.classList?.contains?.('crystal-prompter-video-frame')
       ? frameOrChild
       : frameOrChild?.closest?.('.crystal-prompter-video-frame') || infoCard?.querySelector?.('.crystal-prompter-video-frame');
     const iframe = frame ? frame.querySelector('.crystal-prompter-video-embed') : null;
+    if (!iframe) return false;
+    sendYoutubePlayerCommand(iframe, 'unMute');
+    sendYoutubePlayerCommand(iframe, 'setVolume', [100]);
+    sendYoutubePlayerCommand(iframe, 'playVideo');
+    return true;
+  }
+
+  function primeCue24ShortsPlayback(frameOrChild) {
+    const frame = frameOrChild?.classList?.contains?.('cue24-video-frame')
+      ? frameOrChild
+      : frameOrChild?.closest?.('.cue24-video-frame') || infoCard?.querySelector?.('.cue24-video-frame');
+    const iframe = frame ? frame.querySelector('.cue24-video-embed') : null;
+    if (!iframe) return false;
+    sendYoutubePlayerCommand(iframe, 'unMute');
+    sendYoutubePlayerCommand(iframe, 'setVolume', [100]);
+    sendYoutubePlayerCommand(iframe, 'playVideo');
+    return true;
+  }
+
+  function primeCue27ShortsPlayback(frameOrChild) {
+    const frame = frameOrChild?.classList?.contains?.('cue27-video-frame')
+      ? frameOrChild
+      : frameOrChild?.closest?.('.cue27-video-frame') || infoCard?.querySelector?.('.cue27-video-frame');
+    const iframe = frame ? frame.querySelector('.cue27-video-embed') : null;
+    if (!iframe) return false;
+    sendYoutubePlayerCommand(iframe, 'unMute');
+    sendYoutubePlayerCommand(iframe, 'setVolume', [100]);
+    sendYoutubePlayerCommand(iframe, 'playVideo');
+    return true;
+  }
+
+  function primeCue32ShortsPlayback(frameOrChild) {
+    const frame = frameOrChild?.classList?.contains?.('cue32-video-frame')
+      ? frameOrChild
+      : frameOrChild?.closest?.('.cue32-video-frame') || infoCard?.querySelector?.('.cue32-video-frame');
+    const iframe = frame ? frame.querySelector('.cue32-video-embed') : null;
     if (!iframe) return false;
     sendYoutubePlayerCommand(iframe, 'unMute');
     sendYoutubePlayerCommand(iframe, 'setVolume', [100]);
@@ -1485,6 +1611,81 @@
             tabindex="-1"
           ></iframe>
           <div class="crystal-prompter-video-overlay" aria-hidden="true" onclick="primeCrystalPrompterBrandPlayback(this)"></div>
+        </div>
+      </section>
+    `;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCue24ShortsVideoCard() {
+    if (!infoCard) return;
+    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue24-video-state' });
+    const embedSrc = getCue24ShortsEmbedSrc();
+    infoCard.innerHTML = `
+      <section class="cue24-video-card" aria-label="Cue 24 video">
+        <div class="cue24-video-frame">
+          <iframe
+            class="cue24-video-embed"
+            src="${escapeHtml(embedSrc)}"
+            title="${escapeHtml(CUE24_SHORTS_EMBED_TITLE)}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            tabindex="-1"
+          ></iframe>
+          <div class="cue24-video-overlay" aria-hidden="true" onclick="primeCue24ShortsPlayback(this)"></div>
+        </div>
+      </section>
+    `;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCue27ShortsVideoCard() {
+    if (!infoCard) return;
+    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue27-video-state' });
+    const embedSrc = getCue27ShortsEmbedSrc();
+    infoCard.innerHTML = `
+      <section class="cue27-video-card" aria-label="Cue 27 video">
+        <div class="cue27-video-frame">
+          <iframe
+            class="cue27-video-embed"
+            src="${escapeHtml(embedSrc)}"
+            title="${escapeHtml(CUE27_SHORTS_EMBED_TITLE)}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            tabindex="-1"
+          ></iframe>
+          <div class="cue27-video-overlay" aria-hidden="true"></div>
+        </div>
+      </section>
+    `;
+    resetInfoCardAutoScroll();
+    scheduleCueSeriesAvatarHeightSync();
+  }
+
+  function renderCue32ShortsVideoCard() {
+    if (!infoCard) return;
+    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue32-video-state' });
+    const embedSrc = getCue32ShortsEmbedSrc();
+    infoCard.innerHTML = `
+      <section class="cue32-video-card" aria-label="Cue 32 video">
+        <div class="cue32-video-frame">
+          <iframe
+            class="cue32-video-embed"
+            src="${escapeHtml(embedSrc)}"
+            title="${escapeHtml(CUE32_SHORTS_EMBED_TITLE)}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            tabindex="-1"
+          ></iframe>
+          <div class="cue32-video-overlay" aria-hidden="true"></div>
         </div>
       </section>
     `;
@@ -9684,6 +9885,78 @@
       setInfoCardOnlyMode(false);
       setClone16VideoOnlyMode(true);
       renderClone16VideoInfoCard();
+      return;
+    }
+    if (product.key === 'cue24') {
+      setDetailFocusMode(false);
+      setInfoCardOnlyMode(false);
+      setClone16VideoOnlyMode(false);
+      setCueSeriesMode(false);
+      setClone16ActionLayout(false);
+      stopAvatarVideo();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      clearCustomCenterPanel();
+      showMergedEmptyBottomCard();
+      setCrystalPrompterVideoMode(false);
+      setCue24VideosMode(true);
+      setCue27VideosMode(false);
+      setCue32VideosMode(false);
+      setSubtitleStripText('Cue 24 video');
+      renderCue24ShortsVideoCard();
+      // Best-effort: try to start playback with sound using the user's action as a gesture.
+      primeCue24ShortsPlayback(infoCard);
+      window.setTimeout(() => {
+        primeCue24ShortsPlayback(infoCard);
+      }, 650);
+      return;
+    }
+    if (product.key === 'cue27') {
+      setDetailFocusMode(false);
+      setInfoCardOnlyMode(false);
+      setClone16VideoOnlyMode(false);
+      setCueSeriesMode(false);
+      setClone16ActionLayout(false);
+      stopAvatarVideo();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      clearCustomCenterPanel();
+      showMergedEmptyBottomCard();
+      setCrystalPrompterVideoMode(false);
+      setCue24VideosMode(false);
+      setCue27VideosMode(true);
+      setCue32VideosMode(false);
+      setSubtitleStripText('Cue 27 video');
+      renderCue27ShortsVideoCard();
+      // Best-effort: autoplay with sound can be blocked by browser policy.
+      primeCue27ShortsPlayback(infoCard);
+      window.setTimeout(() => {
+        primeCue27ShortsPlayback(infoCard);
+      }, 650);
+      return;
+    }
+    if (product.key === 'cue32') {
+      setDetailFocusMode(false);
+      setInfoCardOnlyMode(false);
+      setClone16VideoOnlyMode(false);
+      setCueSeriesMode(false);
+      setClone16ActionLayout(false);
+      stopAvatarVideo();
+      setInitialVideoPanelHidden(true);
+      stopPanelVideo();
+      clearCustomCenterPanel();
+      showMergedEmptyBottomCard();
+      setCrystalPrompterVideoMode(false);
+      setCue24VideosMode(false);
+      setCue27VideosMode(false);
+      setCue32VideosMode(true);
+      setSubtitleStripText('Cue 32 video');
+      renderCue32ShortsVideoCard();
+      // Best-effort: autoplay with sound can be blocked by browser policy.
+      primeCue32ShortsPlayback(infoCard);
+      window.setTimeout(() => {
+        primeCue32ShortsPlayback(infoCard);
+      }, 650);
     }
   }
 
@@ -9742,6 +10015,9 @@
     setAboutUsCardsPanelMode(false);
     setClone16VideoOnlyMode(false);
     setCrystalPrompterVideoMode(false);
+    setCue24VideosMode(false);
+    setCue27VideosMode(false);
+    setCue32VideosMode(false);
     setPlaceholderMode('intro');
     restoreAvatarIdleVideo();
     setQuickActionsMode('all');
