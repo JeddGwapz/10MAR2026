@@ -82,9 +82,9 @@
   const CLONE16_OVERVIEW_VIDEO_ID = 'IJlVE8LUHZ0';
   const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
   const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
-  const CRYSTAL_PROMPTER_BRAND_VIDEO_ID = '3V9xlKOeVUU';
-  const CRYSTAL_PROMPTER_BRAND_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CRYSTAL_PROMPTER_BRAND_VIDEO_ID}`;
-  const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'Crystal Prompter brand video';
+  // Uses the exact embed URL pattern requested (we append autoplay/controls params at runtime).
+  const CRYSTAL_PROMPTER_BRAND_EMBED_URL = 'https://www.youtube.com/embed/3V9xlKOeVUU?si=JAmS_-j3mVVR-gql';
+  const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'YouTube video player';
   const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
   const CLONE16_PRODUCT_TYPE_PANEL_VIDEO = 'assets/clone16-2.mp4';
   const CLONE16_MAIN_PURPOSE_PANEL_VIDEO = 'assets/clone16-3.mp4';
@@ -1423,9 +1423,10 @@
     try {
       const embedUrl = new URL(CRYSTAL_PROMPTER_BRAND_EMBED_URL, window.location.href);
       embedUrl.searchParams.set('autoplay', '1');
-      embedUrl.searchParams.set('mute', '1');
+      embedUrl.searchParams.set('mute', '0');
       embedUrl.searchParams.set('rel', '0');
       embedUrl.searchParams.set('playsinline', '1');
+      embedUrl.searchParams.set('enablejsapi', '1');
       embedUrl.searchParams.set('modestbranding', '1');
       embedUrl.searchParams.set('iv_load_policy', '3');
       embedUrl.searchParams.set('controls', '0');
@@ -1436,13 +1437,34 @@
       }
       return embedUrl.toString();
     } catch (error) {
-      return `${CRYSTAL_PROMPTER_BRAND_EMBED_URL}?autoplay=1&mute=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
+      return `${CRYSTAL_PROMPTER_BRAND_EMBED_URL}&autoplay=1&mute=0&rel=0&playsinline=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=0&fs=0&disablekb=1`;
     }
   }
 
   function setCrystalPrompterVideoMode(enabled) {
     if (!appContainer) return;
     appContainer.classList.toggle('crystal-prompter-video-mode', Boolean(enabled));
+  }
+
+  function sendYoutubePlayerCommand(iframe, func, args = []) {
+    if (!iframe?.contentWindow) return;
+    iframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func,
+      args
+    }), '*');
+  }
+
+  function primeCrystalPrompterBrandPlayback(frameOrChild) {
+    const frame = frameOrChild?.classList?.contains?.('crystal-prompter-video-frame')
+      ? frameOrChild
+      : frameOrChild?.closest?.('.crystal-prompter-video-frame') || infoCard?.querySelector?.('.crystal-prompter-video-frame');
+    const iframe = frame ? frame.querySelector('.crystal-prompter-video-embed') : null;
+    if (!iframe) return false;
+    sendYoutubePlayerCommand(iframe, 'unMute');
+    sendYoutubePlayerCommand(iframe, 'setVolume', [100]);
+    sendYoutubePlayerCommand(iframe, 'playVideo');
+    return true;
   }
 
   function renderCrystalPrompterBrandVideoCard() {
@@ -1462,7 +1484,7 @@
             allowfullscreen
             tabindex="-1"
           ></iframe>
-          <div class="crystal-prompter-video-overlay" aria-hidden="true"></div>
+          <div class="crystal-prompter-video-overlay" aria-hidden="true" onclick="primeCrystalPrompterBrandPlayback(this)"></div>
         </div>
       </section>
     `;
@@ -9775,6 +9797,11 @@
       setCrystalPrompterVideoMode(true);
       setSubtitleStripText(CRYSTAL_PROMPTER_BRAND_VIDEO_SUBTITLE);
       renderCrystalPrompterBrandVideoCard();
+      // Best-effort: try to start playback with sound using the user's send action as a gesture.
+      primeCrystalPrompterBrandPlayback(infoCard);
+      window.setTimeout(() => {
+        primeCrystalPrompterBrandPlayback(infoCard);
+      }, 650);
       return;
     }
     if (match.id === 'about_us') {
@@ -10352,13 +10379,17 @@
     const shouldUseLocalClone16DefinitionFlow = shouldForceClone16DefinitionSequence(
       msg,
       detectedProductKey || (hasExplicitProductSelection ? currentProductKey : '')
-    );
-    const matchedScriptedQuestion = matchScriptedQuestion(msg);
+	    );
+	    const matchedScriptedQuestion = matchScriptedQuestion(msg);
+	    if (matchedScriptedQuestion && !matchedScriptedQuestion.id?.startsWith('product_')) {
+	      applyMatchedResponse(matchedScriptedQuestion);
+	      return;
+	    }
 
-    if (
-      isDirectClone16OverviewRequest(msg) &&
-      matchedScriptedQuestion?.id?.startsWith('product_') &&
-      matchedScriptedQuestion.productKey === 'clone16'
+	    if (
+	      isDirectClone16OverviewRequest(msg) &&
+	      matchedScriptedQuestion?.id?.startsWith('product_') &&
+	      matchedScriptedQuestion.productKey === 'clone16'
     ) {
       currentProductKey = 'clone16';
       lastConfirmedProductKey = 'clone16';
