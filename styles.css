@@ -474,28 +474,582 @@
       background: transparent;
       box-shadow: none;
     }
-    .app-container.clone16-video-only-mode .center-panel,
-    .app-container.clone16-video-only-mode .bottom-cards {
-      display: none;
-    }
-    .app-container.clone16-video-only-mode .main-content {
-      gap: 14px;
-    }
-    .app-container.clone16-video-only-mode .cards-panel {
-      flex: 1;
-      width: 100%;
-      max-width: 100%;
-      gap: 0;
-    }
-    .app-container.clone16-video-only-mode .info-card.main-card {
-      flex: 1;
-      width: 100%;
-      min-height: 0;
-      padding: 0;
-      border-radius: 22px;
-      overflow: hidden;
-      background: #000000;
-    }
+	    .app-container.clone16-video-only-mode .assistant-panel,
+	    .app-container.clone16-video-only-mode .center-panel,
+	    .app-container.clone16-video-only-mode .bottom-cards {
+	      display: none;
+	    }
+	    .app-container.clone16-video-only-mode .main-content {
+	      gap: 14px;
+	    }
+	    .app-container.clone16-video-only-mode .cards-panel {
+	      flex: 1;
+	      width: 100%;
+	      max-width: 100%;
+	      gap: 0;
+	    }
+		    .app-container.clone16-video-only-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.clone16-video-with-avatar-mode .center-panel,
+		    .app-container.clone16-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.clone16-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.clone16-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.clone16-video-with-avatar-mode .info-card.main-card {
+		      flex: 1;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.cue24-video-with-avatar-mode .center-panel,
+		    .app-container.cue24-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.cue24-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.cue24-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.cue24-video-with-avatar-mode .info-card.main-card {
+		      flex: 1;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.cue27-video-with-avatar-mode .center-panel,
+		    .app-container.cue27-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.cue27-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.cue27-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.cue27-video-with-avatar-mode .info-card.main-card {
+		      flex: 1;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.cue32-video-with-avatar-mode .center-panel,
+		    .app-container.cue32-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.cue32-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.cue32-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.cue32-video-with-avatar-mode .info-card.main-card {
+		      flex: 1;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+	    .app-container.ep30k-videos-mode .assistant-panel,
+	    .app-container.ep30k-videos-mode .center-panel,
+	    .app-container.ep30k-videos-mode .bottom-cards {
+	      display: none;
+	    }
+	    .app-container.ep30k-videos-mode .main-content {
+	      gap: 14px;
+	    }
+	    .app-container.ep30k-videos-mode .cards-panel {
+	      flex: 1;
+	      width: 100%;
+	      max-width: 100%;
+	      gap: 0;
+	    }
+		    .app-container.ep30k-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.ep30k-video-with-avatar-mode .center-panel,
+		    .app-container.ep30k-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep30k-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.ep30k-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.ep30k-video-with-avatar-mode .info-card.main-card {
+		      flex: 1;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.ep40k-video-with-avatar-mode .center-panel,
+		    .app-container.ep40k-video-with-avatar-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep40k-video-with-avatar-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.ep40k-video-with-avatar-mode .cards-panel {
+		      flex: 1;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+			    .app-container.ep40k-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.ep50k-video-with-avatar-mode .center-panel,
+			    .app-container.ep50k-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.ep50k-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.ep50k-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.ep50k-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.ep60k-video-with-avatar-mode .center-panel,
+			    .app-container.ep60k-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.ep60k-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.ep60k-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.ep60k-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.flex15-video-with-avatar-mode .center-panel,
+			    .app-container.flex15-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.flex15-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.flex15-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.flex15-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.folder22n-video-with-avatar-mode .center-panel,
+			    .app-container.folder22n-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.folder22n-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.folder22n-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.folder22n-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.framer24-video-with-avatar-mode .center-panel,
+			    .app-container.framer24-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.framer24-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.framer24-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.framer24-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.framer27-video-with-avatar-mode .center-panel,
+			    .app-container.framer27-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.framer27-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.framer27-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.framer27-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.framer32-video-with-avatar-mode .center-panel,
+			    .app-container.framer32-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.framer32-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.framer32-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.framer32-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.lessonq-video-with-avatar-mode .center-panel,
+			    .app-container.lessonq-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.lessonq-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.lessonq-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.lessonq-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+			    .app-container.mime-video-with-avatar-mode .center-panel,
+			    .app-container.mime-video-with-avatar-mode .bottom-cards {
+			      display: none;
+			    }
+			    .app-container.mime-video-with-avatar-mode .main-content {
+			      gap: 14px;
+			    }
+			    .app-container.mime-video-with-avatar-mode .cards-panel {
+			      flex: 1;
+			      max-width: 100%;
+			      gap: 0;
+			    }
+			    .app-container.mime-video-with-avatar-mode .info-card.main-card {
+			      flex: 1;
+			      min-height: 0;
+			      padding: 0;
+			      border-radius: 22px;
+			      overflow: hidden;
+			      background: #000000;
+			    }
+		    .app-container.ep40k-videos-mode .assistant-panel,
+		    .app-container.ep40k-videos-mode .center-panel,
+		    .app-container.ep40k-videos-mode .bottom-cards {
+		      display: none;
+		    }
+	    .app-container.ep40k-videos-mode .main-content {
+	      gap: 14px;
+	    }
+	    .app-container.ep40k-videos-mode .cards-panel {
+	      flex: 1;
+	      width: 100%;
+	      max-width: 100%;
+	      gap: 0;
+	    }
+		    .app-container.ep40k-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.ep50k-videos-mode .assistant-panel,
+		    .app-container.ep50k-videos-mode .center-panel,
+		    .app-container.ep50k-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep50k-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.ep50k-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.ep50k-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.ep60k-videos-mode .assistant-panel,
+		    .app-container.ep60k-videos-mode .center-panel,
+		    .app-container.ep60k-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep60k-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.ep60k-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.ep60k-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.flex15-videos-mode .assistant-panel,
+		    .app-container.flex15-videos-mode .center-panel,
+		    .app-container.flex15-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.flex15-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.flex15-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.flex15-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.folder22n-videos-mode .assistant-panel,
+		    .app-container.folder22n-videos-mode .center-panel,
+		    .app-container.folder22n-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.folder22n-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.folder22n-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.folder22n-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.framer24-videos-mode .assistant-panel,
+		    .app-container.framer24-videos-mode .center-panel,
+		    .app-container.framer24-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.framer24-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.framer24-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.framer24-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.framer27-videos-mode .assistant-panel,
+		    .app-container.framer27-videos-mode .center-panel,
+		    .app-container.framer27-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.framer27-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.framer27-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.framer27-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.framer32-videos-mode .assistant-panel,
+		    .app-container.framer32-videos-mode .center-panel,
+		    .app-container.framer32-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.framer32-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.framer32-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.framer32-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.lessonq-videos-mode .assistant-panel,
+		    .app-container.lessonq-videos-mode .center-panel,
+		    .app-container.lessonq-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.lessonq-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.lessonq-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.lessonq-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
+		    .app-container.mime-videos-mode .assistant-panel,
+		    .app-container.mime-videos-mode .center-panel,
+		    .app-container.mime-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.mime-videos-mode .main-content {
+		      gap: 14px;
+		    }
+		    .app-container.mime-videos-mode .cards-panel {
+		      flex: 1;
+		      width: 100%;
+		      max-width: 100%;
+		      gap: 0;
+		    }
+		    .app-container.mime-videos-mode .info-card.main-card {
+		      flex: 1;
+		      width: 100%;
+		      min-height: 0;
+		      padding: 0;
+		      border-radius: 22px;
+		      overflow: hidden;
+		      background: #000000;
+		    }
     .app-container.buy-now-mode .main-content {
       align-items: flex-start;
     }
@@ -2275,9 +2829,15 @@
 	    .app-container.cue27-videos-mode .bottom-cards {
 	      display: none;
 	    }
-	    .app-container.cue32-videos-mode .bottom-cards {
-	      display: none;
-	    }
+		    .app-container.cue32-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep30k-videos-mode .bottom-cards {
+		      display: none;
+		    }
+		    .app-container.ep40k-videos-mode .bottom-cards {
+		      display: none;
+		    }
 
 	    .info-card.main-card.crystal-prompter-video-state {
 	      padding: 0;
@@ -2301,13 +2861,97 @@
 	      cursor: default;
 	      overflow: hidden;
 	    }
-	    .info-card.main-card.cue32-video-state {
-	      padding: 0;
-	      border: 0;
-	      box-shadow: none;
-	      cursor: default;
-	      overflow: hidden;
-	    }
+		    .info-card.main-card.cue32-video-state {
+		      padding: 0;
+		      border: 0;
+		      box-shadow: none;
+		      cursor: default;
+		      overflow: hidden;
+		    }
+		    .info-card.main-card.clone16-onedrive-video-state {
+		      padding: 0;
+		      border: 0;
+		      box-shadow: none;
+		      cursor: default;
+		      overflow: hidden;
+		    }
+		    .info-card.main-card.ep30k-video-state {
+		      padding: 0;
+		      border: 0;
+		      box-shadow: none;
+		      cursor: default;
+		      overflow: hidden;
+		    }
+			    .info-card.main-card.ep40k-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.ep50k-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.ep60k-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.flex15-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.folder22n-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.framer24-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.framer27-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.framer32-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.lessonq-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
+			    .info-card.main-card.mime-video-state {
+			      padding: 0;
+			      border: 0;
+			      box-shadow: none;
+			      cursor: default;
+			      overflow: hidden;
+			    }
 
 	    .crystal-prompter-video-card {
 	      width: 100%;
@@ -2355,14 +2999,17 @@
 	      background: #000;
 	    }
 
-	    .cue24-video-embed {
-	      position: absolute;
-	      inset: 0;
-	      width: 100%;
-	      height: 100%;
-	      border: 0;
-	      pointer-events: none;
-	    }
+		    .cue24-video-embed {
+		      position: absolute;
+		      inset: 0;
+		      width: 100%;
+		      height: 100%;
+		      border: 0;
+		      pointer-events: none;
+		    }
+		    .cue24-onedrive-video-embed {
+		      pointer-events: none;
+		    }
 
 	    .cue24-video-overlay {
 	      position: absolute;
@@ -2386,14 +3033,17 @@
 	      background: #000;
 	    }
 
-	    .cue27-video-embed {
-	      position: absolute;
-	      inset: 0;
-	      width: 100%;
-	      height: 100%;
-	      border: 0;
-	      pointer-events: none;
-	    }
+		    .cue27-video-embed {
+		      position: absolute;
+		      inset: 0;
+		      width: 100%;
+		      height: 100%;
+		      border: 0;
+		      pointer-events: none;
+		    }
+		    .cue27-onedrive-video-embed {
+		      pointer-events: none;
+		    }
 
 	    .cue27-video-overlay {
 	      position: absolute;
@@ -2417,22 +3067,282 @@
 	      background: #000;
 	    }
 
-	    .cue32-video-embed {
-	      position: absolute;
-	      inset: 0;
-	      width: 100%;
-	      height: 100%;
-	      border: 0;
-	      pointer-events: none;
-	    }
+		    .cue32-video-embed {
+		      position: absolute;
+		      inset: 0;
+		      width: 100%;
+		      height: 100%;
+		      border: 0;
+		      pointer-events: none;
+		    }
+		    .cue32-onedrive-video-embed {
+		      pointer-events: none;
+		    }
 
-	    .cue32-video-overlay {
-	      position: absolute;
-	      inset: 0;
-	      z-index: 2;
-	      pointer-events: none;
-	      background: transparent;
-	    }
+		    .cue32-video-overlay {
+		      position: absolute;
+		      inset: 0;
+		      z-index: 2;
+		      pointer-events: none;
+		      background: transparent;
+		    }
+
+		    .ep30k-video-card {
+		      width: 100%;
+		      height: 100%;
+		      min-height: 0;
+		    }
+
+		    .ep30k-video-frame {
+		      position: relative;
+		      width: 100%;
+		      height: 100%;
+		      min-height: 220px;
+		      background: #000;
+		    }
+
+		    .ep30k-video-embed {
+		      position: absolute;
+		      inset: 0;
+		      width: 100%;
+		      height: 100%;
+		      border: 0;
+		      /* Prevent pausing/interaction; autoplay plays once. */
+		      pointer-events: none;
+		    }
+
+		    .ep40k-video-card {
+		      width: 100%;
+		      height: 100%;
+		      min-height: 0;
+		    }
+
+		    .ep40k-video-frame {
+		      position: relative;
+		      width: 100%;
+		      height: 100%;
+		      min-height: 220px;
+		      background: #000;
+		    }
+
+			    .ep40k-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      /* Prevent pausing/interaction; autoplay plays once. */
+			      pointer-events: none;
+			    }
+
+			    .ep50k-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .ep50k-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .ep50k-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      /* Prevent pausing/interaction; autoplay plays once. */
+			      pointer-events: none;
+			    }
+
+			    .ep60k-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .ep60k-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .ep60k-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      /* Prevent pausing/interaction; autoplay plays once. */
+			      pointer-events: none;
+			    }
+
+			    .flex15-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .flex15-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .flex15-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .folder22n-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .folder22n-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .folder22n-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .framer24-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .framer24-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .framer24-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .framer27-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .framer27-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .framer27-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .framer32-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .framer32-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .framer32-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .lessonq-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .lessonq-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .lessonq-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
+
+			    .mime-video-card {
+			      width: 100%;
+			      height: 100%;
+			      min-height: 0;
+			    }
+
+			    .mime-video-frame {
+			      position: relative;
+			      width: 100%;
+			      height: 100%;
+			      min-height: 220px;
+			      background: #000;
+			    }
+
+			    .mime-video-embed {
+			      position: absolute;
+			      inset: 0;
+			      width: 100%;
+			      height: 100%;
+			      border: 0;
+			      pointer-events: none;
+			    }
     .info-card.main-card:has(.initial-info-card) {
       background: var(--theme-info-card-bg);
     }
@@ -7443,9 +8353,12 @@
       background: #000000;
       aspect-ratio: auto;
     }
-    .clone16-inline-video-embed {
-      border: 0;
-    }
+	    .clone16-inline-video-embed {
+	      border: 0;
+	    }
+	    .clone16-onedrive-video-embed {
+	      pointer-events: none;
+	    }
     .clone16-video-stage-footer {
       display: flex;
       align-items: center;

@@ -80,17 +80,91 @@
   const ABOUT_US_AVATAR_VIDEO = 'assets/about us.mp4';
   const CLONE16_AVATAR_VIDEO = 'assets/clone 16.mp4';
   const CLONE16_OVERVIEW_VIDEO_ID = 'IJlVE8LUHZ0';
-  const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
-  const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
-  const CUE24_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/jmy31E2XFgk?si=vnyUGd83-nl0hTxh';
-  const CUE24_SHORTS_EMBED_TITLE = 'Cue 24 video';
-  const CUE27_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/cmeOc4GNkhk?si=TqAE3YmznARhxW7K';
-  const CUE27_SHORTS_EMBED_TITLE = 'Cue 27 video';
-  const CUE32_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/ZFNiWKEY71s?si=y3F7WMVayE6Aepxv';
-  const CUE32_SHORTS_EMBED_TITLE = 'Cue 32 video';
-  // Uses the exact embed URL pattern requested (we append autoplay/controls params at runtime).
-  const CRYSTAL_PROMPTER_BRAND_EMBED_URL = 'https://www.youtube.com/embed/3V9xlKOeVUU?si=JAmS_-j3mVVR-gql';
-  const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'YouTube video player';
+	  const CLONE16_OVERVIEW_EMBED_URL = `https://www.youtube-nocookie.com/embed/${CLONE16_OVERVIEW_VIDEO_ID}`;
+	  const CLONE16_OVERVIEW_EMBED_TITLE = 'Crystal Prompter Product Intro Clone 16';
+	  const CUE24_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/jmy31E2XFgk?si=vnyUGd83-nl0hTxh';
+	  const CUE24_SHORTS_EMBED_TITLE = 'Cue 24 video';
+	  const CUE27_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/cmeOc4GNkhk?si=TqAE3YmznARhxW7K';
+	  const CUE27_SHORTS_EMBED_TITLE = 'Cue 27 video';
+	  const CUE32_SHORTS_EMBED_URL = 'https://www.youtube.com/embed/ZFNiWKEY71s?si=y3F7WMVayE6Aepxv';
+	  const CUE32_SHORTS_EMBED_TITLE = 'Cue 32 video';
+	  const CUE32_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=bdbd1fb8-ffff-4b35-9edc-b2ff9724b9cf&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const CUE32_ONEDRIVE_EMBED_TITLE = 'Cue 32.mp4';
+	  const CUE24_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=67474564-4aaa-42ef-a774-159a371428b0&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const CUE24_ONEDRIVE_EMBED_TITLE = 'Cue 24.mp4';
+	  const CUE27_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=bb270902-5cb5-4c1a-a04d-5927dafe8092&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const CUE27_ONEDRIVE_EMBED_TITLE = 'Cue 27.mp4';
+	  const CLONE16_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=dbc635d1-19ae-44c9-8f1a-f49a61e53953&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const CLONE16_ONEDRIVE_EMBED_TITLE = 'Clone 16.mp4';
+	  const EP30K_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=9f8ab576-e4af-4f08-ac1a-ac8de7d40dea&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const EP30K_ONEDRIVE_EMBED_TITLE = 'EP 30K.mp4';
+	  const EP40K_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=0aa27768-a320-4ae4-8f65-3214a159f4e6&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const EP40K_ONEDRIVE_EMBED_TITLE = 'EP 40K.mp4';
+	  const EP50K_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=14d96adb-94ca-4472-8833-f236a88f3a82&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const EP50K_ONEDRIVE_EMBED_TITLE = 'EP 50K.mp4';
+	  const EP60K_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=a02325d6-4f2d-4c14-a714-168d0501dbfa&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const EP60K_ONEDRIVE_EMBED_TITLE = 'EP 60K.mp4';
+	  const FLEX15_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=ecbcffc4-8766-4b23-bad5-475f3a42f908&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const FLEX15_ONEDRIVE_EMBED_TITLE = 'Flex 15.mp4';
+	  const FOLDER22N_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=d8b72cde-2eeb-4ffd-a903-195c3a41348e&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const FOLDER22N_ONEDRIVE_EMBED_TITLE = 'Folder 22N.mp4';
+	  const FRAMER24_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=c36a769f-db4b-48db-879a-80b40b41418a&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const FRAMER24_ONEDRIVE_EMBED_TITLE = 'Framer 24.mp4';
+	  const FRAMER27_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=9a03a3ae-2abd-4f60-bf57-1eb0829d7105&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const FRAMER27_ONEDRIVE_EMBED_TITLE = 'Framer 27.mp4';
+	  const FRAMER32_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=ffc7e2a8-d0f1-4f3d-9b1e-262400899177&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const FRAMER32_ONEDRIVE_EMBED_TITLE = 'Framer 32.mp4';
+	  const LESSONQ24_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=f5332da7-eef1-4918-80e0-5b9a03e368c0&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const LESSONQ24_ONEDRIVE_EMBED_TITLE = 'LessonQ 24.mp4';
+	  const LESSONQ27_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=caa3a68a-2224-4697-81ec-641e39678ab6&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const LESSONQ27_ONEDRIVE_EMBED_TITLE = 'LessonQ 27.mp4';
+	  const LESSONQ32_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=8aa8c0a9-fd62-4df0-8f5f-9b890470bd35&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const LESSONQ32_ONEDRIVE_EMBED_TITLE = 'LessonQ 32.mp4';
+	  const LESSONQ43_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=88d2d37a-6e2b-439c-8376-ea8ccb610619&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const LESSONQ43_ONEDRIVE_EMBED_TITLE = 'LessonQ 43.mp4';
+	  const MIME24_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=21512ae6-2140-4a51-b8bb-2fc91876744a&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const MIME24_ONEDRIVE_EMBED_TITLE = 'Mime 24.mp4';
+	  const MIME27_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=68bde42b-1b2c-436d-ba00-8f65d4d6991a&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const MIME27_ONEDRIVE_EMBED_TITLE = 'Mime 27.mp4';
+	  const MIME32_ONEDRIVE_EMBED_URL = 'https://onedrive.live.com/personal/94a3066e2e4acdae/_layouts/15/embed.aspx?UniqueId=83e00a34-ab44-43bf-9ef3-73c5251404c1&nav=%7B%22playbackOptions%22%3A%7B%22startTimeInSeconds%22%3A0%7D%7D&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create';
+	  const MIME32_ONEDRIVE_EMBED_TITLE = 'Mime 32.mp4';
+
+	  const ONEDRIVE_VIDEO_EMBEDS = {
+	    clone16: { src: CLONE16_ONEDRIVE_EMBED_URL, title: CLONE16_ONEDRIVE_EMBED_TITLE },
+	    cue24: { src: CUE24_ONEDRIVE_EMBED_URL, title: CUE24_ONEDRIVE_EMBED_TITLE },
+	    cue27: { src: CUE27_ONEDRIVE_EMBED_URL, title: CUE27_ONEDRIVE_EMBED_TITLE },
+	    cue32: { src: CUE32_ONEDRIVE_EMBED_URL, title: CUE32_ONEDRIVE_EMBED_TITLE },
+	    ep30k: { src: EP30K_ONEDRIVE_EMBED_URL, title: EP30K_ONEDRIVE_EMBED_TITLE },
+	    ep40k: { src: EP40K_ONEDRIVE_EMBED_URL, title: EP40K_ONEDRIVE_EMBED_TITLE },
+	    ep50k: { src: EP50K_ONEDRIVE_EMBED_URL, title: EP50K_ONEDRIVE_EMBED_TITLE },
+	    ep60k: { src: EP60K_ONEDRIVE_EMBED_URL, title: EP60K_ONEDRIVE_EMBED_TITLE },
+	    flex15: { src: FLEX15_ONEDRIVE_EMBED_URL, title: FLEX15_ONEDRIVE_EMBED_TITLE },
+	    folder22n: { src: FOLDER22N_ONEDRIVE_EMBED_URL, title: FOLDER22N_ONEDRIVE_EMBED_TITLE },
+	    framer24: { src: FRAMER24_ONEDRIVE_EMBED_URL, title: FRAMER24_ONEDRIVE_EMBED_TITLE },
+	    framer27: { src: FRAMER27_ONEDRIVE_EMBED_URL, title: FRAMER27_ONEDRIVE_EMBED_TITLE },
+	    framer32: { src: FRAMER32_ONEDRIVE_EMBED_URL, title: FRAMER32_ONEDRIVE_EMBED_TITLE },
+	    lessonq24: { src: LESSONQ24_ONEDRIVE_EMBED_URL, title: LESSONQ24_ONEDRIVE_EMBED_TITLE },
+	    lessonq27: { src: LESSONQ27_ONEDRIVE_EMBED_URL, title: LESSONQ27_ONEDRIVE_EMBED_TITLE },
+	    lessonq32: { src: LESSONQ32_ONEDRIVE_EMBED_URL, title: LESSONQ32_ONEDRIVE_EMBED_TITLE },
+	    lessonq43: { src: LESSONQ43_ONEDRIVE_EMBED_URL, title: LESSONQ43_ONEDRIVE_EMBED_TITLE },
+	    mime24: { src: MIME24_ONEDRIVE_EMBED_URL, title: MIME24_ONEDRIVE_EMBED_TITLE },
+	    mime27: { src: MIME27_ONEDRIVE_EMBED_URL, title: MIME27_ONEDRIVE_EMBED_TITLE },
+	    mime32: { src: MIME32_ONEDRIVE_EMBED_URL, title: MIME32_ONEDRIVE_EMBED_TITLE }
+	  };
+	  const LESSONQ_ONEDRIVE_VIDEO_EMBEDS = {
+	    lessonQ24: { src: LESSONQ24_ONEDRIVE_EMBED_URL, title: LESSONQ24_ONEDRIVE_EMBED_TITLE, label: 'LessonQ 24' },
+	    lessonQ27: { src: LESSONQ27_ONEDRIVE_EMBED_URL, title: LESSONQ27_ONEDRIVE_EMBED_TITLE, label: 'LessonQ 27' },
+	    lessonQ32: { src: LESSONQ32_ONEDRIVE_EMBED_URL, title: LESSONQ32_ONEDRIVE_EMBED_TITLE, label: 'LessonQ 32' },
+	    lessonQ43: { src: LESSONQ43_ONEDRIVE_EMBED_URL, title: LESSONQ43_ONEDRIVE_EMBED_TITLE, label: 'LessonQ 43' }
+	  };
+	  const MIME_ONEDRIVE_VIDEO_EMBEDS = {
+	    mime24: { src: MIME24_ONEDRIVE_EMBED_URL, title: MIME24_ONEDRIVE_EMBED_TITLE, label: 'Mime 24' },
+	    mime27: { src: MIME27_ONEDRIVE_EMBED_URL, title: MIME27_ONEDRIVE_EMBED_TITLE, label: 'Mime 27' },
+	    mime32: { src: MIME32_ONEDRIVE_EMBED_URL, title: MIME32_ONEDRIVE_EMBED_TITLE, label: 'Mime 32' }
+	  };
+	  // Uses the exact embed URL pattern requested (we append autoplay/controls params at runtime).
+	  const CRYSTAL_PROMPTER_BRAND_EMBED_URL = 'https://www.youtube.com/embed/3V9xlKOeVUU?si=JAmS_-j3mVVR-gql';
+	  const CRYSTAL_PROMPTER_BRAND_EMBED_TITLE = 'YouTube video player';
   const CLONE16_DEFINITION_PANEL_VIDEO = 'assets/clone16-animation.mp4';
   const CLONE16_PRODUCT_TYPE_PANEL_VIDEO = 'assets/clone16-2.mp4';
   const CLONE16_MAIN_PURPOSE_PANEL_VIDEO = 'assets/clone16-3.mp4';
@@ -1409,24 +1483,36 @@
     renderProductDefinitionImageCard(imageSrc, 'Clone 16 infographic');
   }
 
-  const INFO_CARD_FRAME_CLASSES = [
-    'image-card',
-    'info-card-show-scrollbar',
-    'info-card-slide-enter',
-    'cue-series-intro-card',
-    'info-card-empty-state',
-    'no-match-info-state',
-    'clone16-intro-info-state',
-    'clone16-readmore-info-state',
-    'clone16-images-info-state',
-    'clone16-spec-image-state',
-    'clone16-answer-sequence-state',
-    'crystal-prompter-video-state',
-    'cue24-video-state',
-    'cue27-video-state',
-    'cue32-video-state',
-    'info-card-locked-layout'
-  ];
+	  const INFO_CARD_FRAME_CLASSES = [
+	    'image-card',
+	    'info-card-show-scrollbar',
+	    'info-card-slide-enter',
+	    'cue-series-intro-card',
+	    'info-card-empty-state',
+	    'no-match-info-state',
+	    'clone16-intro-info-state',
+	    'clone16-readmore-info-state',
+	    'clone16-images-info-state',
+	    'clone16-spec-image-state',
+	    'clone16-answer-sequence-state',
+	    'clone16-onedrive-video-state',
+	    'crystal-prompter-video-state',
+	    'cue24-video-state',
+	    'cue27-video-state',
+	    'cue32-video-state',
+	    'ep30k-video-state',
+	    'ep40k-video-state',
+	    'ep50k-video-state',
+	    'ep60k-video-state',
+	    'flex15-video-state',
+	    'folder22n-video-state',
+	    'framer24-video-state',
+	    'framer27-video-state',
+	    'framer32-video-state',
+	    'lessonq-video-state',
+	    'mime-video-state',
+	    'info-card-locked-layout'
+	  ];
 
   function getCue24ShortsEmbedSrc() {
     try {
@@ -1540,10 +1626,135 @@
     appContainer.classList.toggle('cue27-videos-mode', Boolean(enabled));
   }
 
-  function setCue32VideosMode(enabled) {
-    if (!appContainer) return;
-    appContainer.classList.toggle('cue32-videos-mode', Boolean(enabled));
-  }
+	  function setCue32VideosMode(enabled) {
+	    if (!appContainer) return;
+	    appContainer.classList.toggle('cue32-videos-mode', Boolean(enabled));
+	  }
+
+	  function setCue24VideoWithAvatarMode(enabled) {
+	    if (!appContainer) return;
+	    appContainer.classList.toggle('cue24-video-with-avatar-mode', Boolean(enabled));
+	  }
+
+		  function setCue27VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('cue27-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setCue32VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('cue32-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setEP30kVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep30k-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setEP40kVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep40k-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setEP50kVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep50k-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setEP60kVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep60k-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setFlex15VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('flex15-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setFolder22NVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('folder22n-videos-mode', Boolean(enabled));
+		  }
+
+		  function setFolder22NVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('folder22n-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setFramer24VideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer24-videos-mode', Boolean(enabled));
+		  }
+
+		  function setFramer24VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer24-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setFramer27VideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer27-videos-mode', Boolean(enabled));
+		  }
+
+		  function setFramer27VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer27-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setFramer32VideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer32-videos-mode', Boolean(enabled));
+		  }
+
+		  function setFramer32VideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('framer32-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setLessonQVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('lessonq-videos-mode', Boolean(enabled));
+		  }
+
+		  function setLessonQVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('lessonq-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setMimeVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('mime-videos-mode', Boolean(enabled));
+		  }
+
+		  function setMimeVideoWithAvatarMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('mime-video-with-avatar-mode', Boolean(enabled));
+		  }
+
+		  function setEP30kVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep30k-videos-mode', Boolean(enabled));
+		  }
+
+		  function setEP40kVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep40k-videos-mode', Boolean(enabled));
+		  }
+
+		  function setEP50kVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep50k-videos-mode', Boolean(enabled));
+		  }
+
+		  function setEP60kVideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('ep60k-videos-mode', Boolean(enabled));
+		  }
+
+		  function setFlex15VideosMode(enabled) {
+		    if (!appContainer) return;
+		    appContainer.classList.toggle('flex15-videos-mode', Boolean(enabled));
+		  }
 
   function primeCrystalPrompterBrandPlayback(frameOrChild) {
     const frame = frameOrChild?.classList?.contains?.('crystal-prompter-video-frame')
@@ -1618,30 +1829,80 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
-  function renderCue24ShortsVideoCard() {
-    if (!infoCard) return;
-    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue24-video-state' });
-    const embedSrc = getCue24ShortsEmbedSrc();
-    infoCard.innerHTML = `
-      <section class="cue24-video-card" aria-label="Cue 24 video">
-        <div class="cue24-video-frame">
-          <iframe
-            class="cue24-video-embed"
-            src="${escapeHtml(embedSrc)}"
-            title="${escapeHtml(CUE24_SHORTS_EMBED_TITLE)}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-            tabindex="-1"
-          ></iframe>
-          <div class="cue24-video-overlay" aria-hidden="true" onclick="primeCue24ShortsPlayback(this)"></div>
-        </div>
-      </section>
-    `;
-    resetInfoCardAutoScroll();
-    scheduleCueSeriesAvatarHeightSync();
-  }
+	  function renderCue24ShortsVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue24-video-state' });
+	    const embedSrc = getCue24ShortsEmbedSrc();
+	    infoCard.innerHTML = `
+	      <section class="cue24-video-card" aria-label="Cue 24 video">
+	        <div class="cue24-video-frame">
+	          <iframe
+	            class="cue24-video-embed"
+	            src="${escapeHtml(embedSrc)}"
+	            title="${escapeHtml(CUE24_SHORTS_EMBED_TITLE)}"
+	            frameborder="0"
+	            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	          ></iframe>
+	          <div class="cue24-video-overlay" aria-hidden="true" onclick="primeCue24ShortsPlayback(this)"></div>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+	  function renderCue24OneDriveVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue24-video-state' });
+	    infoCard.innerHTML = `
+	      <section class="cue24-video-card" aria-label="Cue 24 video">
+	        <div class="cue24-video-frame">
+	          <iframe
+	            class="cue24-video-embed cue24-onedrive-video-embed"
+	            src="${escapeHtml(CUE24_ONEDRIVE_EMBED_URL)}"
+	            title="${escapeHtml(CUE24_ONEDRIVE_EMBED_TITLE)}"
+	            frameborder="0"
+	            scrolling="no"
+	            allow="autoplay; fullscreen"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	            loading="eager"
+	          ></iframe>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+	  function renderCue27OneDriveVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue27-video-state' });
+	    infoCard.innerHTML = `
+	      <section class="cue27-video-card" aria-label="Cue 27 video">
+	        <div class="cue27-video-frame">
+	          <iframe
+	            class="cue27-video-embed cue27-onedrive-video-embed"
+	            src="${escapeHtml(CUE27_ONEDRIVE_EMBED_URL)}"
+	            title="${escapeHtml(CUE27_ONEDRIVE_EMBED_TITLE)}"
+	            frameborder="0"
+	            scrolling="no"
+	            allow="autoplay; fullscreen"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	            loading="eager"
+	          ></iframe>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
 
   function renderCue27ShortsVideoCard() {
     if (!infoCard) return;
@@ -1668,30 +1929,355 @@
     scheduleCueSeriesAvatarHeightSync();
   }
 
-  function renderCue32ShortsVideoCard() {
-    if (!infoCard) return;
-    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue32-video-state' });
-    const embedSrc = getCue32ShortsEmbedSrc();
-    infoCard.innerHTML = `
-      <section class="cue32-video-card" aria-label="Cue 32 video">
-        <div class="cue32-video-frame">
-          <iframe
-            class="cue32-video-embed"
-            src="${escapeHtml(embedSrc)}"
-            title="${escapeHtml(CUE32_SHORTS_EMBED_TITLE)}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-            tabindex="-1"
-          ></iframe>
-          <div class="cue32-video-overlay" aria-hidden="true"></div>
-        </div>
-      </section>
-    `;
-    resetInfoCardAutoScroll();
-    scheduleCueSeriesAvatarHeightSync();
-  }
+	  function renderCue32ShortsVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue32-video-state' });
+	    const embedSrc = getCue32ShortsEmbedSrc();
+	    infoCard.innerHTML = `
+	      <section class="cue32-video-card" aria-label="Cue 32 video">
+	        <div class="cue32-video-frame">
+	          <iframe
+	            class="cue32-video-embed"
+	            src="${escapeHtml(embedSrc)}"
+	            title="${escapeHtml(CUE32_SHORTS_EMBED_TITLE)}"
+	            frameborder="0"
+	            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	          ></iframe>
+	          <div class="cue32-video-overlay" aria-hidden="true"></div>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+	  function renderCue32OneDriveVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'cue32-video-state' });
+	    infoCard.innerHTML = `
+	      <section class="cue32-video-card" aria-label="Cue 32 video">
+	        <div class="cue32-video-frame">
+	          <iframe
+	            class="cue32-video-embed cue32-onedrive-video-embed"
+	            src="${escapeHtml(CUE32_ONEDRIVE_EMBED_URL)}"
+	            title="${escapeHtml(CUE32_ONEDRIVE_EMBED_TITLE)}"
+	            frameborder="0"
+	            scrolling="no"
+	            allow="autoplay; fullscreen"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	            loading="eager"
+	          ></iframe>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+	  function renderClone16OneDriveVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'clone16-onedrive-video-state' });
+	    infoCard.innerHTML = `
+	      <section class="clone16-video-only-card" aria-label="Clone 16 video">
+	        <iframe
+	          class="clone16-inline-video clone16-inline-video-only clone16-inline-video-embed clone16-onedrive-video-embed"
+	          src="${escapeHtml(CLONE16_ONEDRIVE_EMBED_URL)}"
+	          title="${escapeHtml(CLONE16_ONEDRIVE_EMBED_TITLE)}"
+	          frameborder="0"
+	          scrolling="no"
+	          allow="autoplay; fullscreen"
+	          referrerpolicy="strict-origin-when-cross-origin"
+	          allowfullscreen
+	          tabindex="-1"
+	          loading="eager"
+	        ></iframe>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+	  function renderEP30kVideoCard() {
+	    if (!infoCard) return;
+	    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'ep30k-video-state' });
+	    infoCard.innerHTML = `
+	      <section class="ep30k-video-card" aria-label="EP 30K video">
+	        <div class="ep30k-video-frame">
+	          <iframe
+	            class="ep30k-video-embed"
+	            src="${escapeHtml(EP30K_ONEDRIVE_EMBED_URL)}"
+	            title="${escapeHtml(EP30K_ONEDRIVE_EMBED_TITLE)}"
+	            frameborder="0"
+	            scrolling="no"
+	            allow="autoplay; fullscreen"
+	            referrerpolicy="strict-origin-when-cross-origin"
+	            allowfullscreen
+	            tabindex="-1"
+	            loading="eager"
+	          ></iframe>
+	        </div>
+	      </section>
+	    `;
+	    resetInfoCardAutoScroll();
+	    scheduleCueSeriesAvatarHeightSync();
+	  }
+
+		  function renderEP40kVideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'ep40k-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="ep40k-video-card" aria-label="EP 40K video">
+		        <div class="ep40k-video-frame">
+		          <iframe
+		            class="ep40k-video-embed"
+		            src="${escapeHtml(EP40K_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(EP40K_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderEP50kVideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'ep50k-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="ep50k-video-card" aria-label="EP 50K video">
+		        <div class="ep50k-video-frame">
+		          <iframe
+		            class="ep50k-video-embed"
+		            src="${escapeHtml(EP50K_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(EP50K_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderEP60kVideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'ep60k-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="ep60k-video-card" aria-label="EP 60K video">
+		        <div class="ep60k-video-frame">
+		          <iframe
+		            class="ep60k-video-embed"
+		            src="${escapeHtml(EP60K_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(EP60K_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderFlex15VideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'flex15-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="flex15-video-card" aria-label="Flex 15 video">
+		        <div class="flex15-video-frame">
+		          <iframe
+		            class="flex15-video-embed"
+		            src="${escapeHtml(FLEX15_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(FLEX15_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderFolder22NVideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'folder22n-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="folder22n-video-card" aria-label="Folder 22N video">
+		        <div class="folder22n-video-frame">
+		          <iframe
+		            class="folder22n-video-embed"
+		            src="${escapeHtml(FOLDER22N_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(FOLDER22N_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderFramer24VideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'framer24-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="framer24-video-card" aria-label="Framer 24 video">
+		        <div class="framer24-video-frame">
+		          <iframe
+		            class="framer24-video-embed"
+		            src="${escapeHtml(FRAMER24_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(FRAMER24_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderFramer27VideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'framer27-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="framer27-video-card" aria-label="Framer 27 video">
+		        <div class="framer27-video-frame">
+		          <iframe
+		            class="framer27-video-embed"
+		            src="${escapeHtml(FRAMER27_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(FRAMER27_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderFramer32VideoCard() {
+		    if (!infoCard) return;
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'framer32-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="framer32-video-card" aria-label="Framer 32 video">
+		        <div class="framer32-video-frame">
+		          <iframe
+		            class="framer32-video-embed"
+		            src="${escapeHtml(FRAMER32_ONEDRIVE_EMBED_URL)}"
+		            title="${escapeHtml(FRAMER32_ONEDRIVE_EMBED_TITLE)}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderLessonQVideoCard(embed = {}) {
+		    if (!infoCard) return;
+		    const label = String(embed.label || 'LessonQ video').trim() || 'LessonQ video';
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'lessonq-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="lessonq-video-card" aria-label="${escapeHtml(label)} video">
+		        <div class="lessonq-video-frame">
+		          <iframe
+		            class="lessonq-video-embed"
+		            src="${escapeHtml(String(embed.src || 'about:blank'))}"
+		            title="${escapeHtml(String(embed.title || label))}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
+
+		  function renderMimeVideoCard(embed = {}) {
+		    if (!infoCard) return;
+		    const label = String(embed.label || 'Mime video').trim() || 'Mime video';
+		    prepareInfoCardFrame({ locked: true, scrollable: false, stateClass: 'mime-video-state' });
+		    infoCard.innerHTML = `
+		      <section class="mime-video-card" aria-label="${escapeHtml(label)} video">
+		        <div class="mime-video-frame">
+		          <iframe
+		            class="mime-video-embed"
+		            src="${escapeHtml(String(embed.src || 'about:blank'))}"
+		            title="${escapeHtml(String(embed.title || label))}"
+		            frameborder="0"
+		            scrolling="no"
+		            allow="autoplay; fullscreen"
+		            referrerpolicy="strict-origin-when-cross-origin"
+		            allowfullscreen
+		            tabindex="-1"
+		            loading="eager"
+		          ></iframe>
+		        </div>
+		      </section>
+		    `;
+		    resetInfoCardAutoScroll();
+		    scheduleCueSeriesAvatarHeightSync();
+		  }
 
   function prepareInfoCardFrame(options = {}) {
     if (!infoCard) return false;
@@ -4524,16 +5110,46 @@
   let hasExplicitProductSelection = false;
   let infoCardAutoScrollTimer = null;
   let infoCardAutoScrollDelayTimer = null;
-  let introInfoCardSlideIndex = 0;
-  let introInfoCardSliderTimer = null;
-  let aboutUsTypingTimer = null;
-  let aboutUsDisappearTimer = null;
-  let aboutUsRestartTimer = null;
-  const PRODUCT_KEY_API_SLUG_OVERRIDES = {
-    lessonQ24: 'lessonq24',
-    lessonQ27: 'lessonq27',
-    electricPedestal: 'electricpedestal'
-  };
+	  let introInfoCardSlideIndex = 0;
+	  let introInfoCardSliderTimer = null;
+	  let aboutUsTypingTimer = null;
+	  let aboutUsDisappearTimer = null;
+	  let aboutUsRestartTimer = null;
+	  let clone16VideoAutoReturnTimer = null;
+	  const CLONE16_ONEDRIVE_AUTORETURN_MS = 60000;
+	  let cue24VideoAutoReturnTimer = null;
+	  const CUE24_ONEDRIVE_AUTORETURN_MS = 60000;
+	  let cue27VideoAutoReturnTimer = null;
+	  const CUE27_ONEDRIVE_AUTORETURN_MS = 60000;
+	  let cue32VideoAutoReturnTimer = null;
+	  const CUE32_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let ep30kVideoAutoReturnTimer = null;
+		  const EP30K_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let ep40kVideoAutoReturnTimer = null;
+		  const EP40K_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let ep50kVideoAutoReturnTimer = null;
+		  const EP50K_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let ep60kVideoAutoReturnTimer = null;
+		  const EP60K_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let flex15VideoAutoReturnTimer = null;
+		  const FLEX15_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let folder22nVideoAutoReturnTimer = null;
+		  const FOLDER22N_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let framer24VideoAutoReturnTimer = null;
+		  const FRAMER24_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let framer27VideoAutoReturnTimer = null;
+		  const FRAMER27_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let framer32VideoAutoReturnTimer = null;
+		  const FRAMER32_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let lessonqVideoAutoReturnTimer = null;
+		  const LESSONQ_ONEDRIVE_AUTORETURN_MS = 60000;
+		  let mimeVideoAutoReturnTimer = null;
+		  const MIME_ONEDRIVE_AUTORETURN_MS = 60000;
+		  const PRODUCT_KEY_API_SLUG_OVERRIDES = {
+		    lessonQ24: 'lessonq24',
+		    lessonQ27: 'lessonq27',
+		    electricPedestal: 'electricpedestal'
+		  };
   const apiState = {
     enabled: true,
     startupHydrationPromise: null,
@@ -9761,28 +10377,59 @@
     appContainer.classList.toggle('about-us-cards-panel-mode', enabled);
   }
 
-  function setClone16VideoOnlyMode(enabled) {
-    if (!appContainer) return;
-    appContainer.classList.toggle('clone16-video-only-mode', enabled);
-  }
+	  function setClone16VideoOnlyMode(enabled) {
+	    if (!appContainer) return;
+	    appContainer.classList.toggle('clone16-video-only-mode', enabled);
+	  }
 
-  function applyAboutStyleLayout(subtitleText = '', options = {}) {
-    const showEmptyCard = options.showEmptyCard !== false;
-    const hideInputCards = options.hideInputCards === true;
-    stopAvatarVideo();
-    setIntroEmptyState(false);
-    setDetailFocusMode(true);
-    setInfoCardOnlyMode(false);
-    setBuyNowMode(false);
-    setProductSummaryMode(false);
-    setCueSeriesInfographicOnlyMode(false);
-    setAboutUsCardsPanelMode(false);
-    setClone16VideoOnlyMode(false);
-    setCueSeriesMode(true);
-    setClone16ActionLayout(false);
-    setCardsPanelHidden(false);
-    setQuickActionsMode('all');
-    setQuickActionsHidden(true);
+	  function setClone16VideoWithAvatarMode(enabled) {
+	    if (!appContainer) return;
+	    appContainer.classList.toggle('clone16-video-with-avatar-mode', enabled);
+	  }
+
+		  function applyAboutStyleLayout(subtitleText = '', options = {}) {
+		    const showEmptyCard = options.showEmptyCard !== false;
+		    const hideInputCards = options.hideInputCards === true;
+		    stopAvatarVideo();
+		    setIntroEmptyState(false);
+		    setDetailFocusMode(true);
+		    setInfoCardOnlyMode(false);
+		    setBuyNowMode(false);
+		    setProductSummaryMode(false);
+		    setCueSeriesInfographicOnlyMode(false);
+		    setAboutUsCardsPanelMode(false);
+		    setClone16VideoOnlyMode(false);
+		    setClone16VideoWithAvatarMode(false);
+		    setCue24VideoWithAvatarMode(false);
+		    setCue27VideoWithAvatarMode(false);
+			    setCue32VideoWithAvatarMode(false);
+			    setEP30kVideoWithAvatarMode(false);
+			    setEP40kVideoWithAvatarMode(false);
+			    setEP50kVideoWithAvatarMode(false);
+			    setEP60kVideoWithAvatarMode(false);
+			    setFlex15VideoWithAvatarMode(false);
+			    setFolder22NVideoWithAvatarMode(false);
+			    setFramer24VideoWithAvatarMode(false);
+			    setFramer27VideoWithAvatarMode(false);
+			    setFramer32VideoWithAvatarMode(false);
+			    setLessonQVideoWithAvatarMode(false);
+			    setMimeVideoWithAvatarMode(false);
+		    setEP30kVideosMode(false);
+		    setEP40kVideosMode(false);
+		    setEP50kVideosMode(false);
+		    setEP60kVideosMode(false);
+		    setFlex15VideosMode(false);
+		    setFolder22NVideosMode(false);
+		    setFramer24VideosMode(false);
+		    setFramer27VideosMode(false);
+		    setFramer32VideosMode(false);
+		    setLessonQVideosMode(false);
+		    setMimeVideosMode(false);
+		    setCueSeriesMode(true);
+		    setClone16ActionLayout(false);
+		    setCardsPanelHidden(false);
+		    setQuickActionsMode('all');
+		    setQuickActionsHidden(true);
     clearCustomCenterPanel();
     setInitialVideoPanelHidden(true);
     setPlaceholderMode('intro');
@@ -9790,31 +10437,387 @@
     setInputCardStripHidden(hideInputCards);
     showMergedEmptyBottomCard();
     setSubtitleStripText(subtitleText);
-    if (showEmptyCard) {
-      showEmptyInfoCard();
-    }
-  }
+	    if (showEmptyCard) {
+	      showEmptyInfoCard();
+	    }
+	  }
 
-  function selectProduct(productKey, options = {}) {
-    const product = PRODUCTS[productKey];
-    if (!product) return;
+	  function clearClone16VideoAutoReturn() {
+	    if (clone16VideoAutoReturnTimer) {
+	      window.clearTimeout(clone16VideoAutoReturnTimer);
+	      clone16VideoAutoReturnTimer = null;
+	    }
+	  }
 
-    clearPendingClone16OverviewAutoplay();
-    clearPreInteractionState();
-    setInputCardStripHidden(false);
-    currentProductKey = productKey;
-    lastConfirmedProductKey = productKey;
-    hasExplicitProductSelection = true;
+	  function clearCue24VideoAutoReturn() {
+	    if (cue24VideoAutoReturnTimer) {
+	      window.clearTimeout(cue24VideoAutoReturnTimer);
+	      cue24VideoAutoReturnTimer = null;
+	    }
+	  }
+
+		  function clearCue27VideoAutoReturn() {
+		    if (cue27VideoAutoReturnTimer) {
+		      window.clearTimeout(cue27VideoAutoReturnTimer);
+		      cue27VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearCue32VideoAutoReturn() {
+		    if (cue32VideoAutoReturnTimer) {
+		      window.clearTimeout(cue32VideoAutoReturnTimer);
+		      cue32VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearEP30kVideoAutoReturn() {
+		    if (ep30kVideoAutoReturnTimer) {
+		      window.clearTimeout(ep30kVideoAutoReturnTimer);
+		      ep30kVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearEP40kVideoAutoReturn() {
+		    if (ep40kVideoAutoReturnTimer) {
+		      window.clearTimeout(ep40kVideoAutoReturnTimer);
+		      ep40kVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearEP50kVideoAutoReturn() {
+		    if (ep50kVideoAutoReturnTimer) {
+		      window.clearTimeout(ep50kVideoAutoReturnTimer);
+		      ep50kVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearEP60kVideoAutoReturn() {
+		    if (ep60kVideoAutoReturnTimer) {
+		      window.clearTimeout(ep60kVideoAutoReturnTimer);
+		      ep60kVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearFlex15VideoAutoReturn() {
+		    if (flex15VideoAutoReturnTimer) {
+		      window.clearTimeout(flex15VideoAutoReturnTimer);
+		      flex15VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearFolder22NVideoAutoReturn() {
+		    if (folder22nVideoAutoReturnTimer) {
+		      window.clearTimeout(folder22nVideoAutoReturnTimer);
+		      folder22nVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearFramer24VideoAutoReturn() {
+		    if (framer24VideoAutoReturnTimer) {
+		      window.clearTimeout(framer24VideoAutoReturnTimer);
+		      framer24VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearFramer27VideoAutoReturn() {
+		    if (framer27VideoAutoReturnTimer) {
+		      window.clearTimeout(framer27VideoAutoReturnTimer);
+		      framer27VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearFramer32VideoAutoReturn() {
+		    if (framer32VideoAutoReturnTimer) {
+		      window.clearTimeout(framer32VideoAutoReturnTimer);
+		      framer32VideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearLessonQVideoAutoReturn() {
+		    if (lessonqVideoAutoReturnTimer) {
+		      window.clearTimeout(lessonqVideoAutoReturnTimer);
+		      lessonqVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function clearMimeVideoAutoReturn() {
+		    if (mimeVideoAutoReturnTimer) {
+		      window.clearTimeout(mimeVideoAutoReturnTimer);
+		      mimeVideoAutoReturnTimer = null;
+		    }
+		  }
+
+		  function scheduleClone16VideoAutoReturn(delayMs = CLONE16_ONEDRIVE_AUTORETURN_MS) {
+		    clearClone16VideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    clone16VideoAutoReturnTimer = window.setTimeout(() => {
+	      clone16VideoAutoReturnTimer = null;
+	      if (!appContainer) return;
+	      if (!appContainer.classList.contains('clone16-video-only-mode')) return;
+	      if (currentProductKey !== 'clone16') return;
+	      setClone16VideoOnlyMode(false);
+	      setClone16VideoWithAvatarMode(true);
+	      restoreAvatarIdleVideo();
+	    }, safeDelayMs);
+	  }
+
+	  function scheduleCue24VideoAutoReturn(delayMs = CUE24_ONEDRIVE_AUTORETURN_MS) {
+	    clearCue24VideoAutoReturn();
+	    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+	    cue24VideoAutoReturnTimer = window.setTimeout(() => {
+	      cue24VideoAutoReturnTimer = null;
+	      if (!appContainer) return;
+	      if (!appContainer.classList.contains('cue24-videos-mode')) return;
+	      if (currentProductKey !== 'cue24') return;
+	      setCue24VideosMode(false);
+	      setCue24VideoWithAvatarMode(true);
+	      restoreAvatarIdleVideo();
+	    }, safeDelayMs);
+	  }
+
+	  function scheduleCue27VideoAutoReturn(delayMs = CUE27_ONEDRIVE_AUTORETURN_MS) {
+	    clearCue27VideoAutoReturn();
+	    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+	    cue27VideoAutoReturnTimer = window.setTimeout(() => {
+	      cue27VideoAutoReturnTimer = null;
+	      if (!appContainer) return;
+	      if (!appContainer.classList.contains('cue27-videos-mode')) return;
+	      if (currentProductKey !== 'cue27') return;
+	      setCue27VideosMode(false);
+	      setCue27VideoWithAvatarMode(true);
+	      restoreAvatarIdleVideo();
+	    }, safeDelayMs);
+	  }
+
+	  function scheduleCue32VideoAutoReturn(delayMs = CUE32_ONEDRIVE_AUTORETURN_MS) {
+	    clearCue32VideoAutoReturn();
+	    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+	    cue32VideoAutoReturnTimer = window.setTimeout(() => {
+	      cue32VideoAutoReturnTimer = null;
+	      if (!appContainer) return;
+	      if (!appContainer.classList.contains('cue32-videos-mode')) return;
+	      if (currentProductKey !== 'cue32') return;
+	      setCue32VideosMode(false);
+	      setCue32VideoWithAvatarMode(true);
+	      restoreAvatarIdleVideo();
+	    }, safeDelayMs);
+	  }
+
+	  function scheduleEP30kVideoAutoReturn(delayMs = EP30K_ONEDRIVE_AUTORETURN_MS) {
+	    clearEP30kVideoAutoReturn();
+	    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+	    ep30kVideoAutoReturnTimer = window.setTimeout(() => {
+	      ep30kVideoAutoReturnTimer = null;
+	      if (!appContainer) return;
+	      if (!appContainer.classList.contains('ep30k-videos-mode')) return;
+	      if (currentProductKey !== 'ep30k') return;
+	      setEP30kVideosMode(false);
+	      setEP30kVideoWithAvatarMode(true);
+	      restoreAvatarIdleVideo();
+	    }, safeDelayMs);
+	  }
+
+		  function scheduleEP40kVideoAutoReturn(delayMs = EP40K_ONEDRIVE_AUTORETURN_MS) {
+		    clearEP40kVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    ep40kVideoAutoReturnTimer = window.setTimeout(() => {
+		      ep40kVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('ep40k-videos-mode')) return;
+		      if (currentProductKey !== 'ep40k') return;
+		      setEP40kVideosMode(false);
+		      setEP40kVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleEP50kVideoAutoReturn(delayMs = EP50K_ONEDRIVE_AUTORETURN_MS) {
+		    clearEP50kVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    ep50kVideoAutoReturnTimer = window.setTimeout(() => {
+		      ep50kVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('ep50k-videos-mode')) return;
+		      if (currentProductKey !== 'ep50k') return;
+		      setEP50kVideosMode(false);
+		      setEP50kVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleEP60kVideoAutoReturn(delayMs = EP60K_ONEDRIVE_AUTORETURN_MS) {
+		    clearEP60kVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    ep60kVideoAutoReturnTimer = window.setTimeout(() => {
+		      ep60kVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('ep60k-videos-mode')) return;
+		      if (currentProductKey !== 'ep60k') return;
+		      setEP60kVideosMode(false);
+		      setEP60kVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleFlex15VideoAutoReturn(delayMs = FLEX15_ONEDRIVE_AUTORETURN_MS) {
+		    clearFlex15VideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    flex15VideoAutoReturnTimer = window.setTimeout(() => {
+		      flex15VideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('flex15-videos-mode')) return;
+		      if (currentProductKey !== 'flex15') return;
+		      setFlex15VideosMode(false);
+		      setFlex15VideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleFolder22NVideoAutoReturn(delayMs = FOLDER22N_ONEDRIVE_AUTORETURN_MS) {
+		    clearFolder22NVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    folder22nVideoAutoReturnTimer = window.setTimeout(() => {
+		      folder22nVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('folder22n-videos-mode')) return;
+		      if (currentProductKey !== 'folder22n') return;
+		      setFolder22NVideosMode(false);
+		      setFolder22NVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleFramer24VideoAutoReturn(delayMs = FRAMER24_ONEDRIVE_AUTORETURN_MS) {
+		    clearFramer24VideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    framer24VideoAutoReturnTimer = window.setTimeout(() => {
+		      framer24VideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('framer24-videos-mode')) return;
+		      if (currentProductKey !== 'framer24') return;
+		      setFramer24VideosMode(false);
+		      setFramer24VideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleFramer27VideoAutoReturn(delayMs = FRAMER27_ONEDRIVE_AUTORETURN_MS) {
+		    clearFramer27VideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    framer27VideoAutoReturnTimer = window.setTimeout(() => {
+		      framer27VideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('framer27-videos-mode')) return;
+		      if (currentProductKey !== 'framer27') return;
+		      setFramer27VideosMode(false);
+		      setFramer27VideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleFramer32VideoAutoReturn(delayMs = FRAMER32_ONEDRIVE_AUTORETURN_MS) {
+		    clearFramer32VideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    framer32VideoAutoReturnTimer = window.setTimeout(() => {
+		      framer32VideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('framer32-videos-mode')) return;
+		      if (currentProductKey !== 'framer32') return;
+		      setFramer32VideosMode(false);
+		      setFramer32VideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleLessonQVideoAutoReturn(delayMs = LESSONQ_ONEDRIVE_AUTORETURN_MS) {
+		    clearLessonQVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    lessonqVideoAutoReturnTimer = window.setTimeout(() => {
+		      lessonqVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('lessonq-videos-mode')) return;
+		      if (!LESSONQ_ONEDRIVE_VIDEO_EMBEDS[currentProductKey]) return;
+		      setLessonQVideosMode(false);
+		      setLessonQVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function scheduleMimeVideoAutoReturn(delayMs = MIME_ONEDRIVE_AUTORETURN_MS) {
+		    clearMimeVideoAutoReturn();
+		    const safeDelayMs = Math.max(0, Number(delayMs) || 0);
+		    mimeVideoAutoReturnTimer = window.setTimeout(() => {
+		      mimeVideoAutoReturnTimer = null;
+		      if (!appContainer) return;
+		      if (!appContainer.classList.contains('mime-videos-mode')) return;
+		      if (!MIME_ONEDRIVE_VIDEO_EMBEDS[currentProductKey]) return;
+		      setMimeVideosMode(false);
+		      setMimeVideoWithAvatarMode(true);
+		      restoreAvatarIdleVideo();
+		    }, safeDelayMs);
+		  }
+
+		  function selectProduct(productKey, options = {}) {
+		    const product = PRODUCTS[productKey];
+		    if (!product) return;
+
+		    clearPendingClone16OverviewAutoplay();
+		    clearClone16VideoAutoReturn();
+		    clearCue24VideoAutoReturn();
+		    clearCue27VideoAutoReturn();
+		    clearCue32VideoAutoReturn();
+		    clearEP30kVideoAutoReturn();
+		    clearEP40kVideoAutoReturn();
+		    clearEP50kVideoAutoReturn();
+		    clearEP60kVideoAutoReturn();
+		    clearFlex15VideoAutoReturn();
+		    clearFolder22NVideoAutoReturn();
+		    clearFramer24VideoAutoReturn();
+		    clearFramer27VideoAutoReturn();
+		    clearFramer32VideoAutoReturn();
+		    clearLessonQVideoAutoReturn();
+		    clearMimeVideoAutoReturn();
+		    clearPreInteractionState();
+		    setInputCardStripHidden(false);
+	    currentProductKey = productKey;
+	    lastConfirmedProductKey = productKey;
+	    hasExplicitProductSelection = true;
     setIntroEmptyState(false);
     setDetailFocusMode(false);
     setInfoCardOnlyMode(false);
     setBuyNowMode(false);
     setProductSummaryMode(true);
     setCueSeriesInfographicOnlyMode(productKey === 'cue24' || productKey === 'cue27' || productKey === 'cue32' || productKey === 'ep30k' || productKey === 'ep40k' || productKey === 'ep50k' || productKey === 'ep60k' || productKey === 'framer24' || productKey === 'framer27' || productKey === 'framer32' || productKey === 'lessonQ24' || productKey === 'lessonQ27' || productKey === 'lessonQ32' || productKey === 'lessonQ43');
-    setAboutUsCardsPanelMode(false);
-    setClone16VideoOnlyMode(false);
-    setCueSeriesMode(shouldUseShowcaseLayout(productKey, 'summary'));
-    setClone16ActionLayout(false);
+		    setAboutUsCardsPanelMode(false);
+		    setClone16VideoOnlyMode(false);
+		    setClone16VideoWithAvatarMode(false);
+		    setCue24VideoWithAvatarMode(false);
+		    setCue27VideoWithAvatarMode(false);
+			    setCue32VideoWithAvatarMode(false);
+				    setEP30kVideoWithAvatarMode(false);
+				    setEP40kVideoWithAvatarMode(false);
+				    setEP50kVideoWithAvatarMode(false);
+				    setEP60kVideoWithAvatarMode(false);
+			    setFlex15VideoWithAvatarMode(false);
+			    setFolder22NVideoWithAvatarMode(false);
+			    setFramer24VideoWithAvatarMode(false);
+			    setFramer27VideoWithAvatarMode(false);
+			    setFramer32VideoWithAvatarMode(false);
+			    setLessonQVideoWithAvatarMode(false);
+			    setMimeVideoWithAvatarMode(false);
+			    setEP30kVideosMode(false);
+			    setEP40kVideosMode(false);
+			    setEP50kVideosMode(false);
+			    setEP60kVideosMode(false);
+			    setFlex15VideosMode(false);
+			    setFolder22NVideosMode(false);
+			    setFramer24VideosMode(false);
+			    setFramer27VideosMode(false);
+			    setFramer32VideosMode(false);
+			    setLessonQVideosMode(false);
+			    setMimeVideosMode(false);
+			    setCueSeriesMode(shouldUseShowcaseLayout(productKey, 'summary'));
+		    setClone16ActionLayout(false);
     if (options.setPlaceholderMode !== false) {
       setPlaceholderMode('intro');
     }
@@ -9877,21 +10880,396 @@
     }
   }
 
-  function showCurrentProductVideo() {
-    const product = getCurrentProduct();
-    applyAboutStyleLayout(getProductSummaryStripText(product));
-    if (product.key === 'clone16') {
-      setDetailFocusMode(false);
-      setInfoCardOnlyMode(false);
-      setClone16VideoOnlyMode(true);
-      renderClone16VideoInfoCard();
-      return;
-    }
-    if (product.key === 'cue24') {
-      setDetailFocusMode(false);
-      setInfoCardOnlyMode(false);
-      setClone16VideoOnlyMode(false);
-      setCueSeriesMode(false);
+		  function showCurrentProductVideo() {
+		    const product = getCurrentProduct();
+		    applyAboutStyleLayout(getProductSummaryStripText(product));
+		    stopAssistantSpeech();
+		    if (product.key === 'clone16') {
+		      clearClone16VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(true);
+		      setClone16VideoWithAvatarMode(false);
+		      setSubtitleStripText('Clone 16 video');
+		      renderClone16OneDriveVideoCard();
+		      scheduleClone16VideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'flex15') {
+		      clearFlex15VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setFlex15VideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(true);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(false);
+		      setSubtitleStripText('Flex 15 video');
+		      renderFlex15VideoCard();
+		      scheduleFlex15VideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'folder22n') {
+		      clearFolder22NVideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setFolder22NVideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(true);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(false);
+		      setSubtitleStripText('Folder 22N video');
+		      renderFolder22NVideoCard();
+		      scheduleFolder22NVideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'framer24') {
+		      clearFramer24VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setFramer24VideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(true);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(false);
+		      setSubtitleStripText('Framer 24 video');
+		      renderFramer24VideoCard();
+		      scheduleFramer24VideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'framer27') {
+		      clearFramer27VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setFramer27VideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(true);
+		      setFramer32VideosMode(false);
+		      setSubtitleStripText('Framer 27 video');
+		      renderFramer27VideoCard();
+		      scheduleFramer27VideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'framer32') {
+		      clearFramer32VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setFramer32VideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(true);
+		      setSubtitleStripText('Framer 32 video');
+		      renderFramer32VideoCard();
+		      scheduleFramer32VideoAutoReturn();
+		      return;
+		    }
+		    if (LESSONQ_ONEDRIVE_VIDEO_EMBEDS[product.key]) {
+		      const embed = LESSONQ_ONEDRIVE_VIDEO_EMBEDS[product.key];
+		      clearLessonQVideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setLessonQVideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(false);
+		      setLessonQVideosMode(true);
+		      setSubtitleStripText(`${embed.label} video`);
+		      renderLessonQVideoCard(embed);
+		      scheduleLessonQVideoAutoReturn();
+		      return;
+		    }
+		    if (MIME_ONEDRIVE_VIDEO_EMBEDS[product.key]) {
+		      const embed = MIME_ONEDRIVE_VIDEO_EMBEDS[product.key];
+		      clearMimeVideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setMimeVideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(false);
+		      setFlex15VideosMode(false);
+		      setFolder22NVideosMode(false);
+		      setFramer24VideosMode(false);
+		      setFramer27VideosMode(false);
+		      setFramer32VideosMode(false);
+		      setLessonQVideosMode(false);
+		      setMimeVideosMode(true);
+		      setSubtitleStripText(`${embed.label} video`);
+		      renderMimeVideoCard(embed);
+		      scheduleMimeVideoAutoReturn();
+		      return;
+		    }
+	    if (product.key === 'ep30k') {
+	      clearEP30kVideoAutoReturn();
+	      setDetailFocusMode(false);
+	      setInfoCardOnlyMode(false);
+	      setClone16VideoOnlyMode(false);
+	      setEP30kVideoWithAvatarMode(false);
+	      setCueSeriesMode(false);
+	      setClone16ActionLayout(false);
+	      stopAvatarVideo();
+	      setInitialVideoPanelHidden(true);
+	      stopPanelVideo();
+	      clearCustomCenterPanel();
+	      showMergedEmptyBottomCard();
+	      setCrystalPrompterVideoMode(false);
+	      setCue24VideosMode(false);
+	      setCue27VideosMode(false);
+	      setCue32VideosMode(false);
+	      setEP30kVideosMode(true);
+	      setEP40kVideosMode(false);
+	      setSubtitleStripText('EP 30K video');
+	      renderEP30kVideoCard();
+	      scheduleEP30kVideoAutoReturn();
+	      return;
+	    }
+			    if (product.key === 'ep40k') {
+			      clearEP40kVideoAutoReturn();
+			      setDetailFocusMode(false);
+			      setInfoCardOnlyMode(false);
+			      setClone16VideoOnlyMode(false);
+			      setEP40kVideoWithAvatarMode(false);
+			      setCueSeriesMode(false);
+			      setClone16ActionLayout(false);
+			      stopAvatarVideo();
+			      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+			      setCue32VideosMode(false);
+			      setEP30kVideosMode(false);
+			      setEP40kVideosMode(true);
+			      setEP50kVideosMode(false);
+			      setEP60kVideosMode(false);
+			      setSubtitleStripText('EP 40K video');
+			      renderEP40kVideoCard();
+			      scheduleEP40kVideoAutoReturn();
+			      return;
+			    }
+		    if (product.key === 'ep50k') {
+		      clearEP50kVideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setEP50kVideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(true);
+		      setEP60kVideosMode(false);
+		      setSubtitleStripText('EP 50K video');
+		      renderEP50kVideoCard();
+		      scheduleEP50kVideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'ep60k') {
+		      clearEP60kVideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+		      setEP60kVideoWithAvatarMode(false);
+		      setCueSeriesMode(false);
+		      setClone16ActionLayout(false);
+		      stopAvatarVideo();
+		      setInitialVideoPanelHidden(true);
+		      stopPanelVideo();
+		      clearCustomCenterPanel();
+		      showMergedEmptyBottomCard();
+		      setCrystalPrompterVideoMode(false);
+		      setCue24VideosMode(false);
+		      setCue27VideosMode(false);
+		      setCue32VideosMode(false);
+		      setEP30kVideosMode(false);
+		      setEP40kVideosMode(false);
+		      setEP50kVideosMode(false);
+		      setEP60kVideosMode(true);
+		      setSubtitleStripText('EP 60K video');
+		      renderEP60kVideoCard();
+		      scheduleEP60kVideoAutoReturn();
+		      return;
+		    }
+		    if (product.key === 'cue24') {
+		      clearCue24VideoAutoReturn();
+		      setDetailFocusMode(false);
+		      setInfoCardOnlyMode(false);
+		      setClone16VideoOnlyMode(false);
+	      setCue24VideoWithAvatarMode(false);
+	      setCueSeriesMode(false);
+	      setClone16ActionLayout(false);
+	      stopAvatarVideo();
+	      setInitialVideoPanelHidden(true);
+	      stopPanelVideo();
+	      clearCustomCenterPanel();
+	      showMergedEmptyBottomCard();
+	      setCrystalPrompterVideoMode(false);
+	      setCue24VideosMode(true);
+	      setCue27VideosMode(false);
+	      setCue32VideosMode(false);
+	      setSubtitleStripText('Cue 24 video');
+	      renderCue24OneDriveVideoCard();
+	      scheduleCue24VideoAutoReturn();
+	      return;
+	    }
+	    if (product.key === 'cue27') {
+	      clearCue27VideoAutoReturn();
+	      setDetailFocusMode(false);
+	      setInfoCardOnlyMode(false);
+	      setClone16VideoOnlyMode(false);
+	      setCue27VideoWithAvatarMode(false);
+	      setCueSeriesMode(false);
+	      setClone16ActionLayout(false);
+	      stopAvatarVideo();
+	      setInitialVideoPanelHidden(true);
+	      stopPanelVideo();
+	      clearCustomCenterPanel();
+	      showMergedEmptyBottomCard();
+	      setCrystalPrompterVideoMode(false);
+	      setCue24VideosMode(false);
+	      setCue27VideosMode(true);
+	      setCue32VideosMode(false);
+	      setSubtitleStripText('Cue 27 video');
+	      renderCue27OneDriveVideoCard();
+	      scheduleCue27VideoAutoReturn();
+	      return;
+	    }
+	    if (product.key === 'cue32') {
+	      clearCue32VideoAutoReturn();
+	      setDetailFocusMode(false);
+	      setInfoCardOnlyMode(false);
+	      setClone16VideoOnlyMode(false);
+	      setCue32VideoWithAvatarMode(false);
+	      setCueSeriesMode(false);
       setClone16ActionLayout(false);
       stopAvatarVideo();
       setInitialVideoPanelHidden(true);
@@ -9899,66 +11277,15 @@
       clearCustomCenterPanel();
       showMergedEmptyBottomCard();
       setCrystalPrompterVideoMode(false);
-      setCue24VideosMode(true);
-      setCue27VideosMode(false);
-      setCue32VideosMode(false);
-      setSubtitleStripText('Cue 24 video');
-      renderCue24ShortsVideoCard();
-      // Best-effort: try to start playback with sound using the user's action as a gesture.
-      primeCue24ShortsPlayback(infoCard);
-      window.setTimeout(() => {
-        primeCue24ShortsPlayback(infoCard);
-      }, 650);
-      return;
-    }
-    if (product.key === 'cue27') {
-      setDetailFocusMode(false);
-      setInfoCardOnlyMode(false);
-      setClone16VideoOnlyMode(false);
-      setCueSeriesMode(false);
-      setClone16ActionLayout(false);
-      stopAvatarVideo();
-      setInitialVideoPanelHidden(true);
-      stopPanelVideo();
-      clearCustomCenterPanel();
-      showMergedEmptyBottomCard();
-      setCrystalPrompterVideoMode(false);
-      setCue24VideosMode(false);
-      setCue27VideosMode(true);
-      setCue32VideosMode(false);
-      setSubtitleStripText('Cue 27 video');
-      renderCue27ShortsVideoCard();
-      // Best-effort: autoplay with sound can be blocked by browser policy.
-      primeCue27ShortsPlayback(infoCard);
-      window.setTimeout(() => {
-        primeCue27ShortsPlayback(infoCard);
-      }, 650);
-      return;
-    }
-    if (product.key === 'cue32') {
-      setDetailFocusMode(false);
-      setInfoCardOnlyMode(false);
-      setClone16VideoOnlyMode(false);
-      setCueSeriesMode(false);
-      setClone16ActionLayout(false);
-      stopAvatarVideo();
-      setInitialVideoPanelHidden(true);
-      stopPanelVideo();
-      clearCustomCenterPanel();
-      showMergedEmptyBottomCard();
-      setCrystalPrompterVideoMode(false);
-      setCue24VideosMode(false);
-      setCue27VideosMode(false);
-      setCue32VideosMode(true);
-      setSubtitleStripText('Cue 32 video');
-      renderCue32ShortsVideoCard();
-      // Best-effort: autoplay with sound can be blocked by browser policy.
-      primeCue32ShortsPlayback(infoCard);
-      window.setTimeout(() => {
-        primeCue32ShortsPlayback(infoCard);
-      }, 650);
-    }
-  }
+	      setCue24VideosMode(false);
+	      setCue27VideosMode(false);
+	      setCue32VideosMode(true);
+	      setSubtitleStripText('Cue 32 video');
+	      renderCue32OneDriveVideoCard();
+	      scheduleCue32VideoAutoReturn();
+	      return;
+	    }
+	  }
 
   function showCurrentProductText(section) {
     const product = getCurrentProduct();
@@ -9990,43 +11317,92 @@
     updatePlaceholderProductSelection();
   }
 
-  function applyMatchedResponse(match) {
-    if (!match) return;
+		  function applyMatchedResponse(match) {
+		    if (!match) return;
 
-    clearPendingClone16OverviewAutoplay();
-    clearPreInteractionState();
-    setInputCardStripHidden(false);
+		    clearPendingClone16OverviewAutoplay();
+		    clearClone16VideoAutoReturn();
+		    clearCue24VideoAutoReturn();
+		    clearCue27VideoAutoReturn();
+			    clearCue32VideoAutoReturn();
+			    clearEP30kVideoAutoReturn();
+			    clearEP40kVideoAutoReturn();
+			    clearEP50kVideoAutoReturn();
+			    clearEP60kVideoAutoReturn();
+			    clearFlex15VideoAutoReturn();
+			    clearFolder22NVideoAutoReturn();
+			    clearFramer24VideoAutoReturn();
+			    clearFramer27VideoAutoReturn();
+			    clearFramer32VideoAutoReturn();
+			    clearLessonQVideoAutoReturn();
+			    clearMimeVideoAutoReturn();
+			    clearPreInteractionState();
+			    setInputCardStripHidden(false);
 
-    if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection) {
-      applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, FAQs, or Installation.');
-      renderNoMatchPicker();
-      setPlaceholderMode('nomatch');
-      renderNoMatchInfoCard();
-      speakAssistantText('Please select a product first before opening images, videos, specification, frequently asked questions, or installation.');
-      return;
-    }
+	    if (requiresExplicitProductSelection(match.id) && !hasExplicitProductSelection && !match.productKey) {
+	      applyAboutStyleLayout('Please select a product first to open Images, Videos, Specification, FAQs, or Installation.');
+	      renderNoMatchPicker();
+	      setPlaceholderMode('nomatch');
+	      renderNoMatchInfoCard();
+	      speakAssistantText('Please select a product first before opening images, videos, specification, frequently asked questions, or installation.');
+	      return;
+	    }
 
-    setIntroEmptyState(false);
-    setDetailFocusMode(false);
-    setInfoCardOnlyMode(false);
-    setBuyNowMode(false);
-    setProductSummaryMode(false);
-    setCueSeriesInfographicOnlyMode(false);
-    setAboutUsCardsPanelMode(false);
-    setClone16VideoOnlyMode(false);
-    setCrystalPrompterVideoMode(false);
-    setCue24VideosMode(false);
-    setCue27VideosMode(false);
-    setCue32VideosMode(false);
-    setPlaceholderMode('intro');
-    restoreAvatarIdleVideo();
-    setQuickActionsMode('all');
-    setCardsPanelHidden(false);
+	    setIntroEmptyState(false);
+	    setDetailFocusMode(false);
+	    setInfoCardOnlyMode(false);
+	    setBuyNowMode(false);
+	    setProductSummaryMode(false);
+		    setCueSeriesInfographicOnlyMode(false);
+		    setAboutUsCardsPanelMode(false);
+		    setClone16VideoOnlyMode(false);
+		    setClone16VideoWithAvatarMode(false);
+		    setCue24VideoWithAvatarMode(false);
+		    setCue27VideoWithAvatarMode(false);
+		    setCue32VideoWithAvatarMode(false);
+		    setEP30kVideoWithAvatarMode(false);
+		    setEP40kVideoWithAvatarMode(false);
+		    setEP50kVideoWithAvatarMode(false);
+		    setEP60kVideoWithAvatarMode(false);
+		    setFlex15VideoWithAvatarMode(false);
+		    setFolder22NVideoWithAvatarMode(false);
+		    setFramer24VideoWithAvatarMode(false);
+		    setFramer27VideoWithAvatarMode(false);
+		    setFramer32VideoWithAvatarMode(false);
+		    setLessonQVideoWithAvatarMode(false);
+		    setMimeVideoWithAvatarMode(false);
+			    setCrystalPrompterVideoMode(false);
+			    setCue24VideosMode(false);
+			    setCue27VideosMode(false);
+			    setCue32VideosMode(false);
+		    setEP30kVideosMode(false);
+		    setEP40kVideosMode(false);
+		    setEP50kVideosMode(false);
+		    setEP60kVideosMode(false);
+		    setFlex15VideosMode(false);
+		    setFolder22NVideosMode(false);
+		    setFramer24VideosMode(false);
+		    setFramer27VideosMode(false);
+		    setFramer32VideosMode(false);
+		    setLessonQVideosMode(false);
+		    setMimeVideosMode(false);
+	    setPlaceholderMode('intro');
+	    restoreAvatarIdleVideo();
+	    setQuickActionsMode('all');
+	    setCardsPanelHidden(false);
 
-    if (match.isProductFaqItem && match.faqItem) {
-      const product = match.productKey && PRODUCTS[match.productKey]
-        ? PRODUCTS[match.productKey]
-        : getCurrentProduct();
+	    if (match.productKey && PRODUCTS[match.productKey]) {
+	      currentProductKey = match.productKey;
+	      lastConfirmedProductKey = match.productKey;
+	      hasExplicitProductSelection = true;
+	      updatePlaceholderProductSelection();
+	      void hydrateProductFromApi(match.productKey);
+	    }
+
+	    if (match.isProductFaqItem && match.faqItem) {
+	      const product = match.productKey && PRODUCTS[match.productKey]
+	        ? PRODUCTS[match.productKey]
+	        : getCurrentProduct();
       if (match.productKey) {
         selectProduct(match.productKey, { showQuickActions: true });
       }
@@ -10087,19 +11463,23 @@
       showAboutUsSocialInfoCard();
       showMergedEmptyBottomCard();
     }
-    if (match.id === 'product_list') {
-      applyAboutStyleLayout('Browse the available Crystal Prompter models and select one to continue.');
-      renderNoMatchPicker();
-      setPlaceholderMode('nomatch');
-      renderNoMatchInfoCard();
-    }
-    if (match.id === 'images') showCurrentProductImages();
-    if (match.id === 'videos') showCurrentProductVideo();
-    if (match.id === 'specification') showCurrentProductText('specification');
-    if (match.id === 'faqs') showCurrentProductText('faqs');
-    if (match.id === 'installation') showCurrentProductText('installation');
-    if (match.id === 'buy_now') {
-      setQuickActionsMode('all');
+	    if (match.id === 'product_list') {
+	      applyAboutStyleLayout('Browse the available Crystal Prompter models and select one to continue.');
+	      renderNoMatchPicker();
+	      setPlaceholderMode('nomatch');
+	      renderNoMatchInfoCard();
+	    }
+	    if (match.id === 'images') showCurrentProductImages();
+	    if (match.id === 'videos') {
+	      showCurrentProductVideo();
+	      const activeProductKey = match.productKey || currentProductKey;
+		      if (activeProductKey === 'clone16' || activeProductKey === 'cue24' || activeProductKey === 'cue27' || activeProductKey === 'cue32' || activeProductKey === 'ep30k' || activeProductKey === 'ep40k' || activeProductKey === 'ep50k' || activeProductKey === 'ep60k' || activeProductKey === 'flex15' || activeProductKey === 'folder22n' || activeProductKey === 'framer24' || activeProductKey === 'framer27' || activeProductKey === 'framer32' || activeProductKey === 'lessonQ24' || activeProductKey === 'lessonQ27' || activeProductKey === 'lessonQ32' || activeProductKey === 'lessonQ43' || activeProductKey === 'mime24' || activeProductKey === 'mime27' || activeProductKey === 'mime32') return;
+		    }
+	    if (match.id === 'specification') showCurrentProductText('specification');
+	    if (match.id === 'faqs') showCurrentProductText('faqs');
+	    if (match.id === 'installation') showCurrentProductText('installation');
+	    if (match.id === 'buy_now') {
+	      setQuickActionsMode('all');
       setQuickActionsHidden(true);
       showCurrentProductText('buy_now');
     }
